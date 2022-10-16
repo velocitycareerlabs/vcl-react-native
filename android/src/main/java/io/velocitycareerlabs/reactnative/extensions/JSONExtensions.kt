@@ -1,4 +1,11 @@
-package io.velocitycareerlabs.reactnative.extensions
+/**
+ * Created by Michael Avoyan.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+ 
+ package io.velocitycareerlabs.reactnative.extensions
 
 import com.facebook.react.bridge.*
 import org.json.JSONArray

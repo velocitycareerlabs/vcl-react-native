@@ -1,4 +1,11 @@
-package io.velocitycareerlabs.reactnative.utlis
+/**
+ * Created by Michael Avoyan.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+ 
+ package io.velocitycareerlabs.reactnative.utlis
 
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableArray

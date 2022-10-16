@@ -1,4 +1,11 @@
-package com.vcl.reactnativeexample;
+/**
+ * Created by Michael Avoyan.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+ package com.vcl.reactnativeexample;
 
 import com.facebook.react.ReactActivity;
 

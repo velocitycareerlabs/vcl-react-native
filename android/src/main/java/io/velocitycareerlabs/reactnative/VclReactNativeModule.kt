@@ -4,7 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
- 
+
  package io.velocitycareerlabs.reactnative
 
 import com.facebook.react.bridge.*
@@ -36,6 +36,7 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToVerifiedProfileDes
 import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
 import io.velocitycareerlabs.api.entities.VCLError
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -55,11 +56,16 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   }
 
   @ReactMethod
-  fun initialize(environmentMap: ReadableMap, promise: Promise) {
+  fun initialize(
+    initializationDescriptor: ReadableMap,
+    promise: Promise
+  ) {
     try {
       vcl.initialize(
-        context = reactContext,
-        environment = mapToEnvironment(environmentMap),
+        initializationDescriptor = mapToInitializationDescriptor(
+          reactContext,
+          initializationDescriptor
+        ),
         successHandler = {
           promise.resolve("VCL initialization succeed!")
         },

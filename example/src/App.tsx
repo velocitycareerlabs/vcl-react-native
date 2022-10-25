@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 
 import { StyleSheet, View, Text, Button } from 'react-native';
@@ -42,6 +41,7 @@ import vcl, {
   VCLToken,
   VCLVerifiedProfile,
   VCLDeepLink,
+  VCLInitializationDescriptor,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export const enum InitState {
@@ -62,7 +62,12 @@ export default function App() {
 
   React.useEffect(() => {
     setInitState(InitState.Initializing);
-    vcl.initialize(environment).then(
+
+    const initializationDescriptor: VCLInitializationDescriptor = {
+      environment: environment,
+      resetCache: false,
+    };
+    vcl.initialize(initializationDescriptor).then(
       () => {
         console.log('VCL Initialized');
         setInitState(InitState.InitializationSucceed);

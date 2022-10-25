@@ -11,6 +11,17 @@
 import Foundation
 import VCL
 
+func dictionaryToInitializationDescriptor(
+    _ initializationDescriptorDictionary: [String: Any]
+) -> VCLInitializationDescriptor {
+    return VCLInitializationDescriptor(
+        environment: dictionaryToEnvironment(
+            initializationDescriptorDictionary["environment"] as? [String: String] ?? ["value": VCLEnvironment.PROD.rawValue]
+        ),
+        resetCache: initializationDescriptorDictionary["resetCache"] as? Bool ?? false
+        )
+}
+
 func dictionaryToEnvironment(
     _ environmentDictionary: [String: String]
 ) -> VCLEnvironment {

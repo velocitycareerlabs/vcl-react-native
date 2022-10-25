@@ -52,6 +52,7 @@ import type { VCLVerifiableCredential } from './api/entities/VCLVerifiableCreden
 import type { VCLVerifiedProfile } from './api/entities/VCLVerifiedProfile';
 import type { VCLVerifiedProfileDescriptor } from './api/entities/VCLVerifiedProfileDescriptor';
 import type { Dictionary } from './api/Dictionary';
+import type { VCLInitializationDescriptor } from './api/entities/VCLInitializationDescriptor';
 
 const { VclReactNative } = NativeModules;
 
@@ -102,4 +103,5 @@ export {
   VCLVerifiableCredential,
   VCLVerifiedProfile,
   VCLVerifiedProfileDescriptor,
+  VCLInitializationDescriptor,
 };

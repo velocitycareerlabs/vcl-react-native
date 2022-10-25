@@ -4,13 +4,10 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
- 
+
  package io.velocitycareerlabs.reactnative.utlis
 
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.*
 import io.velocitycareerlabs.api.*
 import io.velocitycareerlabs.api.entities.*
 import io.velocitycareerlabs.reactnative.extensions.*
@@ -22,8 +19,21 @@ import java.lang.Exception
  */
 object Converter {
 
+  fun mapToInitializationDescriptor(
+    reactContext: ReactApplicationContext,
+    initializationDescriptorMap: ReadableMap
+  ) =
+    VCLInitializationDescriptor(
+      context = reactContext,
+      environment = mapToEnvironment(
+        initializationDescriptorMap.getMapOpt("environment")
+          ?: mapOf(Pair("value", VCLEnvironment.PROD.value)).toReadableMap()
+      ),
+      resetCache = initializationDescriptorMap.getBooleanOpt("resetCache") ?: false
+    )
+
   fun mapToEnvironment(environmentMap: ReadableMap) =
-    when(environmentMap.getStringOpt("value")) {
+    when (environmentMap.getStringOpt("value")) {
       VCLEnvironment.DEV.value -> VCLEnvironment.DEV
       VCLEnvironment.STAGING.value -> VCLEnvironment.STAGING
       VCLEnvironment.PROD.value -> VCLEnvironment.PROD
@@ -53,13 +63,13 @@ object Converter {
   }
 
   fun countryToMap(
-  country: VCLCountry
+    country: VCLCountry
   ): ReadableMap {
     val countryMap = Arguments.createMap()
     countryMap.putMap("payload", country.payload.toReadableMap())
     countryMap.putString("code", country.code)
     countryMap.putString("name", country.name)
-    country.regions?.let{ countryMap.putMap("regions", regionsToMap(it)) }
+    country.regions?.let { countryMap.putMap("regions", regionsToMap(it)) }
     return countryMap
   }
 
@@ -143,10 +153,10 @@ object Converter {
   fun mapToPresentationRequest(
     presentationRequestMap: ReadableMap?
   ) = VCLPresentationRequest(
-      mapToJwt(presentationRequestMap?.getMapOpt("jwt")),
-      mapToPublicKey(presentationRequestMap?.getMapOpt("publicKey")),
-      mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink"))
-    )
+    mapToJwt(presentationRequestMap?.getMapOpt("jwt")),
+    mapToPublicKey(presentationRequestMap?.getMapOpt("publicKey")),
+    mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink"))
+  )
 
   fun presentationRequestToMap(
     presentationRequest: VCLPresentationRequest
@@ -160,7 +170,10 @@ object Converter {
     presentationRequestMap.putMap("publicKey", jwkMap)
     presentationRequestMap.putString("iss", presentationRequest.iss)
     presentationRequestMap.putString("exchangeId", presentationRequest.exchangeId)
-    presentationRequestMap.putString("presentationDefinitionId", presentationRequest.presentationDefinitionId)
+    presentationRequestMap.putString(
+      "presentationDefinitionId",
+      presentationRequest.presentationDefinitionId
+    )
     presentationRequestMap.putMap("deepLink", deepLinkToMap(presentationRequest.deepLink))
     return presentationRequestMap
   }
@@ -214,18 +227,18 @@ object Converter {
   fun mapToSubmissionResult(
     submissionResultMap: ReadableMap?
   ) = VCLSubmissionResult(
-      token = mapToToken(submissionResultMap?.getMapOpt("token")),
-      exchange = mapToExchange(submissionResultMap?.getMapOpt("exchange"))
-    )
+    token = mapToToken(submissionResultMap?.getMapOpt("token")),
+    exchange = mapToExchange(submissionResultMap?.getMapOpt("exchange"))
+  )
 
   fun mapToExchange(
     exchangeMap: ReadableMap?
   ) = VCLExchange(
-      id = exchangeMap?.getStringOpt("id") ?: "",
-      type = exchangeMap?.getStringOpt("type") ?: "",
-      disclosureComplete = exchangeMap?.getBooleanOpt("disclosureComplete") ?: false,
-      exchangeComplete = exchangeMap?.getBooleanOpt("exchangeComplete") ?: false
-    )
+    id = exchangeMap?.getStringOpt("id") ?: "",
+    type = exchangeMap?.getStringOpt("type") ?: "",
+    disclosureComplete = exchangeMap?.getBooleanOpt("disclosureComplete") ?: false,
+    exchangeComplete = exchangeMap?.getBooleanOpt("exchangeComplete") ?: false
+  )
 
   fun mapToExchangeDescriptor(exchangeDescriptorMap: ReadableMap) =
     VCLExchangeDescriptor(
@@ -251,11 +264,11 @@ object Converter {
   fun mapToOrganizationsSearchDescriptor(
     organizationsDescriptorMap: ReadableMap
   ) = VCLOrganizationsSearchDescriptor(
-      filter = mapToFilter(organizationsDescriptorMap.getMapOpt("filter")),
-      page = mapToPage(organizationsDescriptorMap.getMapOpt("page")),
-      sort = readableArrayToList(organizationsDescriptorMap.getArrayOpt("sort")),
-      query = organizationsDescriptorMap.getStringOpt("query") ?: ""
-    )
+    filter = mapToFilter(organizationsDescriptorMap.getMapOpt("filter")),
+    page = mapToPage(organizationsDescriptorMap.getMapOpt("page")),
+    sort = readableArrayToList(organizationsDescriptorMap.getArrayOpt("sort")),
+    query = organizationsDescriptorMap.getStringOpt("query") ?: ""
+  )
 
   fun mapToFilter(
     filterMap: ReadableMap?
@@ -343,9 +356,9 @@ object Converter {
     credentialManifestDescriptorMap.getMapOpt("deepLink")?.let {
       return mapToCredentialManifestDescriptorByDeepLink(credentialManifestDescriptorMap)
     } ?: credentialManifestDescriptorMap.getMapOpt("service")?.let {
-        credentialManifestDescriptorMap.getArrayOpt("credentialIds")?.let {
-          return mapToCredentialManifestDescriptorRefresh(credentialManifestDescriptorMap)
-        } ?: return mapToCredentialManifestDescriptorByService(credentialManifestDescriptorMap)
+      credentialManifestDescriptorMap.getArrayOpt("credentialIds")?.let {
+        return mapToCredentialManifestDescriptorRefresh(credentialManifestDescriptorMap)
+      } ?: return mapToCredentialManifestDescriptorByService(credentialManifestDescriptorMap)
     }
     return null
   }
@@ -373,7 +386,8 @@ object Converter {
         credentialManifestDescriptorByServiceMap.getMapOpt("service")
       ),
       credentialTypes =
-      (credentialManifestDescriptorByServiceMap.getArrayOpt("credentialTypes")?.toArrayList()?.toList() as? List<String>),
+      (credentialManifestDescriptorByServiceMap.getArrayOpt("credentialTypes")?.toArrayList()
+        ?.toList() as? List<String>),
       pushDelegate = pushDelegate
     )
   }
@@ -384,8 +398,9 @@ object Converter {
     return VCLCredentialManifestDescriptorRefresh(
       service = mapToServiceCredentialAgentIssuer(
         credentialManifestDescriptorRefreshMap.getMapOpt("service")
-    ),
-    credentialIds = credentialManifestDescriptorRefreshMap.getArrayOpt("credentialIds")?.toArrayList()?.toList() as? List<String> ?: listOf()
+      ),
+      credentialIds = credentialManifestDescriptorRefreshMap.getArrayOpt("credentialIds")
+        ?.toArrayList()?.toList() as? List<String> ?: listOf()
     )
   }
 
@@ -418,7 +433,8 @@ object Converter {
   fun mapToCredentialManifest(
     credentialManifestMap: ReadableMap?
   ): VCLCredentialManifest {
-    val jwt = VCLJWT(encodedJwt = credentialManifestMap?.getMapOpt("jwt")?.getStringOpt("encodedJwt") ?: "")
+    val jwt =
+      VCLJWT(encodedJwt = credentialManifestMap?.getMapOpt("jwt")?.getStringOpt("encodedJwt") ?: "")
     val vendorOriginContext: String? = credentialManifestMap?.getStringOpt("vendorOriginContext")
     return VCLCredentialManifest(jwt = jwt, vendorOriginContext = vendorOriginContext)
   }
@@ -426,7 +442,8 @@ object Converter {
   fun mapToGenerateOffersDescriptor(
     generateOffersDescriptorMap: ReadableMap
   ): VCLGenerateOffersDescriptor {
-    val verifiableCredentialsReadableArr = generateOffersDescriptorMap.getArrayOpt("identificationVerifiableCredentials")
+    val verifiableCredentialsReadableArr =
+      generateOffersDescriptorMap.getArrayOpt("identificationVerifiableCredentials")
     val verifiableCredentialsList = mutableListOf<VCLVerifiableCredential>()
     verifiableCredentialsReadableArr?.let {
       for (i in 0 until it.size()) {
@@ -441,8 +458,10 @@ object Converter {
     }
     return VCLGenerateOffersDescriptor(
       mapToCredentialManifest(generateOffersDescriptorMap.getMapOpt("credentialManifest")),
-      types = (generateOffersDescriptorMap.getArrayOpt("types")?.toArrayList()?.toList() as? List<String>),
-      offerHashes = (generateOffersDescriptorMap.getArrayOpt("offerHashes")?.toArrayList()?.toList() as? List<String>),
+      types = (generateOffersDescriptorMap.getArrayOpt("types")?.toArrayList()
+        ?.toList() as? List<String>),
+      offerHashes = (generateOffersDescriptorMap.getArrayOpt("offerHashes")?.toArrayList()
+        ?.toList() as? List<String>),
       identificationVerifiableCredentials = verifiableCredentialsList
     )
   }
@@ -461,7 +480,10 @@ object Converter {
     credentialTypesFormSchema: VCLCredentialTypesUIFormSchema
   ): ReadableMap {
     val credentialTypesFormSchemaMap = Arguments.createMap()
-    credentialTypesFormSchemaMap.putMap("payload", credentialTypesFormSchema.payload.toReadableMap())
+    credentialTypesFormSchemaMap.putMap(
+      "payload",
+      credentialTypesFormSchema.payload.toReadableMap()
+    )
     return credentialTypesFormSchemaMap
   }
 
@@ -474,10 +496,12 @@ object Converter {
   fun mapToFinalizedOffersDescriptor(
     finalizedOffersDescriptorMap: ReadableMap
   ) = VCLFinalizeOffersDescriptor(
-      credentialManifest = mapToCredentialManifest(finalizedOffersDescriptorMap.getMapOpt("credentialManifest")),
-      approvedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("approvedOfferIds")?.toArrayList()?.toList() as? List<String>) ?: listOf(),
-      rejectedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("rejectedOfferIds")?.toArrayList()?.toList() as? List<String>) ?: listOf()
-    )
+    credentialManifest = mapToCredentialManifest(finalizedOffersDescriptorMap.getMapOpt("credentialManifest")),
+    approvedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("approvedOfferIds")?.toArrayList()
+      ?.toList() as? List<String>) ?: listOf(),
+    rejectedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("rejectedOfferIds")?.toArrayList()
+      ?.toList() as? List<String>) ?: listOf()
+  )
 
   fun jwtVerifiableCredentialsToMap(
     jwtVerifiableCredentials: VCLJwtVerifiableCredentials

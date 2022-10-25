@@ -12,9 +12,12 @@ class VclReactNative: NSObject {
     private let vcl = VCLProvider.vclInstance()
     
     @objc(initialize:withResolver:withRejecter:)
-    func initialize(environmentDictionary: [String: String], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func initialize(
+        initializationDescriptorDictionary: [String: Any],
+        resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
+    ) {
         vcl.initialize(
-            environment: dictionaryToEnvironment(environmentDictionary),
+            initializationDescriptor: dictionaryToInitializationDescriptor(initializationDescriptorDictionary),
             successHandler: {
                 resolve("VCL initialization succeed!")
             },

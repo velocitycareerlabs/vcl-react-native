@@ -12,7 +12,6 @@ import type { VCLCredentialTypeSchemas } from './entities/VCLCredentialTypeSchem
 import type { VCLCredentialTypesUIFormSchema } from './entities/VCLCredentialTypesUIFormSchema';
 import type { VCLCredentialTypesUIFormSchemaDescriptor } from './entities/VCLCredentialTypesUIFormSchemaDescriptor';
 import type { VCLDeepLink } from './entities/VCLDeepLink';
-import type { VCLEnvironment } from './VCLEnvironment';
 import type { VCLExchange } from './entities/VCLExchange';
 import type { VCLExchangeDescriptor } from './entities/VCLExchangeDescriptor';
 import type { VCLFinalizeOffersDescriptor } from './entities/VCLFinalizeOffersDescriptor';
@@ -31,9 +30,12 @@ import type { VCLVerifiedProfile } from './entities/VCLVerifiedProfile';
 import type { VCLVerifiedProfileDescriptor } from './entities/VCLVerifiedProfileDescriptor';
 import type { VCLCountries } from './entities/VCLCountries';
 import type { Dictionary } from './Dictionary';
+import type { VCLInitializationDescriptor } from './entities/VCLInitializationDescriptor';
 
 export type VclApi = {
-  initialize(environment: VCLEnvironment): Promise<void>;
+  initialize(
+    initializationDescriptor: VCLInitializationDescriptor
+  ): Promise<void>;
 
   getCountries(): Promise<VCLCountries>;
   getCredentialTypeSchemas(): Promise<VCLCredentialTypeSchemas>;

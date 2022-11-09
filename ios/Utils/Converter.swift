@@ -18,7 +18,7 @@ func dictionaryToInitializationDescriptor(
         environment: dictionaryToEnvironment(
             initializationDescriptorDictionary["environment"] as? [String: String] ?? ["value": VCLEnvironment.PROD.rawValue]
         ),
-        resetCache: initializationDescriptorDictionary["resetCache"] as? Bool ?? false
+        cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0
         )
 }
 

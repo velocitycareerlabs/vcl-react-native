@@ -65,7 +65,7 @@ export default function App() {
 
     const initializationDescriptor: VCLInitializationDescriptor = {
       environment: environment,
-      resetCache: false,
+      cacheSequence: 0,
     };
     vcl.initialize(initializationDescriptor).then(
       () => {

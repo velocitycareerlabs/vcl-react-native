@@ -29,7 +29,7 @@ object Converter {
         initializationDescriptorMap.getMapOpt("environment")
           ?: mapOf(Pair("value", VCLEnvironment.PROD.value)).toReadableMap()
       ),
-      resetCache = initializationDescriptorMap.getBooleanOpt("resetCache") ?: false
+      cacheSequence = initializationDescriptorMap.getIntOpt("cacheSequence") ?: 0
     )
 
   fun mapToEnvironment(environmentMap: ReadableMap) =

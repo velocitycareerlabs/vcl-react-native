@@ -9,5 +9,5 @@ import type { VCLEnvironment } from '../VCLEnvironment';
 
 export interface VCLInitializationDescriptor {
   environment?: VCLEnvironment;
-  resetCache?: Boolean;
+  cacheSequence?: Number;
 }

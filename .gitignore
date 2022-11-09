@@ -60,3 +60,4 @@ android/keystores/debug.keystore
 lib/
 ios/Pods/*
 ios/Podfile.lock
+*.hprof

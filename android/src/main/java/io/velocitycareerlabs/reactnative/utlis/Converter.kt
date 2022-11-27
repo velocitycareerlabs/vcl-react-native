@@ -202,13 +202,17 @@ object Converter {
   }
 
   fun presentationSubmissionResultToMap(
-    presentationSubmissionResult: VCLIdentificationSubmissionResult
+    presentationSubmissionResult: VCLPresentationSubmissionResult
   ): ReadableMap {
     val presentationSubmissionResultMap = Arguments.createMap()
-    presentationSubmissionResultMap.putMap("token", tokenToMap(presentationSubmissionResult.token))
     presentationSubmissionResultMap.putMap(
-      "exchange",
-      exchangeToMap(presentationSubmissionResult.exchange)
+      VCLIdentificationSubmissionResult.KeyToken, tokenToMap(presentationSubmissionResult.token)
+    )
+    presentationSubmissionResultMap.putMap(
+      VCLIdentificationSubmissionResult.KeyExchange, exchangeToMap(presentationSubmissionResult.exchange)
+    )
+    presentationSubmissionResultMap.putString(
+      VCLIdentificationSubmissionResult.KeyId, presentationSubmissionResult.id
     )
     return presentationSubmissionResultMap
   }
@@ -227,8 +231,9 @@ object Converter {
   fun mapToSubmissionResult(
     submissionResultMap: ReadableMap?
   ) = VCLSubmissionResult(
-    token = mapToToken(submissionResultMap?.getMapOpt("token")),
-    exchange = mapToExchange(submissionResultMap?.getMapOpt("exchange"))
+    token = mapToToken(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyToken)),
+    exchange = mapToExchange(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyExchange)),
+    id = submissionResultMap?.getStringOpt(VCLSubmissionResult.KeyId) ?: ""
   )
 
   fun mapToExchange(

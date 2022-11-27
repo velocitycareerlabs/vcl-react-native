@@ -35,7 +35,7 @@ import vcl, {
   VCLOrganizations,
   VCLPresentationRequest,
   VCLPresentationSubmission,
-  VCLPresentationSubmissionResult,
+  VCLSubmissionResult,
   VCLService,
   VCLServiceCredentialAgentIssuer,
   VCLToken,
@@ -143,7 +143,7 @@ export default function App() {
     };
 
     vcl.submitPresentation(presentationSubmission).then(
-      (presentationSubmissionResult: VCLPresentationSubmissionResult) => {
+      (presentationSubmissionResult: VCLSubmissionResult) => {
         console.log(
           'VCL Presentation submission result:',
           presentationSubmissionResult

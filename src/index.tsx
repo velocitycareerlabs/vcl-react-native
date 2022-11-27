@@ -40,7 +40,6 @@ import type { VCLOrganizationsSearchDescriptor } from './api/entities/VCLOrganiz
 import type { VCLPage } from './api/entities/VCLPage';
 import type { VCLPresentationRequest } from './api/entities/VCLPresentationRequest';
 import type { VCLPresentationSubmission } from './api/entities/VCLPresentationSubmission';
-import type { VCLPresentationSubmissionResult } from './api/entities/VCLPresentationSubmissionResult';
 import type { VCLPublicKey } from './api/entities/VCLPublicKey';
 import type { VCLPushDelegate } from './api/entities/VCLPushDelegate';
 import type { VCLService } from './api/entities/VCLService';
@@ -92,7 +91,6 @@ export {
   VCLPage,
   VCLPresentationRequest,
   VCLPresentationSubmission,
-  VCLPresentationSubmissionResult,
   VCLPublicKey,
   VCLPushDelegate,
   VCLService,

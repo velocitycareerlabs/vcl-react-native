@@ -23,7 +23,6 @@ import type { VCLOrganizations } from './entities/VCLOrganizations';
 import type { VCLOrganizationsSearchDescriptor } from './entities/VCLOrganizationsSearchDescriptor';
 import type { VCLPresentationRequest } from './entities/VCLPresentationRequest';
 import type { VCLPresentationSubmission } from './entities/VCLPresentationSubmission';
-import type { VCLPresentationSubmissionResult } from './entities/VCLPresentationSubmissionResult';
 import type { VCLPublicKey } from './entities/VCLPublicKey';
 import type { VCLToken } from './entities/VCLToken';
 import type { VCLVerifiedProfile } from './entities/VCLVerifiedProfile';
@@ -31,6 +30,7 @@ import type { VCLVerifiedProfileDescriptor } from './entities/VCLVerifiedProfile
 import type { VCLCountries } from './entities/VCLCountries';
 import type { Dictionary } from './Dictionary';
 import type { VCLInitializationDescriptor } from './entities/VCLInitializationDescriptor';
+import type { VCLSubmissionResult } from './entities/VCLSubmissionResult';
 
 export type VclApi = {
   initialize(
@@ -47,7 +47,7 @@ export type VclApi = {
 
   submitPresentation(
     presentationSubmission: VCLPresentationSubmission
-  ): Promise<VCLPresentationSubmissionResult>;
+  ): Promise<VCLSubmissionResult>;
 
   getExchangeProgress(
     exchangeDescriptor: VCLExchangeDescriptor

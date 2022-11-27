@@ -24,7 +24,6 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.presentationRequestToMa
 import io.velocitycareerlabs.reactnative.utlis.Converter.presentationSubmissionResultToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToCredentialTypesUIFormSchemaDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDeepLink
-import io.velocitycareerlabs.reactnative.utlis.Converter.mapToEnvironment
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToExchangeDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToFinalizedOffersDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToGenerateOffersDescriptor

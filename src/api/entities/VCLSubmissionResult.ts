@@ -11,5 +11,6 @@ import type { VCLToken } from './VCLToken';
 export interface VCLSubmissionResult {
   token: VCLToken;
   exchange: VCLExchange;
-  id: string;
+  jti: string;
+  submissionId: string;
 }

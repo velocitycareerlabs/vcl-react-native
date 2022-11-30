@@ -195,7 +195,8 @@ func presentationSubmissionResultToDictionary(
     var presentationSubmissionResulDictionary = [String: Any]()
     presentationSubmissionResulDictionary["token"] = tokenToDictionary(presentationSubmissionResult.token)
     presentationSubmissionResulDictionary["exchange"] = exchangeToDictionary(presentationSubmissionResult.exchange)
-    presentationSubmissionResulDictionary["id"] = presentationSubmissionResult.id
+    presentationSubmissionResulDictionary["jti"] = presentationSubmissionResult.jti
+    presentationSubmissionResulDictionary["submissionId"] = presentationSubmissionResult.submissionId
     return presentationSubmissionResulDictionary
 }
 
@@ -214,7 +215,8 @@ func dictionaryToSubmissionResult(_ submissionResultDictionary: [String: Any]?) 
     return VCLSubmissionResult(
         token: dictionaryToToken(submissionResultDictionary?["token"] as? [String: Any]),
         exchange: dictionaryToExchange(submissionResultDictionary?["exchange"] as? [String: Any]),
-        id: submissionResultDictionary?["id"] as? String ?? ""
+        jti: submissionResultDictionary?["jti"] as? String ?? "",
+        submissionId: submissionResultDictionary?["submissionId"] as? String ?? ""
     )
 }
 

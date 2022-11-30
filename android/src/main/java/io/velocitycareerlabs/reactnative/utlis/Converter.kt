@@ -212,7 +212,10 @@ object Converter {
       VCLIdentificationSubmissionResult.KeyExchange, exchangeToMap(presentationSubmissionResult.exchange)
     )
     presentationSubmissionResultMap.putString(
-      VCLIdentificationSubmissionResult.KeyId, presentationSubmissionResult.id
+      VCLIdentificationSubmissionResult.KeyJti, presentationSubmissionResult.jti
+    )
+    presentationSubmissionResultMap.putString(
+      VCLIdentificationSubmissionResult.KeySubmissionId, presentationSubmissionResult.submissionId
     )
     return presentationSubmissionResultMap
   }
@@ -233,7 +236,8 @@ object Converter {
   ) = VCLSubmissionResult(
     token = mapToToken(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyToken)),
     exchange = mapToExchange(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyExchange)),
-    id = submissionResultMap?.getStringOpt(VCLSubmissionResult.KeyId) ?: ""
+    jti = submissionResultMap?.getStringOpt(VCLSubmissionResult.KeyJti) ?: "",
+    submissionId = submissionResultMap?.getStringOpt(VCLSubmissionResult.KeySubmissionId) ?: "",
   )
 
   fun mapToExchange(

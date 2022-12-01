@@ -135,8 +135,6 @@ export abstract class Constants {
       '{"alg":"ES256K","use":"sig","kid":"uemn6l5ro6hLNrgiPRl1Dy51V9whez4tu4hlwsNOTVk","crv":"secp256k1","x":"oLYCa-AlnVpW8Rq9iST_1eY_XoyvGRry7y1xS4vU4qo","y":"PUMAsawZ24WaSnRIdDb_wNbShAvfsGF71ke1DcJGxlM","kty":"EC"}\n',
   };
   static readonly SomeJson = JSON.parse('{"p1":"v1", "p2":"v12"}');
-  static readonly SomeIss =
-    'did:velocity:0xd4df29726d500f9b85bc6c7f1b3c021f16305692';
 
   static readonly VerifiedProfileDescriptor: VCLVerifiedProfileDescriptor = {
     did: Constants.DID,

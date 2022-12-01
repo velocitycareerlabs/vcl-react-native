@@ -131,5 +131,5 @@ dependencies {
 
   // VCL:
   implementation "com.nimbusds:nimbus-jose-jwt:9.25.6"
-  implementation "io.velocitycareerlabs:vcl:1.1.9"
+  implementation "io.velocitycareerlabs:vcl:1.1.10"
 }

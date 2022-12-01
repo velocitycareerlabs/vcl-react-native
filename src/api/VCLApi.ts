@@ -85,5 +85,9 @@ export type VclApi = {
 
   verifyJwt(jwt: VCLJWT, publicKey: VCLPublicKey): Promise<boolean>;
 
-  generateSignedJwt(payload: Dictionary<any>, iss: string): Promise<VCLJWT>;
+  generateSignedJwt(
+    payload: Dictionary<any>,
+    iss: string,
+    jti: string
+  ): Promise<VCLJWT>;
 };

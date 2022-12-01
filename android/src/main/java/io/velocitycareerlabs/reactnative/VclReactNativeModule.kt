@@ -298,7 +298,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   }
 
   @ReactMethod
-  fun verifyJwt(jwtMap: ReadableMap, publicKeyMap: ReadableMap, promise: Promise) {
+  fun verifyJwt(
+    jwtMap: ReadableMap,
+    publicKeyMap: ReadableMap,
+    promise: Promise
+  ) {
     try {
       vcl.verifyJwt(mapToJwt(jwtMap), mapToPublicKey(publicKeyMap),
         {
@@ -313,11 +317,16 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   }
 
   @ReactMethod
-  fun generateSignedJwt(jwtJsonMap: ReadableMap, iss: String, promise: Promise) {
+  fun generateSignedJwt(
+    jwtJsonMap: ReadableMap,
+    iss: String,
+    jti: String,
+    promise: Promise
+  ) {
     var json: JSONObject? = null
     try {
       json = JSONObject(jwtJsonMap.toHashMap())
-      vcl.generateSignedJwt(json, iss,
+      vcl.generateSignedJwt(json, iss, jti,
         {
           promise.resolve(Converter.jwtToMap(it))
         },

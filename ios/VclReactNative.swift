@@ -239,15 +239,17 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(generateSignedJwt:withIss:withResolver:withRejecter:)
+    @objc(generateSignedJwt:withIss:withJti:withResolver:withRejecter:)
     func generateSignedJwt(
         jwtDictionary: [String: Any],
         iss: String,
+        jti: String,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.generateSignedJwt(
             payload: jwtDictionary,
             iss: iss,
+            jti: jti,
             successHandler: {
                 resolve(jwtToReadableMap($0))
             },

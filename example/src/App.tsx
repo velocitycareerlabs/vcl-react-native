@@ -364,7 +364,7 @@ export default function App() {
   };
 
   const generateSignedJwt = () => {
-    vcl.generateSignedJwt(Constants.SomeJson, Constants.SomeIss).then(
+    vcl.generateSignedJwt(Constants.SomeJson, 'iss123', 'jti123').then(
       (jwt: VCLJWT) => {
         console.log('VCL generated signed jwt:', jwt);
       },

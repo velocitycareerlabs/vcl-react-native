@@ -35,7 +35,7 @@ import vcl, {
   VCLOrganizations,
   VCLPresentationRequest,
   VCLPresentationSubmission,
-  VCLPresentationSubmissionResult,
+  VCLSubmissionResult,
   VCLService,
   VCLServiceCredentialAgentIssuer,
   VCLToken,
@@ -65,7 +65,7 @@ export default function App() {
 
     const initializationDescriptor: VCLInitializationDescriptor = {
       environment: environment,
-      resetCache: false,
+      cacheSequence: 0,
     };
     vcl.initialize(initializationDescriptor).then(
       () => {
@@ -143,7 +143,7 @@ export default function App() {
     };
 
     vcl.submitPresentation(presentationSubmission).then(
-      (presentationSubmissionResult: VCLPresentationSubmissionResult) => {
+      (presentationSubmissionResult: VCLSubmissionResult) => {
         console.log(
           'VCL Presentation submission result:',
           presentationSubmissionResult
@@ -364,7 +364,7 @@ export default function App() {
   };
 
   const generateSignedJwt = () => {
-    vcl.generateSignedJwt(Constants.SomeJson, Constants.SomeIss).then(
+    vcl.generateSignedJwt(Constants.SomeJson, 'iss123', 'jti123').then(
       (jwt: VCLJWT) => {
         console.log('VCL generated signed jwt:', jwt);
       },

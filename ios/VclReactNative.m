@@ -70,6 +70,7 @@ RCT_EXTERN_METHOD(verifyJwt:(NSDictionary*)jwtDictionary
 
 RCT_EXTERN_METHOD(generateSignedJwt:(NSDictionary*)jwtDictionary
                   withIss:(NSString*)iss
+                  withJti:(NSString*)jti
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 

@@ -29,7 +29,7 @@ object Converter {
         initializationDescriptorMap.getMapOpt("environment")
           ?: mapOf(Pair("value", VCLEnvironment.PROD.value)).toReadableMap()
       ),
-      resetCache = initializationDescriptorMap.getBooleanOpt("resetCache") ?: false
+      cacheSequence = initializationDescriptorMap.getIntOpt("cacheSequence") ?: 0
     )
 
   fun mapToEnvironment(environmentMap: ReadableMap) =
@@ -202,13 +202,20 @@ object Converter {
   }
 
   fun presentationSubmissionResultToMap(
-    presentationSubmissionResult: VCLIdentificationSubmissionResult
+    presentationSubmissionResult: VCLPresentationSubmissionResult
   ): ReadableMap {
     val presentationSubmissionResultMap = Arguments.createMap()
-    presentationSubmissionResultMap.putMap("token", tokenToMap(presentationSubmissionResult.token))
     presentationSubmissionResultMap.putMap(
-      "exchange",
-      exchangeToMap(presentationSubmissionResult.exchange)
+      VCLIdentificationSubmissionResult.KeyToken, tokenToMap(presentationSubmissionResult.token)
+    )
+    presentationSubmissionResultMap.putMap(
+      VCLIdentificationSubmissionResult.KeyExchange, exchangeToMap(presentationSubmissionResult.exchange)
+    )
+    presentationSubmissionResultMap.putString(
+      VCLIdentificationSubmissionResult.KeyJti, presentationSubmissionResult.jti
+    )
+    presentationSubmissionResultMap.putString(
+      VCLIdentificationSubmissionResult.KeySubmissionId, presentationSubmissionResult.submissionId
     )
     return presentationSubmissionResultMap
   }
@@ -227,8 +234,10 @@ object Converter {
   fun mapToSubmissionResult(
     submissionResultMap: ReadableMap?
   ) = VCLSubmissionResult(
-    token = mapToToken(submissionResultMap?.getMapOpt("token")),
-    exchange = mapToExchange(submissionResultMap?.getMapOpt("exchange"))
+    token = mapToToken(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyToken)),
+    exchange = mapToExchange(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyExchange)),
+    jti = submissionResultMap?.getStringOpt(VCLSubmissionResult.KeyJti) ?: "",
+    submissionId = submissionResultMap?.getStringOpt(VCLSubmissionResult.KeySubmissionId) ?: "",
   )
 
   fun mapToExchange(

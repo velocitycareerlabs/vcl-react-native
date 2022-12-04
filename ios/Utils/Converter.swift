@@ -18,7 +18,7 @@ func dictionaryToInitializationDescriptor(
         environment: dictionaryToEnvironment(
             initializationDescriptorDictionary["environment"] as? [String: String] ?? ["value": VCLEnvironment.PROD.rawValue]
         ),
-        resetCache: initializationDescriptorDictionary["resetCache"] as? Bool ?? false
+        cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0
         )
 }
 
@@ -195,6 +195,8 @@ func presentationSubmissionResultToDictionary(
     var presentationSubmissionResulDictionary = [String: Any]()
     presentationSubmissionResulDictionary["token"] = tokenToDictionary(presentationSubmissionResult.token)
     presentationSubmissionResulDictionary["exchange"] = exchangeToDictionary(presentationSubmissionResult.exchange)
+    presentationSubmissionResulDictionary["jti"] = presentationSubmissionResult.jti
+    presentationSubmissionResulDictionary["submissionId"] = presentationSubmissionResult.submissionId
     return presentationSubmissionResulDictionary
 }
 
@@ -212,7 +214,9 @@ func exchangeToDictionary(
 func dictionaryToSubmissionResult(_ submissionResultDictionary: [String: Any]?) -> VCLSubmissionResult {
     return VCLSubmissionResult(
         token: dictionaryToToken(submissionResultDictionary?["token"] as? [String: Any]),
-        exchange: dictionaryToExchange(submissionResultDictionary?["exchange"] as? [String: Any])
+        exchange: dictionaryToExchange(submissionResultDictionary?["exchange"] as? [String: Any]),
+        jti: submissionResultDictionary?["jti"] as? String ?? "",
+        submissionId: submissionResultDictionary?["submissionId"] as? String ?? ""
     )
 }
 

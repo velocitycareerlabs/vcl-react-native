@@ -64,11 +64,11 @@ class VclReactNative: NSObject {
     
     @objc(getPresentationRequest:withResolver:withRejecter:)
     func getPresentationRequest(
-        deepLinkDictionary: [String: String],
+        presentationRequestDescriptorDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.getPresentationRequest(
-            deepLink: dictionaryToDeepLink(deepLinkDictionary),
+            presentationRequestDescriptor: dictionaryTopPresentationRequestDescriptor(presentationRequestDescriptorDictionary),
             successHandler: {
                 resolve(presentationRequestToDictionary($0))
             },

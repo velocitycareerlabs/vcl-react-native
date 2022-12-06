@@ -11,7 +11,6 @@ import type { VCLCredentialType } from './entities/VCLCredentialType';
 import type { VCLCredentialTypeSchemas } from './entities/VCLCredentialTypeSchemas';
 import type { VCLCredentialTypesUIFormSchema } from './entities/VCLCredentialTypesUIFormSchema';
 import type { VCLCredentialTypesUIFormSchemaDescriptor } from './entities/VCLCredentialTypesUIFormSchemaDescriptor';
-import type { VCLDeepLink } from './entities/VCLDeepLink';
 import type { VCLExchange } from './entities/VCLExchange';
 import type { VCLExchangeDescriptor } from './entities/VCLExchangeDescriptor';
 import type { VCLFinalizeOffersDescriptor } from './entities/VCLFinalizeOffersDescriptor';
@@ -31,6 +30,7 @@ import type { VCLCountries } from './entities/VCLCountries';
 import type { Dictionary } from './Dictionary';
 import type { VCLInitializationDescriptor } from './entities/VCLInitializationDescriptor';
 import type { VCLSubmissionResult } from './entities/VCLSubmissionResult';
+import type { VCLPresentationRequestDescriptor } from './entities/VCLPresentationRequestDescriptor';
 
 export type VclApi = {
   initialize(
@@ -42,7 +42,7 @@ export type VclApi = {
   getCredentialTypes(): Promise<Array<VCLCredentialType>>;
 
   getPresentationRequest(
-    deepLink: VCLDeepLink
+    presentationRequestDescriptor: VCLPresentationRequestDescriptor
   ): Promise<VCLPresentationRequest>;
 
   submitPresentation(

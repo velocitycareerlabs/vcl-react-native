@@ -23,7 +23,7 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToPresentationSubmis
 import io.velocitycareerlabs.reactnative.utlis.Converter.presentationRequestToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.presentationSubmissionResultToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToCredentialTypesUIFormSchemaDescriptor
-import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDeepLink
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapTopPresentationRequestDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToExchangeDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToFinalizedOffersDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToGenerateOffersDescriptor
@@ -107,10 +107,13 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   }
 
   @ReactMethod
-  fun getPresentationRequest(deepLinkReadableMap: ReadableMap, promise: Promise) {
+  fun getPresentationRequest(
+    presentationRequestDescriptorReadableMap: ReadableMap,
+    promise: Promise
+  ) {
     try {
       vcl.getPresentationRequest(
-        mapToDeepLink(deepLinkReadableMap),
+        mapTopPresentationRequestDescriptor(presentationRequestDescriptorReadableMap),
         {
           promise.resolve(presentationRequestToMap(it))
         },

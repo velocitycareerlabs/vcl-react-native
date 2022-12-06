@@ -21,7 +21,7 @@ RCT_EXTERN_METHOD(getCredentialTypeSchemas:(RCTPromiseResolveBlock)resolve
 RCT_EXTERN_METHOD(getCredentialTypes:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(getPresentationRequest:(NSDictionary*)deepLink
+RCT_EXTERN_METHOD(getPresentationRequest:(NSDictionary*)presentationRequestDescriptorDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 

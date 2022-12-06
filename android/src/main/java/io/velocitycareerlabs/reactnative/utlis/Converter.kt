@@ -132,6 +132,12 @@ object Converter {
     return credentialTypesArray
   }
 
+  fun mapTopPresentationRequestDescriptor(presentationRequestDescriptorLinkMap: ReadableMap) =
+    VCLPresentationRequestDescriptor(
+      deepLink = mapToDeepLink(presentationRequestDescriptorLinkMap.getMapOpt("deepLink")),
+      pushDelegate = mapToPushDelegate(presentationRequestDescriptorLinkMap.getMapOpt("pushDelegate"))
+    )
+
   fun mapToDeepLink(deepLinkMap: ReadableMap?) =
     VCLDeepLink(deepLinkMap?.getStringOpt("value") ?: "")
 
@@ -359,6 +365,16 @@ object Converter {
     return organizationsMap
   }
 
+  fun mapToPushDelegate(pushDelegateMap: ReadableMap?): VCLPushDelegate? {
+    val pushUrl = pushDelegateMap?.getStringOpt("pushUrl")
+    val pushToken = pushDelegateMap?.getStringOpt("pushToken")
+    return if (pushUrl != null && pushToken != null)
+      VCLPushDelegate(
+        pushUrl = pushUrl,
+        pushToken = pushToken
+      ) else null
+  }
+
   fun mapToCredentialManifestDescriptor(
     credentialManifestDescriptorMap: ReadableMap
   ): VCLCredentialManifestDescriptor? {
@@ -376,20 +392,14 @@ object Converter {
     credentialManifestDescriptorByDeepLinkMap: ReadableMap
   ): VCLCredentialManifestDescriptorByDeepLink {
     return VCLCredentialManifestDescriptorByDeepLink(
-      mapToDeepLink(
-        credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink")
-      )
+      mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink"))
     )
   }
 
   fun mapToCredentialManifestDescriptorByService(
     credentialManifestDescriptorByServiceMap: ReadableMap
   ): VCLCredentialManifestDescriptorByService {
-    val pushDelegateMap = credentialManifestDescriptorByServiceMap.getMapOpt("pushDelegate")
-    val pushDelegate = VCLPushDelegate(
-      pushUrl = pushDelegateMap?.getStringOpt("pushUrl") ?: "",
-      pushToken = pushDelegateMap?.getStringOpt("pushToken") ?: ""
-    )
+    val pushDelegate = mapToPushDelegate(credentialManifestDescriptorByServiceMap.getMapOpt("pushDelegate"))
     return VCLCredentialManifestDescriptorByService(
       service = mapToServiceCredentialAgentIssuer(
         credentialManifestDescriptorByServiceMap.getMapOpt("service")

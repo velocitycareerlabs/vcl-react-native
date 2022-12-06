@@ -52,6 +52,7 @@ import type { VCLVerifiedProfile } from './api/entities/VCLVerifiedProfile';
 import type { VCLVerifiedProfileDescriptor } from './api/entities/VCLVerifiedProfileDescriptor';
 import type { Dictionary } from './api/Dictionary';
 import type { VCLInitializationDescriptor } from './api/entities/VCLInitializationDescriptor';
+import type { VCLPresentationRequestDescriptor } from './api/entities/VCLPresentationRequestDescriptor';
 
 const { VclReactNative } = NativeModules;
 
@@ -102,4 +103,5 @@ export {
   VCLVerifiedProfile,
   VCLVerifiedProfileDescriptor,
   VCLInitializationDescriptor,
+  VCLPresentationRequestDescriptor,
 };

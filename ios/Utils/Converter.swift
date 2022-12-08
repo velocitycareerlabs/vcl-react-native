@@ -19,7 +19,7 @@ func dictionaryToInitializationDescriptor(
             initializationDescriptorDictionary["environment"] as? [String: String] ?? ["value": VCLEnvironment.PROD.rawValue]
         ),
         cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0
-        )
+    )
 }
 
 func dictionaryToEnvironment(
@@ -113,19 +113,28 @@ func credentialTypesToDictionary(
 }
 
 private func parseCredentialTypesArray(_ credentialTypesArr: [VCLCredentialType]) -> [[String: Any?]] {
-  var credentialTypesArray = [[String: Any?]]()
-  credentialTypesArr.forEach {
-    var credentialType = [String: Any?]()
-    credentialType["payload"] = $0.payload
-    credentialType["id"] = $0.id
-    credentialType["schema"] = $0.schema
-    credentialType["createdAt"] = $0.createdAt
-    credentialType["schemaName"] = $0.schemaName
-    credentialType["credentialType"] = $0.credentialType
-    credentialType["recommended"] = $0.recommended
-    credentialTypesArray.append(credentialType)
-  }
-  return credentialTypesArray
+    var credentialTypesArray = [[String: Any?]]()
+    credentialTypesArr.forEach {
+        var credentialType = [String: Any?]()
+        credentialType["payload"] = $0.payload
+        credentialType["id"] = $0.id
+        credentialType["schema"] = $0.schema
+        credentialType["createdAt"] = $0.createdAt
+        credentialType["schemaName"] = $0.schemaName
+        credentialType["credentialType"] = $0.credentialType
+        credentialType["recommended"] = $0.recommended
+        credentialTypesArray.append(credentialType)
+    }
+    return credentialTypesArray
+}
+
+func dictionaryTopPresentationRequestDescriptor(
+    _ presentationRequestDescriptorLinkDictionary: [String: Any]
+) -> VCLPresentationRequestDescriptor {
+    return VCLPresentationRequestDescriptor(
+        deepLink: dictionaryToDeepLink(presentationRequestDescriptorLinkDictionary["deepLink"] as? [String: Any]),
+        pushDelegate: dictionaryToPushDelegate(presentationRequestDescriptorLinkDictionary["pushDelegate"] as? [String: Any])
+    )
 }
 
 func dictionaryToDeepLink(_ deepLinkDictionary: [String: Any]?) -> VCLDeepLink {
@@ -340,6 +349,18 @@ func organizationsToDictionary(
     return organizationsMap
 }
 
+func dictionaryToPushDelegate(_ pushDelegateMap: [String: Any]?) -> VCLPushDelegate? {
+    let pushUrl = pushDelegateMap?["pushUrl"] as? String
+    let pushToken = pushDelegateMap?["pushToken"] as? String
+    if (pushUrl != nil && pushToken != nil) {
+        return VCLPushDelegate(
+            pushUrl: pushUrl!,
+            pushToken: pushToken!
+        )
+    }
+    else { return nil }
+}
+
 func dictionaryToCredentialManifestDescriptor(
     _ credentialManifestDescriptorDictionary: [String: Any]
 ) -> VCLCredentialManifestDescriptor? {
@@ -369,10 +390,7 @@ func dictionaryToCredentialManifestDescriptorByService(
     _ credentialManifestDescriptorByServiceDictionary: [String: Any]
 ) -> VCLCredentialManifestDescriptorByService {
     let pushDelegateDictionary = credentialManifestDescriptorByServiceDictionary["pushDelegate"] as? [String: Any]
-    let pushDelegate = VCLPushDelegate(
-        pushUrl: pushDelegateDictionary?["pushUrl"] as? String ?? "",
-        pushToken: pushDelegateDictionary?["pushToken"] as? String ?? ""
-    )
+    let pushDelegate = dictionaryToPushDelegate(pushDelegateDictionary)
     return VCLCredentialManifestDescriptorByService(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorByServiceDictionary["service"] as? [String : Any]

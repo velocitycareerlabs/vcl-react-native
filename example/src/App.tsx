@@ -42,6 +42,7 @@ import vcl, {
   VCLVerifiedProfile,
   VCLDeepLink,
   VCLInitializationDescriptor,
+  VCLPresentationRequestDescriptor,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export const enum InitState {
@@ -125,7 +126,14 @@ export default function App() {
         value: Constants.PresentationRequestDeepLinkStrStaging,
       };
     }
-    vcl.getPresentationRequest(deepLink).then(
+    const pesentationRequestDescriptor: VCLPresentationRequestDescriptor = {
+      deepLink: deepLink,
+      pushDelegate: {
+        pushToken: 'push_token',
+        pushUrl: 'push_delegate',
+      },
+    };
+    vcl.getPresentationRequest(pesentationRequestDescriptor).then(
       (presentationRequest: VCLPresentationRequest) => {
         console.log('VCL Presentation Request received:', presentationRequest);
         submitPresentation(presentationRequest);

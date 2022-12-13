@@ -6,6 +6,12 @@
  */
 
 export interface VCLPushDelegate {
-  pushToken: string;
+  /**
+   * the url of the endpoint that will send pushes to the device
+   */
   pushUrl: string;
+  /**
+   * the token to use for identifying the group of devices this device belongs to
+   */
+  pushToken: string;
 }

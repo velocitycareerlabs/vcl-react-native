@@ -366,8 +366,8 @@ object Converter {
   }
 
   fun mapToPushDelegate(pushDelegateMap: ReadableMap?): VCLPushDelegate? {
-    val pushUrl = pushDelegateMap?.getStringOpt("pushUrl")
-    val pushToken = pushDelegateMap?.getStringOpt("pushToken")
+    val pushUrl = pushDelegateMap?.getStringOpt(VCLPushDelegate.KeyPushUrl)
+    val pushToken = pushDelegateMap?.getStringOpt(VCLPushDelegate.KeyPushToken)
     return if (pushUrl != null && pushToken != null)
       VCLPushDelegate(
         pushUrl = pushUrl,

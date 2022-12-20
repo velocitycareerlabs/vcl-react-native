@@ -5,7 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export interface VCLError {
-  description: string;
-  code: number;
+import type { VCLServiceType } from './VCLServiceType';
+
+export interface VCLServiceTypes {
+  payload: VCLServiceType[];
 }

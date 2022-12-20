@@ -548,7 +548,11 @@ object Converter {
   )
 
   fun mapToVerifiedProfileDescriptor(verifiedProfileDescriptor: ReadableMap) =
-    VCLVerifiedProfileDescriptor(did = verifiedProfileDescriptor.getStringOpt("did") ?: "")
+    VCLVerifiedProfileDescriptor(
+      did = verifiedProfileDescriptor.getStringOpt("did") ?: "",
+      serviceType = VCLServiceType.fromString(
+        verifiedProfileDescriptor.getStringOpt("serviceType") ?: ""
+      ))
 
   fun verifiedProfileToMap(
     verifiedProfile: VCLVerifiedProfile

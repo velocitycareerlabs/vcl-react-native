@@ -36,9 +36,6 @@ export abstract class Constants {
   static readonly AdamSmithPhoneJwt =
     'eyJ0eXAiOiJKV1QiLCJqd2siOnsiY3J2Ijoic2VjcDI1NmsxIiwieCI6IjFtNi1ZSWtHZTA3MmxYcUNqd1RCTExhMnN6bTZ1cGtMTTNjZnY4eVF6ZEEiLCJ5IjoiNDVBWkJlU2xVOUlSSUR5MHA5RF9kaFR4MkZ4dGQtMlBGdkVma3dsZnRGZyIsImt0eSI6IkVDIiwia2lkIjoiZnV0c2VQQUNRdFVJWnRNVlRMR1RYZzFXMGlUZG1odXJBVHZpcmxES3BwZyIsImFsZyI6IkVTMjU2SyIsInVzZSI6InNpZyJ9LCJhbGciOiJFUzI1NksifQ.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlBob25lVjEuMCIsIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sImNyZWRlbnRpYWxTdWJqZWN0Ijp7InBob25lIjoiKzE1NTU2MTkyMTkxIn19LCJpc3MiOiJkaWQ6dmVsb2NpdHk6MHhiYTdkODdmOWQ1ZTQ3M2Q3ZDNhODJkMTUyOTIzYWRiNTNkZThmYzBlIiwianRpIjoiZGlkOnZlbG9jaXR5OjB4OGNlMzk4Y2VmNGY3ZWQ4ZWI1MGEyOGQyNWM4NjNlZWY5NjhiYjBlZSIsImlhdCI6MTYzNDUxMDg5NCwibmJmIjoxNjM0NTEwODk0fQ.g3YivH_Quiw95TywvTmiv2CBWsp5JrrCcbpOcTtYpMAQNQJD7Q3kmMYTBs1Zg3tKFRPSJ_XozFIXug5nsn2SGg';
 
-  static readonly DID =
-    'did:velocity:0x2bef092530ccc122f5fe439b78eddf6010685e88';
-
   //    Credential id is taken from jti field
   static readonly CredentialId1 =
     'did:velocity:v2:0x2bef092530ccc122f5fe439b78eddf6010685e88:248532930732481:1963';
@@ -69,6 +66,11 @@ export abstract class Constants {
     { inputDescriptor: 'EmailV1.0', jwtVc: Constants.AdamSmithEmailJwt },
   ];
 
+  static readonly DidDev =
+    'did:velocity:0x2bef092530ccc122f5fe439b78eddf6010685e88';
+  static readonly DidStaging =
+    'did:ion:EiDaeg3OofbDCdaQi5-zOLGfhZ9-boS0-w5URDfVwrI7BQ';
+
   static readonly OrganizationsSearchDescriptor: VCLOrganizationsSearchDescriptor =
     {
       filter: {
@@ -83,10 +85,17 @@ export abstract class Constants {
       // query: 'Bank',
     };
 
-  static readonly OrganizationsSearchDescriptorByDid: VCLOrganizationsSearchDescriptor =
+  static readonly OrganizationsSearchDescriptorByDidDev: VCLOrganizationsSearchDescriptor =
     {
       filter: {
-        did: Constants.DID,
+        did: Constants.DidDev,
+      },
+    };
+
+  static readonly OrganizationsSearchDescriptorByDidStaging: VCLOrganizationsSearchDescriptor =
+    {
+      filter: {
+        did: Constants.DidStaging,
       },
     };
 
@@ -137,6 +146,7 @@ export abstract class Constants {
   static readonly SomeJson = JSON.parse('{"p1":"v1", "p2":"v12"}');
 
   static readonly VerifiedProfileDescriptor: VCLVerifiedProfileDescriptor = {
-    did: Constants.DID,
+    did: Constants.DidDev,
+    serviceType: VCLServiceType.Issuer,
   };
 }

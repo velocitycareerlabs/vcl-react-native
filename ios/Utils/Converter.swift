@@ -528,7 +528,11 @@ func readableMapToCredentialTypesUIFormSchemaDescriptor(
 func dictionaryToVerifiedProfileDescriptor(
     _ verifiedProfileDescriptor: [String: Any]
 ) -> VCLVerifiedProfileDescriptor {
-    return VCLVerifiedProfileDescriptor(did: (verifiedProfileDescriptor["did"] as? String) ?? "")
+    return VCLVerifiedProfileDescriptor(
+        did: (verifiedProfileDescriptor["did"] as? String) ?? "",
+        serviceType: VCLServiceType.fromString(
+            value: verifiedProfileDescriptor["serviceType"] as? String ?? ""
+        ))
 }
 
 func verifiedProfileToDictionary(

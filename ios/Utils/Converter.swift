@@ -249,36 +249,6 @@ func dictionaryToExchangeDescriptor(
     )
 }
 
-func stringToServiceType(
-    _ serviceTypeStr: String?
-) -> VCLServiceType? {
-    var serviceType: VCLServiceType? = nil
-    guard (serviceTypeStr != nil) else {
-        return nil
-    }
-    switch serviceTypeStr {
-    case "Issuer":
-        serviceType = .Issuer
-    case "Inspector":
-        serviceType = .Inspector
-    case "CredentialAgentOperator":
-        serviceType = .CredentialAgentOperator
-    case "NodeOperator":
-        serviceType = .NodeOperator
-    case "TrustRoot":
-        serviceType = .TrustRoot
-    case "NotaryIssuer":
-        serviceType = .NotaryIssuer
-    case "IdentityIssuer":
-        serviceType = .IdentityIssuer
-    case "HolderAppProvider":
-        serviceType = .HolderAppProvider
-    default:
-        serviceType = nil
-    }
-    return serviceType
-}
-
 func dictionayToOrganizationsSearchDescriptor(
     _ organizationsDescriptorDictionary: [String: Any]
 ) -> VCLOrganizationsSearchDescriptor {
@@ -298,10 +268,7 @@ func dictionaryToFilter(
     if let serviceTypesArr = (filterDictionary?["serviceTypes"] as? [String]) {
         serviceTypesList = [VCLServiceType]()
         for serviceTypeStr in serviceTypesArr {
-            let serviceType = stringToServiceType(serviceTypeStr)
-            if let st = serviceType {
-                serviceTypesList?.append(st)
-            }
+            serviceTypesList?.append(VCLServiceType.fromString(value: serviceTypeStr))
         }
     }
     var credentialTypesList: [String]? = nil
@@ -528,6 +495,12 @@ func readableMapToCredentialTypesUIFormSchemaDescriptor(
 func dictionaryToVerifiedProfileDescriptor(
     _ verifiedProfileDescriptor: [String: Any]
 ) -> VCLVerifiedProfileDescriptor {
+    if let serviceTypeStr = verifiedProfileDescriptor["serviceType"] as? String {
+        return VCLVerifiedProfileDescriptor(
+            did: (verifiedProfileDescriptor["did"] as? String) ?? "",
+            serviceType: VCLServiceType.fromString(value: serviceTypeStr)
+        )
+    }
     return VCLVerifiedProfileDescriptor(did: (verifiedProfileDescriptor["did"] as? String) ?? "")
 }
 

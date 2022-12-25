@@ -35,6 +35,7 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToVerifiedProfileDes
 import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
 import io.velocitycareerlabs.api.entities.VCLError
+import io.velocitycareerlabs.reactnative.extensions.toThrowable
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
 import org.json.JSONObject
 import java.lang.Exception
@@ -69,7 +70,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve("VCL initialization succeed!")
         },
         errorHandler = {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -118,7 +119,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(presentationRequestToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -137,7 +138,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(presentationSubmissionResultToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -155,7 +156,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(exchangeToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -174,7 +175,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(organizationsToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -193,7 +194,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
             promise.resolve(credentialManifestToMap(it))
           },
           {
-            promise.reject(it)
+            promise.reject(it.toThrowable())
           })
       } ?: promise.reject(VCLError("Unexpected Credential Credential Manifest Descriptor: $credentialManifestDescriptorMap"))
     } catch (ex: Exception) {
@@ -213,7 +214,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(generatedOffersToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -234,7 +235,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(generatedOffersToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -255,7 +256,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(jwtVerifiableCredentialsToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -274,7 +275,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(credentialTypesFormSchemaToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         }
       )
     } catch (ex: Exception) {
@@ -293,7 +294,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(verifiedProfileToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -312,7 +313,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(it)
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
@@ -334,7 +335,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           promise.resolve(Converter.jwtToMap(it))
         },
         {
-          promise.reject(it)
+          promise.reject(it.toThrowable())
         })
     } catch (e: Exception) {
       promise.reject(VCLError(e.message))

@@ -8,10 +8,12 @@
 export enum VCLServiceType {
   Issuer = 'Issuer',
   Inspector = 'Inspector',
-  CredentialAgentOperator = 'CredentialAgentOperator',
-  NodeOperator = 'NodeOperator',
   TrustRoot = 'TrustRoot',
+  CareerIssuer = 'CareerIssuer',
+  NodeOperator = 'NodeOperator',
   NotaryIssuer = 'NotaryIssuer',
   IdentityIssuer = 'IdentityIssuer',
   HolderAppProvider = 'HolderAppProvider',
+  CredentialAgentOperator = 'CredentialAgentOperator',
+  Undefined = 'Undefined',
 }

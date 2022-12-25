@@ -22,7 +22,7 @@ class VclReactNative: NSObject {
                 resolve("VCL initialization succeed!")
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -73,7 +73,7 @@ class VclReactNative: NSObject {
                 resolve(presentationRequestToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             }
         )
     }
@@ -89,7 +89,7 @@ class VclReactNative: NSObject {
                 resolve(presentationSubmissionResultToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -104,7 +104,7 @@ class VclReactNative: NSObject {
                 resolve(exchangeToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -119,7 +119,7 @@ class VclReactNative: NSObject {
                 resolve(organizationsToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -135,7 +135,7 @@ class VclReactNative: NSObject {
                 resolve(credentialManifestToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
         } else {
             reject(nil, "Unexpected Credential Credential Manifest Descriptor: \(credentialManifestDescriptorDictionary)", nil)
@@ -153,7 +153,7 @@ class VclReactNative: NSObject {
                 resolve(generatedOffersToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -170,7 +170,7 @@ class VclReactNative: NSObject {
                 resolve(generatedOffersToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -187,7 +187,7 @@ class VclReactNative: NSObject {
                 resolve(jwtVerifiableCredentialsToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -202,7 +202,7 @@ class VclReactNative: NSObject {
           resolve(credentialTypesFormSchemaToDictionary($0))
         },
         errorHandler: {
-            reject(nil, $0.description, $0)
+            reject(nil, "\($0.toJsonString())", $0)
         }
       )
     }
@@ -218,7 +218,7 @@ class VclReactNative: NSObject {
                 resolve(verifiedProfileToDictionary($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -235,7 +235,7 @@ class VclReactNative: NSObject {
                 resolve($0)
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
     
@@ -254,7 +254,7 @@ class VclReactNative: NSObject {
                 resolve(jwtToReadableMap($0))
             },
             errorHandler: {
-                reject(nil, $0.description, $0)
+                reject(nil, "\($0.toJsonString())", $0)
             })
     }
 }

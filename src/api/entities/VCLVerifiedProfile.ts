@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { VCLServiceTypes } from './VCLServiceTypes';
 import type { Dictionary } from '../Dictionary';
 
 export interface VCLVerifiedProfile {
@@ -13,4 +14,5 @@ export interface VCLVerifiedProfile {
   name: string;
   logo: string;
   id: string;
+  serviceTypes: VCLServiceTypes;
 }

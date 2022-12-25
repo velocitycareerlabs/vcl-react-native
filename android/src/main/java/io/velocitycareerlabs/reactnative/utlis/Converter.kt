@@ -261,21 +261,6 @@ object Converter {
       mapToSubmissionResult(exchangeDescriptorMap.getMapOpt("submissionResult"))
     )
 
-  fun stringToServiceType(
-    serviceType: String?
-  ): VCLServiceType? =
-    when (serviceType) {
-      "Issuer" -> VCLServiceType.Issuer
-      "Inspector" -> VCLServiceType.Inspector
-      "CredentialAgentOperator" -> VCLServiceType.CredentialAgentOperator
-      "NodeOperator" -> VCLServiceType.NodeOperator
-      "TrustRoot" -> VCLServiceType.TrustRoot
-      "NotaryIssuer" -> VCLServiceType.NotaryIssuer
-      "IdentityIssuer" -> VCLServiceType.IdentityIssuer
-      "HolderAppProvider" -> VCLServiceType.HolderAppProvider
-      else -> null
-    }
-
   fun mapToOrganizationsSearchDescriptor(
     organizationsDescriptorMap: ReadableMap
   ) = VCLOrganizationsSearchDescriptor(
@@ -294,8 +279,7 @@ object Converter {
     serviceTypesArr?.let {
       serviceTypesList = mutableListOf()
       for (i in 0 until it.size()) {
-        val serviceType = stringToServiceType(it.getStringOpt(i))
-        serviceType?.let { st -> serviceTypesList?.add(st) }
+        serviceTypesList?.add(VCLServiceType.fromString(it.getStringOpt(i) ?: ""))
       }
     }
     val credentialTypesArr = filterMap?.getArrayOpt("credentialTypes")
@@ -366,8 +350,8 @@ object Converter {
   }
 
   fun mapToPushDelegate(pushDelegateMap: ReadableMap?): VCLPushDelegate? {
-    val pushUrl = pushDelegateMap?.getStringOpt("pushUrl")
-    val pushToken = pushDelegateMap?.getStringOpt("pushToken")
+    val pushUrl = pushDelegateMap?.getStringOpt(VCLPushDelegate.KeyPushUrl)
+    val pushToken = pushDelegateMap?.getStringOpt(VCLPushDelegate.KeyPushToken)
     return if (pushUrl != null && pushToken != null)
       VCLPushDelegate(
         pushUrl = pushUrl,
@@ -548,7 +532,11 @@ object Converter {
   )
 
   fun mapToVerifiedProfileDescriptor(verifiedProfileDescriptor: ReadableMap) =
-    VCLVerifiedProfileDescriptor(did = verifiedProfileDescriptor.getStringOpt("did") ?: "")
+    VCLVerifiedProfileDescriptor(
+      did = verifiedProfileDescriptor.getStringOpt("did") ?: "",
+      serviceType = verifiedProfileDescriptor.getStringOpt("serviceType")?.let {
+        VCLServiceType.fromString(it)
+      })
 
   fun verifiedProfileToMap(
     verifiedProfile: VCLVerifiedProfile

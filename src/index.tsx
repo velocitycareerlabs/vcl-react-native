@@ -25,7 +25,6 @@ import type { VCLCredentialTypeSchemas } from './api/entities/VCLCredentialTypeS
 import type { VCLCredentialTypesUIFormSchemaDescriptor } from './api/entities/VCLCredentialTypesUIFormSchemaDescriptor';
 import type { VCLCredentialTypesUIFormSchema } from './api/entities/VCLCredentialTypesUIFormSchema';
 import type { VCLDeepLink } from './api/entities/VCLDeepLink';
-import type { VCLError } from './api/entities/VCLError';
 import type { VCLExchange } from './api/entities/VCLExchange';
 import type { VCLExchangeDescriptor } from './api/entities/VCLExchangeDescriptor';
 import type { VCLFilter } from './api/entities/VCLFilter';
@@ -77,7 +76,6 @@ export {
   VCLCredentialTypesUIFormSchemaDescriptor,
   VCLCredentialManifestDescriptorRefresh,
   VCLDeepLink,
-  VCLError,
   VCLExchange,
   VCLExchangeDescriptor,
   VCLFilter,

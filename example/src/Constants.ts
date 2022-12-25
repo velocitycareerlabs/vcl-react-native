@@ -147,6 +147,6 @@ export abstract class Constants {
 
   static readonly VerifiedProfileDescriptor: VCLVerifiedProfileDescriptor = {
     did: Constants.DidDev,
-    serviceType: VCLServiceType.Issuer,
+    // serviceType: VCLServiceType.Issuer,
   };
 }

@@ -9,5 +9,5 @@ import type { VCLServiceType } from './VCLServiceType';
 
 export interface VCLVerifiedProfileDescriptor {
   did: string;
-  serviceType: VCLServiceType;
+  serviceType?: VCLServiceType;
 }

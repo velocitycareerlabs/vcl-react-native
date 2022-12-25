@@ -9,6 +9,7 @@ export enum VCLServiceType {
   Issuer = 'Issuer',
   Inspector = 'Inspector',
   TrustRoot = 'TrustRoot',
+  CareerIssuer = 'CareerIssuer',
   NodeOperator = 'NodeOperator',
   NotaryIssuer = 'NotaryIssuer',
   IdentityIssuer = 'IdentityIssuer',

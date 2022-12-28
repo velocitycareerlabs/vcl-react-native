@@ -160,7 +160,7 @@ object Converter {
     presentationRequestMap: ReadableMap?
   ) = VCLPresentationRequest(
     mapToJwt(presentationRequestMap?.getMapOpt("jwt")),
-    mapToPublicKey(presentationRequestMap?.getMapOpt("publicKey")),
+    mapToJwkPublic(presentationRequestMap?.getMapOpt("jwkPublic")),
     mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink"))
   )
 
@@ -172,8 +172,8 @@ object Converter {
     jwtMap.putString("encodedJwt", presentationRequest.jwt.signedJwt.serialize())
     presentationRequestMap.putMap("jwt", jwtMap)
     val jwkMap = Arguments.createMap()
-    jwkMap.putString("jwkStr", presentationRequest.publicKey.jwkStr)
-    presentationRequestMap.putMap("publicKey", jwkMap)
+    jwkMap.putString("valueStr", presentationRequest.jwkPublic.valueStr)
+    presentationRequestMap.putMap("jwkPublic", jwkMap)
     presentationRequestMap.putString("iss", presentationRequest.iss)
     presentationRequestMap.putString("exchangeId", presentationRequest.exchangeId)
     presentationRequestMap.putString(
@@ -215,7 +215,8 @@ object Converter {
       VCLIdentificationSubmissionResult.KeyToken, tokenToMap(presentationSubmissionResult.token)
     )
     presentationSubmissionResultMap.putMap(
-      VCLIdentificationSubmissionResult.KeyExchange, exchangeToMap(presentationSubmissionResult.exchange)
+      VCLIdentificationSubmissionResult.KeyExchange,
+      exchangeToMap(presentationSubmissionResult.exchange)
     )
     presentationSubmissionResultMap.putString(
       VCLIdentificationSubmissionResult.KeyJti, presentationSubmissionResult.jti
@@ -383,7 +384,8 @@ object Converter {
   fun mapToCredentialManifestDescriptorByService(
     credentialManifestDescriptorByServiceMap: ReadableMap
   ): VCLCredentialManifestDescriptorByService {
-    val pushDelegate = mapToPushDelegate(credentialManifestDescriptorByServiceMap.getMapOpt("pushDelegate"))
+    val pushDelegate =
+      mapToPushDelegate(credentialManifestDescriptorByServiceMap.getMapOpt("pushDelegate"))
     return VCLCredentialManifestDescriptorByService(
       service = mapToServiceCredentialAgentIssuer(
         credentialManifestDescriptorByServiceMap.getMapOpt("service")
@@ -437,7 +439,7 @@ object Converter {
     credentialManifestMap: ReadableMap?
   ): VCLCredentialManifest {
     val jwt =
-      VCLJWT(encodedJwt = credentialManifestMap?.getMapOpt("jwt")?.getStringOpt("encodedJwt") ?: "")
+      VCLJwt(encodedJwt = credentialManifestMap?.getMapOpt("jwt")?.getStringOpt("encodedJwt") ?: "")
     val vendorOriginContext: String? = credentialManifestMap?.getStringOpt("vendorOriginContext")
     return VCLCredentialManifest(jwt = jwt, vendorOriginContext = vendorOriginContext)
   }
@@ -491,10 +493,10 @@ object Converter {
   }
 
   fun mapToJwt(jwtMap: ReadableMap?) =
-    VCLJWT(encodedJwt = jwtMap?.getStringOpt("encodedJwt") ?: "")
+    VCLJwt(encodedJwt = jwtMap?.getStringOpt("encodedJwt") ?: "")
 
-  fun mapToPublicKey(publicKeyMap: ReadableMap?) =
-    VCLPublicKey(jwkStr = publicKeyMap?.getStringOpt("jwkStr") ?: "")
+  fun mapToJwkPublic(jwkPublicMap: ReadableMap?) =
+    VCLJwkPublic(valueStr = jwkPublicMap?.getStringOpt("valueStr") ?: "")
 
   fun mapToFinalizedOffersDescriptor(
     finalizedOffersDescriptorMap: ReadableMap
@@ -518,7 +520,7 @@ object Converter {
     return jwtVerifiableCredentialsMap
   }
 
-  fun jwtToMap(jwt: VCLJWT): ReadableMap {
+  fun jwtToMap(jwt: VCLJwt): ReadableMap {
     val jwtReadableMap = Arguments.createMap()
     jwtReadableMap.putString("encodedJwt", jwt.signedJwt.serialize())
     return jwtReadableMap
@@ -547,6 +549,22 @@ object Converter {
     verifiedProfileMap.putString("logo", verifiedProfile.logo)
     verifiedProfileMap.putString("name", verifiedProfile.name)
     return verifiedProfileMap
+  }
+
+  fun mapToJwtDescriptor(
+    jwtDescriptorDictionary: ReadableMap
+  ) = VCLJwtDescriptor(
+    payload = jwtDescriptorDictionary.getMapOpt("payload")?.toJsonObject() ?: JSONObject("{}"),
+    iss = jwtDescriptorDictionary.getStringOpt("iss") ?: "",
+    jti = jwtDescriptorDictionary.getStringOpt("jti") ?: ""
+  )
+
+  fun didJwkToMap(
+    didJwk: VCLDidJwk
+  ): ReadableMap {
+    val didJwkMap = Arguments.createMap()
+    didJwkMap.putString("value", didJwk.value)
+    return didJwkMap
   }
 }
 

@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export interface VCLPublicKey {
-  jwkStr: string;
+export enum VCLErrorCode {
+  NetworkError = 1,
+  VerificationError = 403,
 }

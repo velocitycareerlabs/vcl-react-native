@@ -158,7 +158,7 @@ func dictionaryToPresentationRequest(
 ) -> VCLPresentationRequest {
     return VCLPresentationRequest(
         jwt: dictionaryToJwt(presentationRequestDictionary?["jwt"] as? [String : Any]),
-        publicKey: dictionaryToPublicKey(presentationRequestDictionary?["publicKey"] as? [String: Any]),
+        jwkPublic: dictionaryToPJwkPublic(presentationRequestDictionary?["jwkPublic"] as? [String: Any]),
         deepLink: dictionaryToDeepLink(presentationRequestDictionary?["deepLink"] as? [String : Any])
     )
 }
@@ -168,9 +168,9 @@ func presentationRequestToDictionary(
 ) -> [String: Any] {
     var presentationRequestDictionary = [String: Any]()
     presentationRequestDictionary["jwt"] = ["encodedJwt": presentationRequest.jwt.encodedJwt]
-    var jwkDictionary = [String: Any]()
-    jwkDictionary["jwkStr"] = presentationRequest.publicKey.jwkStr
-    presentationRequestDictionary["publicKey"] = jwkDictionary
+    var jwkPublicDictionary = [String: Any]()
+    jwkPublicDictionary["valueStr"] = presentationRequest.jwkPublic.valueStr
+    presentationRequestDictionary["jwkPublic"] = jwkPublicDictionary
     presentationRequestDictionary["iss"] = presentationRequest.iss
     presentationRequestDictionary["exchangeId"] = presentationRequest.exchangeId
     presentationRequestDictionary["presentationDefinitionId"] = presentationRequest.presentationDefinitionId
@@ -399,7 +399,7 @@ func credentialManifestToDictionary(
 func dictionaryToCredentialManifest(
     _ credentialMAnifestDictionary: [String: Any]?
 ) -> VCLCredentialManifest {
-    let jwt: VCLJWT = VCLJWT(encodedJwt: (credentialMAnifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
+    let jwt: VCLJwt = VCLJwt(encodedJwt: (credentialMAnifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
     let vendorOriginContext: String? = credentialMAnifestDictionary?["vendorOriginContext"] as? String
     return VCLCredentialManifest(jwt: jwt, vendorOriginContext: vendorOriginContext)
 }
@@ -448,14 +448,14 @@ func credentialTypesFormSchemaToDictionary(
 
 func dictionaryToJwt(
     _ jwtDictionary: [String: Any]?
-) -> VCLJWT {
-    return VCLJWT(encodedJwt: jwtDictionary?["encodedJwt"] as? String ?? "")
+) -> VCLJwt {
+    return VCLJwt(encodedJwt: jwtDictionary?["encodedJwt"] as? String ?? "")
 }
 
-func dictionaryToPublicKey(
-    _ publicKeyDictionary: [String: Any]?
-) -> VCLPublicKey {
-    return VCLPublicKey(jwkStr: (publicKeyDictionary?["jwkStr"] as? String ?? ""))
+func dictionaryToPJwkPublic(
+    _ jwkPublicDictionary: [String: Any]?
+) -> VCLJwkPublic {
+    return VCLJwkPublic(valueStr: (jwkPublicDictionary?["valueStr"] as? String ?? ""))
 }
 
 func dictionaryToFinalizedOffersDescriptor(
@@ -479,7 +479,7 @@ func jwtVerifiableCredentialsToDictionary(
     return jwtVerifiableCredentialsDictionary
 }
 
-func jwtToReadableMap(_ jwt: VCLJWT) -> [String: Any] {
+func jwtToReadableMap(_ jwt: VCLJwt) -> [String: Any] {
     return ["encodedJwt": jwt.encodedJwt]
 }
 
@@ -513,4 +513,22 @@ func verifiedProfileToDictionary(
     verifiedProfileDictionary["logo"] = verifiedProfile.logo
     verifiedProfileDictionary["name"] = verifiedProfile.name
     return verifiedProfileDictionary
+}
+
+func dictionaryToJwtDescriptor(
+    _ jwtDescriptorDictionary: [String: Any]
+) -> VCLJwtDescriptor {
+    return VCLJwtDescriptor(
+        payload: jwtDescriptorDictionary["payload"] as? [String: Any] ?? [String: Any](),
+        iss: jwtDescriptorDictionary["iss"] as? String ?? "",
+        jti: jwtDescriptorDictionary["jti"] as? String ?? ""
+    )
+}
+
+func didJwkToDictionary(
+    _ didJwk: VCLDidJwk
+) -> [String: Any] {
+    var didJwkDictionary = [String: Any]()
+    didJwkDictionary["value"] = didJwk.value
+    return didJwkDictionary
 }

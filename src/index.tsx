@@ -39,7 +39,7 @@ import type { VCLOrganizationsSearchDescriptor } from './api/entities/VCLOrganiz
 import type { VCLPage } from './api/entities/VCLPage';
 import type { VCLPresentationRequest } from './api/entities/VCLPresentationRequest';
 import type { VCLPresentationSubmission } from './api/entities/VCLPresentationSubmission';
-import type { VCLPublicKey } from './api/entities/VCLPublicKey';
+import type { VCLJwkPublic } from './api/entities/VCLJwkPublic';
 import type { VCLPushDelegate } from './api/entities/VCLPushDelegate';
 import type { VCLService } from './api/entities/VCLService';
 import type { VCLServiceCredentialAgentIssuer } from './api/entities/VCLServiceCredentialAgentIssuer';
@@ -52,6 +52,9 @@ import type { VCLVerifiedProfileDescriptor } from './api/entities/VCLVerifiedPro
 import type { Dictionary } from './api/Dictionary';
 import type { VCLInitializationDescriptor } from './api/entities/VCLInitializationDescriptor';
 import type { VCLPresentationRequestDescriptor } from './api/entities/VCLPresentationRequestDescriptor';
+import type { VCLJwtDescriptor } from './api/entities/VCLJwtDescriptor';
+import type { VCLDidJwk } from './api/entities/VCLDidJwk';
+import type { VCLErrorCode } from './api/entities/VCLErrorCode';
 
 const { VclReactNative } = NativeModules;
 
@@ -90,7 +93,7 @@ export {
   VCLPage,
   VCLPresentationRequest,
   VCLPresentationSubmission,
-  VCLPublicKey,
+  VCLJwkPublic,
   VCLPushDelegate,
   VCLService,
   VCLServiceCredentialAgentIssuer,
@@ -102,4 +105,7 @@ export {
   VCLVerifiedProfileDescriptor,
   VCLInitializationDescriptor,
   VCLPresentationRequestDescriptor,
+  VCLJwtDescriptor,
+  VCLDidJwk,
+  VCLErrorCode,
 };

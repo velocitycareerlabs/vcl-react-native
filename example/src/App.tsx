@@ -42,6 +42,7 @@ import vcl, {
   VCLDeepLink,
   VCLInitializationDescriptor,
   VCLPresentationRequestDescriptor,
+  VCLDidJwk,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export const enum InitState {
@@ -357,14 +358,14 @@ export default function App() {
       (verifiedProfile: VCLVerifiedProfile) => {
         console.log('VCL Verified Profile: ', verifiedProfile.payload);
       },
-      (err) => {
+      (err: Error) => {
         console.log('VCL Verified Profile failed:', err);
       }
     );
   };
 
   const verifyJwt = () => {
-    vcl.verifyJwt(Constants.SomeJwt, Constants.SomePublicKey).then(
+    vcl.verifyJwt(Constants.SomeJwt, Constants.SomeJjwkPublic).then(
       (isVerified: boolean) => {
         console.log('VCL verified jwt:', isVerified);
       },
@@ -375,12 +376,29 @@ export default function App() {
   };
 
   const generateSignedJwt = () => {
-    vcl.generateSignedJwt(Constants.SomeJson, 'iss123', 'jti123').then(
-      (jwt: VCLJWT) => {
-        console.log('VCL generated signed jwt:', jwt);
+    vcl
+      .generateSignedJwt({
+        payload: Constants.SomeJson,
+        iss: 'iss123',
+        jti: 'jti123',
+      })
+      .then(
+        (jwt: VCLJWT) => {
+          console.log('VCL generated signed jwt:', jwt);
+        },
+        (err: Error) => {
+          console.log('VCL sign Error:', err);
+        }
+      );
+  };
+
+  const generateDidJwk = () => {
+    vcl.generateDidJwk().then(
+      (didJwk: VCLDidJwk) => {
+        console.log('VCL DID:JWK generated: ', didJwk);
       },
       (err: Error) => {
-        console.log('VCL sign Error:', err);
+        console.log('VCL DID:JWK generation failed:', err);
       }
     );
   };
@@ -425,6 +443,8 @@ export default function App() {
         <Button title="Verify Jwt" onPress={verifyJwt} />
         <View style={styles.space} />
         <Button title="Generate Signed Jwt" onPress={generateSignedJwt} />
+        <View style={styles.space} />
+        <Button title="Generate DID:JWK" onPress={generateDidJwk} />
       </View>
     );
   } else if (initState === InitState.InitializationFailed) {

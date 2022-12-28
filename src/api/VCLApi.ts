@@ -22,15 +22,16 @@ import type { VCLOrganizations } from './entities/VCLOrganizations';
 import type { VCLOrganizationsSearchDescriptor } from './entities/VCLOrganizationsSearchDescriptor';
 import type { VCLPresentationRequest } from './entities/VCLPresentationRequest';
 import type { VCLPresentationSubmission } from './entities/VCLPresentationSubmission';
-import type { VCLPublicKey } from './entities/VCLPublicKey';
+import type { VCLJwkPublic } from './entities/VCLJwkPublic';
 import type { VCLToken } from './entities/VCLToken';
 import type { VCLVerifiedProfile } from './entities/VCLVerifiedProfile';
 import type { VCLVerifiedProfileDescriptor } from './entities/VCLVerifiedProfileDescriptor';
 import type { VCLCountries } from './entities/VCLCountries';
-import type { Dictionary } from './Dictionary';
 import type { VCLInitializationDescriptor } from './entities/VCLInitializationDescriptor';
 import type { VCLSubmissionResult } from './entities/VCLSubmissionResult';
 import type { VCLPresentationRequestDescriptor } from './entities/VCLPresentationRequestDescriptor';
+import type { VCLJwtDescriptor } from './entities/VCLJwtDescriptor';
+import type { VCLDidJwk } from 'src/api/entities/VCLDidJwk';
 
 export type VclApi = {
   initialize(
@@ -83,11 +84,9 @@ export type VclApi = {
     verifiedProfileDescriptor: VCLVerifiedProfileDescriptor
   ): Promise<VCLVerifiedProfile>;
 
-  verifyJwt(jwt: VCLJWT, publicKey: VCLPublicKey): Promise<boolean>;
+  verifyJwt(jwt: VCLJWT, jwkPublic: VCLJwkPublic): Promise<boolean>;
 
-  generateSignedJwt(
-    payload: Dictionary<any>,
-    iss: string,
-    jti: string
-  ): Promise<VCLJWT>;
+  generateSignedJwt(jwtDescriptor: VCLJwtDescriptor): Promise<VCLJWT>;
+
+  generateDidJwk(): Promise<VCLDidJwk>;
 };

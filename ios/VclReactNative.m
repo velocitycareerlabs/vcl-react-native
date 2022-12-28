@@ -64,14 +64,15 @@ RCT_EXTERN_METHOD(getVerifiedProfile:(NSDictionary*)verifiedProfileDescriptorDic
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(verifyJwt:(NSDictionary*)jwtDictionary
-                  withPublicKeyDictionary:(NSDictionary*)publicKeyDictionary
+                  withJwkPublicDictionary:(NSDictionary*)jwkPublicDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(generateSignedJwt:(NSDictionary*)jwtDictionary
-                  withIss:(NSString*)iss
-                  withJti:(NSString*)jti
+RCT_EXTERN_METHOD(generateSignedJwt:(NSDictionary*)jwtDescriptorDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(generateDidJwk:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 @end

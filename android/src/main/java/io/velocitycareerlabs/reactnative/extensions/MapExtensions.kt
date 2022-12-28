@@ -4,12 +4,13 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
- 
+
  package io.velocitycareerlabs.reactnative.extensions
 
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
+import org.json.JSONObject
 import java.lang.Exception
 
 /**
@@ -92,5 +93,18 @@ fun ReadableMap.getMapOpt(key: String): ReadableMap? {
 
 fun WritableMap.getMapOpt(key: String): ReadableMap? {
   return (this as ReadableMap).getMapOpt(key)
+}
+
+fun ReadableMap.toJsonObject(): JSONObject {
+  return try {
+    JSONObject(this.toHashMap())
+  } catch (e: Exception) {
+    e.printStackTrace()
+    JSONObject("{}")
+  }
+}
+
+fun WritableMap.toJsonObject(): JSONObject {
+  return (this as ReadableMap).toJsonObject()
 }
 

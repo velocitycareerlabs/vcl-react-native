@@ -5,12 +5,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { VCLJWT } from './VCLJWT';
+import type { VCLJwt } from './VCLJwt';
 import type { VCLJwkPublic } from './VCLJwkPublic';
 
 export interface VCLPresentationRequest {
   exchangeId: string;
-  jwt: VCLJWT;
+  jwt: VCLJwt;
   jwkPublic: VCLJwkPublic;
   keyID: string;
   presentationDefinitionId: string;

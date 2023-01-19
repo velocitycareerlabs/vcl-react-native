@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.swift_version = "5.0"
 
   s.dependency "React"
-  s.dependency "VCL", "1.4.0"
+  s.dependency "VCL", "1.5.0"
 end

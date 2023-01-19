@@ -9,7 +9,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:7.2.1'
+    classpath 'com.android.tools.build:gradle:7.4.0'
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -131,5 +131,5 @@ dependencies {
 
   // VCL:
   implementation "com.nimbusds:nimbus-jose-jwt:9.25.6"
-  implementation "io.velocitycareerlabs:vcl:1.4.0"
+  implementation "io.velocitycareerlabs:vcl:1.5.0"
 }

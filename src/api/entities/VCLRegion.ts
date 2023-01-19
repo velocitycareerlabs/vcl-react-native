@@ -8,7 +8,7 @@
 import type { Dictionary } from '../Dictionary';
 
 export interface VCLRegion {
-  payload: Dictionary<string>;
+  payload: Dictionary<any>;
   code: string;
   name: string;
 }

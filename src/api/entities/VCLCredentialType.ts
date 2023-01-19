@@ -8,7 +8,7 @@
 import type { Dictionary } from '../Dictionary';
 
 export interface VCLCredentialType {
-  payload: Dictionary<string>;
+  payload: Dictionary<any>;
   id: string;
   schema: string;
   createdAt: string;

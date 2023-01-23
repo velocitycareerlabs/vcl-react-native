@@ -11,6 +11,6 @@ import type { VCLServiceType } from './VCLServiceType';
 
 export interface VCLPresentationRequestDescriptor {
   deepLink: VCLDeepLink;
-  serviceType: VCLServiceType;
+  serviceType?: VCLServiceType;
   pushDelegate?: VCLPushDelegate;
 }

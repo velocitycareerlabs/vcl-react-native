@@ -135,7 +135,10 @@ object Converter {
   fun mapTopPresentationRequestDescriptor(presentationRequestDescriptorLinkMap: ReadableMap) =
     VCLPresentationRequestDescriptor(
       deepLink = mapToDeepLink(presentationRequestDescriptorLinkMap.getMapOpt("deepLink")),
-      serviceType = mapToServiceType(presentationRequestDescriptorLinkMap),
+      serviceType = mapToServiceType(
+        presentationRequestDescriptorLinkMap,
+        VCLServiceType.Inspector
+      ),
       pushDelegate = mapToPushDelegate(presentationRequestDescriptorLinkMap.getMapOpt("pushDelegate"))
     )
 
@@ -148,8 +151,13 @@ object Converter {
     return retVal
   }
 
-  fun mapToServiceType(serviceTypeMap: ReadableMap) =
-    VCLServiceType.fromString(serviceTypeMap.getStringOpt("serviceType") ?: "")
+  fun mapToServiceType(
+    serviceTypeMap: ReadableMap,
+    defaultServiceType: VCLServiceType
+  ) =
+    serviceTypeMap.getStringOpt("serviceType")?.let { serviceType ->
+      VCLServiceType.fromString(serviceType)
+    } ?: defaultServiceType
 
   fun mapToToken(tokenMap: ReadableMap?) =
     VCLToken(tokenMap?.getStringOpt("value") ?: "")
@@ -382,7 +390,10 @@ object Converter {
   ): VCLCredentialManifestDescriptorByDeepLink {
     return VCLCredentialManifestDescriptorByDeepLink(
       mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink")),
-      mapToServiceType(credentialManifestDescriptorByDeepLinkMap)
+      mapToServiceType(
+        credentialManifestDescriptorByDeepLinkMap,
+        VCLServiceType.Issuer
+      )
     )
   }
 
@@ -395,7 +406,10 @@ object Converter {
       service = mapToServiceCredentialAgentIssuer(
         credentialManifestDescriptorByServiceMap.getMapOpt("service")
       ),
-      serviceType = mapToServiceType(credentialManifestDescriptorByServiceMap),
+      serviceType = mapToServiceType(
+        credentialManifestDescriptorByServiceMap,
+        VCLServiceType.Issuer
+      ),
       credentialTypes =
       (credentialManifestDescriptorByServiceMap.getArrayOpt("credentialTypes")?.toArrayList()
         ?.toList() as? List<String>),
@@ -410,7 +424,10 @@ object Converter {
       service = mapToServiceCredentialAgentIssuer(
         credentialManifestDescriptorRefreshMap.getMapOpt("service")
       ),
-      serviceType = mapToServiceType(credentialManifestDescriptorRefreshMap),
+      serviceType = mapToServiceType(
+        credentialManifestDescriptorRefreshMap,
+        VCLServiceType.Issuer
+      ),
       credentialIds = credentialManifestDescriptorRefreshMap.getArrayOpt("credentialIds")
         ?.toArrayList()?.toList() as? List<String> ?: listOf()
     )

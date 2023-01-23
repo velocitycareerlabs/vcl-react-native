@@ -133,7 +133,10 @@ func dictionaryTopPresentationRequestDescriptor(
 ) -> VCLPresentationRequestDescriptor {
     return VCLPresentationRequestDescriptor(
         deepLink: dictionaryToDeepLink(presentationRequestDescriptorLinkDictionary["deepLink"] as? [String: Any]),
-        serviceType: dictionaryToServiceType(serviceTypeDictionary: presentationRequestDescriptorLinkDictionary),
+        serviceType: dictionaryToServiceType(
+            serviceTypeDictionary: presentationRequestDescriptorLinkDictionary,
+            defaultServiceType: VCLServiceType.Inspector
+        ),
         pushDelegate: dictionaryToPushDelegate(presentationRequestDescriptorLinkDictionary["pushDelegate"] as? [String: Any])
     )
 }
@@ -154,8 +157,14 @@ func tokenToDictionary(_ token: VCLToken) -> [String: Any] {
     return ["value": token.value]
 }
 
-func dictionaryToServiceType(serviceTypeDictionary: [String: Any]) -> VCLServiceType {
-    return VCLServiceType.fromString(value: serviceTypeDictionary["serviceType"] as? String ?? "")
+func dictionaryToServiceType(
+    serviceTypeDictionary: [String: Any],
+    defaultServiceType: VCLServiceType
+) -> VCLServiceType {
+    if let serviceType = serviceTypeDictionary["serviceType"] as? String {
+        return VCLServiceType.fromString(value: serviceType)
+    }
+    return defaultServiceType
 }
 
 func dictionaryToPresentationRequest(
@@ -355,7 +364,10 @@ func dictionaryToCredentialManifestDescriptorByDeepLink(
         deepLink: dictionaryToDeepLink(
             credentialManifestDescriptorByDeepLinkDictionary["deepLink"] as? [String : Any]
         ),
-        serviceType: dictionaryToServiceType(serviceTypeDictionary: credentialManifestDescriptorByDeepLinkDictionary)
+        serviceType: dictionaryToServiceType(
+            serviceTypeDictionary: credentialManifestDescriptorByDeepLinkDictionary,
+            defaultServiceType: VCLServiceType.Issuer
+        )
     )
 }
 
@@ -368,7 +380,10 @@ func dictionaryToCredentialManifestDescriptorByService(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorByServiceDictionary["service"] as? [String : Any]
         ),
-        serviceType: dictionaryToServiceType(serviceTypeDictionary: credentialManifestDescriptorByServiceDictionary),
+        serviceType: dictionaryToServiceType(
+            serviceTypeDictionary: credentialManifestDescriptorByServiceDictionary,
+            defaultServiceType: VCLServiceType.Issuer
+        ),
         credentialTypes: credentialManifestDescriptorByServiceDictionary["credentialTypes"] as? [String],
         pushDelegate: pushDelegate
     )
@@ -381,7 +396,10 @@ func dictionaryToCredentialManifestDescriptorRefresh(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorRefreshDictionary["service"] as? [String : Any]
         ),
-        serviceType: dictionaryToServiceType(serviceTypeDictionary: credentialManifestDescriptorRefreshDictionary),
+        serviceType: dictionaryToServiceType(
+            serviceTypeDictionary: credentialManifestDescriptorRefreshDictionary,
+            defaultServiceType: VCLServiceType.Issuer
+        ),
         credentialIds: credentialManifestDescriptorRefreshDictionary["credentialIds"] as? [String] ?? [String]()
     )
 }

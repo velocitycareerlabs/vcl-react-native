@@ -9,7 +9,7 @@ import type { VCLPushDelegate } from './VCLPushDelegate';
 import type { VCLServiceType } from './VCLServiceType';
 
 export interface VCLCredentialManifestDescriptor {
-  serviceType: VCLServiceType;
+  serviceType?: VCLServiceType;
   credentialTypes?: string[];
   pushDelegate?: VCLPushDelegate;
 }

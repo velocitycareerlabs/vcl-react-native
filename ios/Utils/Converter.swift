@@ -133,6 +133,7 @@ func dictionaryTopPresentationRequestDescriptor(
 ) -> VCLPresentationRequestDescriptor {
     return VCLPresentationRequestDescriptor(
         deepLink: dictionaryToDeepLink(presentationRequestDescriptorLinkDictionary["deepLink"] as? [String: Any]),
+        serviceType: dictionaryToServiceType(serviceTypeDictionary: presentationRequestDescriptorLinkDictionary),
         pushDelegate: dictionaryToPushDelegate(presentationRequestDescriptorLinkDictionary["pushDelegate"] as? [String: Any])
     )
 }
@@ -151,6 +152,10 @@ func dictionaryToToken(_ tokenDictionary: [String: Any]?) -> VCLToken {
 
 func tokenToDictionary(_ token: VCLToken) -> [String: Any] {
     return ["value": token.value]
+}
+
+func dictionaryToServiceType(serviceTypeDictionary: [String: Any]) -> VCLServiceType {
+    return VCLServiceType.fromString(value: serviceTypeDictionary["serviceType"] as? String ?? "")
 }
 
 func dictionaryToPresentationRequest(
@@ -349,7 +354,8 @@ func dictionaryToCredentialManifestDescriptorByDeepLink(
     return VCLCredentialManifestDescriptorByDeepLink(
         deepLink: dictionaryToDeepLink(
             credentialManifestDescriptorByDeepLinkDictionary["deepLink"] as? [String : Any]
-        )
+        ),
+        serviceType: dictionaryToServiceType(serviceTypeDictionary: credentialManifestDescriptorByDeepLinkDictionary)
     )
 }
 
@@ -362,6 +368,7 @@ func dictionaryToCredentialManifestDescriptorByService(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorByServiceDictionary["service"] as? [String : Any]
         ),
+        serviceType: dictionaryToServiceType(serviceTypeDictionary: credentialManifestDescriptorByServiceDictionary),
         credentialTypes: credentialManifestDescriptorByServiceDictionary["credentialTypes"] as? [String],
         pushDelegate: pushDelegate
     )
@@ -374,6 +381,7 @@ func dictionaryToCredentialManifestDescriptorRefresh(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorRefreshDictionary["service"] as? [String : Any]
         ),
+        serviceType: dictionaryToServiceType(serviceTypeDictionary: credentialManifestDescriptorRefreshDictionary),
         credentialIds: credentialManifestDescriptorRefreshDictionary["credentialIds"] as? [String] ?? [String]()
     )
 }

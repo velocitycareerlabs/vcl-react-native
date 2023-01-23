@@ -15,7 +15,9 @@ export class VCLError extends Error {
       const errorJson = JSON.parse(error.message);
       this.description = errorJson.description;
       this.code = parseInt(errorJson.code, 10);
-    } catch (e) {}
+    } catch (e) {
+      this.description = JSON.stringify(error);
+    }
   }
 }
 

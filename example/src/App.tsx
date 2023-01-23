@@ -45,6 +45,7 @@ import vcl, {
   VCLError,
   VCLErrorCode,
   VCLCredentialTypes,
+  VCLServiceType,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export const enum InitState {
@@ -130,6 +131,7 @@ export default function App() {
     }
     const pesentationRequestDescriptor: VCLPresentationRequestDescriptor = {
       deepLink: deepLink,
+      serviceType: VCLServiceType.Inspector,
       pushDelegate: {
         pushToken: 'push_token',
         pushUrl: 'push_delegate',
@@ -141,7 +143,14 @@ export default function App() {
         submitPresentation(presentationRequest);
       },
       (err: VCLError) => {
-        console.log('VCL Presentation Request failed:', err);
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Presentation Request service type VERIFICATION failed:',
+            err.description
+          );
+        } else {
+          console.log('VCL Presentation Request failed:', err);
+        }
       }
     );
   };
@@ -212,6 +221,7 @@ export default function App() {
     let credentialManifestDescriptorByOrganization: VCLCredentialManifestDescriptorByService =
       {
         service: serviceCredentialAgentIssuer,
+        serviceType: VCLServiceType.Issuer,
         credentialTypes: [
           'CertificationV1.0',
           'EducationDegreeStudyV1.0',
@@ -223,7 +233,14 @@ export default function App() {
         generateOffers(credentialManifest);
       },
       (err: VCLError) => {
-        console.log('VCL Credential Manifest failed:', err);
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Credential Manifest service type VERIFICATION failed:',
+            err.description
+          );
+        } else {
+          console.log('VCL Credential Manifest failed:', err);
+        }
       }
     );
   };
@@ -232,6 +249,7 @@ export default function App() {
     let credentialManifestDescriptorByDeepLink: VCLCredentialManifestDescriptorByDeepLink =
       {
         deepLink: { value: Constants.CredentialManifestDeepLinkStrDev },
+        serviceType: VCLServiceType.Issuer,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorByDeepLink).then(
       (credentialManifest: VCLCredentialManifest) => {
@@ -239,7 +257,14 @@ export default function App() {
         generateOffers(credentialManifest);
       },
       (err: VCLError) => {
-        console.log('VCL Credential Manifest failed:', err);
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Credential Manifest service type VERIFICATION failed:',
+            err.description
+          );
+        } else {
+          console.log('VCL Credential Manifest failed:', err);
+        }
       }
     );
   };
@@ -251,6 +276,7 @@ export default function App() {
     let credentialManifestDescriptorRefresh: VCLCredentialManifestDescriptorRefresh =
       {
         service: service,
+        serviceType: VCLServiceType.Issuer,
         credentialIds: Constants.CredentialIds,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorRefresh).then(
@@ -260,7 +286,14 @@ export default function App() {
         );
       },
       (err: VCLError) => {
-        console.log('VCL Refresh Credentials failed:', err);
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Refresh Credentials service type VERIFICATION failed:',
+            err.description
+          );
+        } else {
+          console.log('VCL Refresh Credentials failed:', err);
+        }
       }
     );
   };

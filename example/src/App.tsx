@@ -131,7 +131,6 @@ export default function App() {
     }
     const pesentationRequestDescriptor: VCLPresentationRequestDescriptor = {
       deepLink: deepLink,
-      serviceType: VCLServiceType.Inspector,
       pushDelegate: {
         pushToken: 'push_token',
         pushUrl: 'push_delegate',
@@ -249,7 +248,6 @@ export default function App() {
     let credentialManifestDescriptorByDeepLink: VCLCredentialManifestDescriptorByDeepLink =
       {
         deepLink: { value: Constants.CredentialManifestDeepLinkStrDev },
-        serviceType: VCLServiceType.Issuer,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorByDeepLink).then(
       (credentialManifest: VCLCredentialManifest) => {

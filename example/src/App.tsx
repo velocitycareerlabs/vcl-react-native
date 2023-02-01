@@ -229,6 +229,7 @@ export default function App() {
       };
     vcl.getCredentialManifest(credentialManifestDescriptorByOrganization).then(
       (credentialManifest: VCLCredentialManifest) => {
+        console.log('VCL Credential Manifest received:', credentialManifest);
         generateOffers(credentialManifest);
       },
       (err: VCLError) => {

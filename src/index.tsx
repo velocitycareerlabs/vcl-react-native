@@ -5,8 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NativeModules } from 'react-native';
-import type { VclApi } from './api/VCLApi';
+import { VclApi } from './api/VCLApi';
 import type { VCLEnvironment } from './api/VCLEnvironment';
 import { VCLEnvTypes } from './api/VCLEnvironment';
 import type { VCLCountry } from './api/entities/VCLCountry';
@@ -20,6 +19,7 @@ import type { VCLCredentialManifestDescriptorByDeepLink } from './api/entities/V
 import type { VCLCredentialManifestDescriptorByService } from './api/entities/VCLCredentialManifestDescriptorByService';
 import type { VCLCredentialManifestDescriptorRefresh } from './api/entities/VCLCredentialManifestDescriptorRefresh';
 import type { VCLCredentialType } from './api/entities/VCLCredentialType';
+import type { VCLCredentialTypes } from './api/entities/VCLCredentialTypes';
 import type { VCLCredentialTypeSchema } from './api/entities/VCLCredentialTypeSchema';
 import type { VCLCredentialTypeSchemas } from './api/entities/VCLCredentialTypeSchemas';
 import type { VCLCredentialTypesUIFormSchemaDescriptor } from './api/entities/VCLCredentialTypesUIFormSchemaDescriptor';
@@ -30,7 +30,7 @@ import type { VCLExchangeDescriptor } from './api/entities/VCLExchangeDescriptor
 import type { VCLFilter } from './api/entities/VCLFilter';
 import type { VCLFinalizeOffersDescriptor } from './api/entities/VCLFinalizeOffersDescriptor';
 import type { VCLGenerateOffersDescriptor } from './api/entities/VCLGenerateOffersDescriptor';
-import type { VCLJWT } from './api/entities/VCLJWT';
+import type { VCLJwt } from './api/entities/VCLJwt';
 import type { VCLJwtVerifiableCredentials } from './api/entities/VCLJwtVerifiableCredentials';
 import type { VCLOffers } from './api/entities/VCLOffers';
 import type { VCLOrganization } from './api/entities/VCLOrganization';
@@ -39,7 +39,7 @@ import type { VCLOrganizationsSearchDescriptor } from './api/entities/VCLOrganiz
 import type { VCLPage } from './api/entities/VCLPage';
 import type { VCLPresentationRequest } from './api/entities/VCLPresentationRequest';
 import type { VCLPresentationSubmission } from './api/entities/VCLPresentationSubmission';
-import type { VCLPublicKey } from './api/entities/VCLPublicKey';
+import type { VCLJwkPublic } from './api/entities/VCLJwkPublic';
 import type { VCLPushDelegate } from './api/entities/VCLPushDelegate';
 import type { VCLService } from './api/entities/VCLService';
 import type { VCLServiceCredentialAgentIssuer } from './api/entities/VCLServiceCredentialAgentIssuer';
@@ -52,10 +52,12 @@ import type { VCLVerifiedProfileDescriptor } from './api/entities/VCLVerifiedPro
 import type { Dictionary } from './api/Dictionary';
 import type { VCLInitializationDescriptor } from './api/entities/VCLInitializationDescriptor';
 import type { VCLPresentationRequestDescriptor } from './api/entities/VCLPresentationRequestDescriptor';
+import type { VCLJwtDescriptor } from './api/entities/VCLJwtDescriptor';
+import type { VCLDidJwk } from './api/entities/VCLDidJwk';
+import { VCLErrorCode } from './api/entities/VCLErrorCode';
+import type { VCLError, toVclError } from './api/entities/VCLError';
 
-const { VclReactNative } = NativeModules;
-
-export default VclReactNative as VclApi;
+export default VclApi;
 export {
   Dictionary,
   VCLEnvironment,
@@ -70,6 +72,7 @@ export {
   VCLCredentialManifestDescriptorByDeepLink,
   VCLCredentialManifestDescriptorByService,
   VCLCredentialType,
+  VCLCredentialTypes,
   VCLCredentialTypeSchema,
   VCLCredentialTypeSchemas,
   VCLCredentialTypesUIFormSchema,
@@ -81,7 +84,7 @@ export {
   VCLFilter,
   VCLFinalizeOffersDescriptor,
   VCLGenerateOffersDescriptor,
-  VCLJWT,
+  VCLJwt,
   VCLJwtVerifiableCredentials,
   VCLOffers,
   VCLOrganization,
@@ -90,7 +93,7 @@ export {
   VCLPage,
   VCLPresentationRequest,
   VCLPresentationSubmission,
-  VCLPublicKey,
+  VCLJwkPublic,
   VCLPushDelegate,
   VCLService,
   VCLServiceCredentialAgentIssuer,
@@ -102,4 +105,9 @@ export {
   VCLVerifiedProfileDescriptor,
   VCLInitializationDescriptor,
   VCLPresentationRequestDescriptor,
+  VCLJwtDescriptor,
+  VCLDidJwk,
+  VCLErrorCode,
+  VCLError,
+  toVclError,
 };

@@ -222,15 +222,15 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(verifyJwt:withPublicKeyDictionary:withResolver:withRejecter:)
+    @objc(verifyJwt:withJwkPublicDictionary:withResolver:withRejecter:)
     func verifyJwt(
         jwtDictionary: [String: Any],
-        publicKeyDictionary: [String: Any],
+        jwkPublicDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.verifyJwt(
             jwt: dictionaryToJwt(jwtDictionary),
-            publicKey: dictionaryToPublicKey(publicKeyDictionary),
+            jwkPublic: dictionaryToPJwkPublic(jwkPublicDictionary),
             successHandler: {
                 resolve($0)
             },
@@ -239,19 +239,28 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(generateSignedJwt:withIss:withJti:withResolver:withRejecter:)
+    @objc(generateSignedJwt:withResolver:withRejecter:)
     func generateSignedJwt(
-        jwtDictionary: [String: Any],
-        iss: String,
-        jti: String,
+        jwtDescriptorDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.generateSignedJwt(
-            payload: jwtDictionary,
-            iss: iss,
-            jti: jti,
+            jwtDescriptor: dictionaryToJwtDescriptor(jwtDescriptorDictionary),
             successHandler: {
                 resolve(jwtToReadableMap($0))
+            },
+            errorHandler: {
+                reject(nil, "\($0.toJsonString())", $0)
+            })
+    }
+    
+    @objc(generateDidJwk:withRejecter:)
+    func generateDidJwk(
+        resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
+    ) {
+        vcl.generateDidJwk(
+            successHandler: {
+                resolve(didJwkToDictionary($0))
             },
             errorHandler: {
                 reject(nil, "\($0.toJsonString())", $0)

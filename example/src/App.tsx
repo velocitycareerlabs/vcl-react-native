@@ -18,7 +18,6 @@ import vcl, {
   VCLCredentialManifestDescriptorByDeepLink,
   VCLCredentialManifestDescriptorByService,
   VCLCredentialManifestDescriptorRefresh,
-  VCLCredentialType,
   VCLCredentialTypeSchemas,
   VCLCredentialTypesUIFormSchema,
   VCLCredentialTypesUIFormSchemaDescriptor,
@@ -28,7 +27,7 @@ import vcl, {
   VCLExchangeDescriptor,
   VCLFinalizeOffersDescriptor,
   VCLGenerateOffersDescriptor,
-  VCLJWT,
+  VCLJwt,
   VCLJwtVerifiableCredentials,
   VCLOffers,
   VCLOrganizations,
@@ -42,6 +41,11 @@ import vcl, {
   VCLDeepLink,
   VCLInitializationDescriptor,
   VCLPresentationRequestDescriptor,
+  VCLDidJwk,
+  VCLError,
+  VCLErrorCode,
+  VCLCredentialTypes,
+  VCLServiceType,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export const enum InitState {
@@ -58,7 +62,7 @@ export default function App() {
   const [initState, setInitState] = React.useState<InitState>(
     InitState.Initializing
   );
-  const [error, setError] = React.useState<Error>();
+  const [error, setError] = React.useState<VCLError>();
 
   React.useEffect(() => {
     setInitState(InitState.Initializing);
@@ -72,7 +76,7 @@ export default function App() {
         console.log('VCL Initialized');
         setInitState(InitState.InitializationSucceed);
       },
-      (err: Error) => {
+      (err: VCLError) => {
         setInitState(InitState.InitializationFailed);
         setError(err);
         console.log('VCL Initialization error:', err);
@@ -85,7 +89,7 @@ export default function App() {
       (countries: VCLCountries) => {
         console.log('VCL Countries received:', countries);
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log('VCL getCountries Error:', err);
       }
     );
@@ -99,7 +103,7 @@ export default function App() {
           credentialTypesScemas
         );
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log('VCL getCredentialTypeSchemas Error:', err);
       }
     );
@@ -107,10 +111,10 @@ export default function App() {
 
   const getCredentialTypes = () => {
     vcl.getCredentialTypes().then(
-      (credentialTypes: VCLCredentialType[]) => {
+      (credentialTypes: VCLCredentialTypes) => {
         console.log('VCL Credential Types received:', credentialTypes);
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log('VCL getCredentialTypeSchemas Error:', err);
       }
     );
@@ -137,8 +141,15 @@ export default function App() {
         console.log('VCL Presentation Request received:', presentationRequest);
         submitPresentation(presentationRequest);
       },
-      (err: Error) => {
-        console.log('VCL Presentation Request failed:', err);
+      (err: VCLError) => {
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Presentation Request service type VERIFICATION failed:',
+            err.description
+          );
+        } else {
+          console.log('VCL Presentation Request failed:', err);
+        }
       }
     );
   };
@@ -165,12 +176,12 @@ export default function App() {
           (exchange: VCLExchange) => {
             console.log('VCL Presentation submission progress:', exchange);
           },
-          (err: Error) => {
+          (err: VCLError) => {
             console.log('VCL Presentation submission progress failed:', err);
           }
         );
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log('VCL Presentation submission failed:', err);
       }
     );
@@ -197,7 +208,7 @@ export default function App() {
         };
         getCredentialManifestByService(serviceCredentialAgentIssuer);
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log('VCL Organizations search failed: ', err);
       }
     );
@@ -209,6 +220,7 @@ export default function App() {
     let credentialManifestDescriptorByOrganization: VCLCredentialManifestDescriptorByService =
       {
         service: serviceCredentialAgentIssuer,
+        serviceType: VCLServiceType.Issuer,
         credentialTypes: [
           'CertificationV1.0',
           'EducationDegreeStudyV1.0',
@@ -217,10 +229,18 @@ export default function App() {
       };
     vcl.getCredentialManifest(credentialManifestDescriptorByOrganization).then(
       (credentialManifest: VCLCredentialManifest) => {
+        console.log('VCL Credential Manifest received:', credentialManifest);
         generateOffers(credentialManifest);
       },
-      (err: Error) => {
-        console.log('VCL Credential Manifest failed:', err);
+      (err: VCLError) => {
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Credential Manifest service type VERIFICATION failed:',
+            err.description
+          );
+        } else {
+          console.log('VCL Credential Manifest failed:', err);
+        }
       }
     );
   };
@@ -235,8 +255,15 @@ export default function App() {
         console.log('VCL Credential Manifest received:', credentialManifest);
         generateOffers(credentialManifest);
       },
-      (err: Error) => {
-        console.log('VCL Credential Manifest failed:', err);
+      (err: VCLError) => {
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Credential Manifest service type VERIFICATION failed:',
+            err.description
+          );
+        } else {
+          console.log('VCL Credential Manifest failed:', err);
+        }
       }
     );
   };
@@ -248,6 +275,7 @@ export default function App() {
     let credentialManifestDescriptorRefresh: VCLCredentialManifestDescriptorRefresh =
       {
         service: service,
+        serviceType: VCLServiceType.Issuer,
         credentialIds: Constants.CredentialIds,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorRefresh).then(
@@ -256,8 +284,15 @@ export default function App() {
           `VCL Credentials refreshed, credential manifest: ${credentialManifest.jwt.encodedJwt}`
         );
       },
-      (err: Error) => {
-        console.log('VCL Refresh Credentials failed:', err);
+      (err: VCLError) => {
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Refresh Credentials service type VERIFICATION failed:',
+            err.description
+          );
+        } else {
+          console.log('VCL Refresh Credentials failed:', err);
+        }
       }
     );
   };
@@ -284,7 +319,7 @@ export default function App() {
           offers.token
         );
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log('VCL generateOffers Error:', err);
       }
     );
@@ -304,7 +339,7 @@ export default function App() {
           finalizeOffers(credentialManifest, offers);
         }
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log(`VCL failed to Check Offers: ${err}`);
       }
     );
@@ -325,7 +360,7 @@ export default function App() {
       (jwtVerifiableCredentials: VCLJwtVerifiableCredentials) => {
         console.log('VCL Finalized Offers received:', jwtVerifiableCredentials);
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log('VCL finalizeOffers Error:', err);
       }
     );
@@ -346,7 +381,7 @@ export default function App() {
             credentialTypesUIFormSchema
           );
         },
-        (err: Error) => {
+        (err: VCLError) => {
           console.log('VCL getCredentialTypesFormSchema Error:', err);
         }
       );
@@ -357,30 +392,56 @@ export default function App() {
       (verifiedProfile: VCLVerifiedProfile) => {
         console.log('VCL Verified Profile: ', verifiedProfile.payload);
       },
-      (err) => {
-        console.log('VCL Verified Profile failed:', err);
+      (err: VCLError) => {
+        if (err.code === VCLErrorCode.VerificationError) {
+          console.log(
+            'VCL Profile verification is faile dwith error:',
+            err,
+            'and error code: ',
+            err.code
+          );
+        } else {
+          console.log('VCL Verified profile failed:', err);
+        }
       }
     );
   };
 
   const verifyJwt = () => {
-    vcl.verifyJwt(Constants.SomeJwt, Constants.SomePublicKey).then(
+    vcl.verifyJwt(Constants.SomeJwt, Constants.SomeJjwkPublic).then(
       (isVerified: boolean) => {
         console.log('VCL verified jwt:', isVerified);
       },
-      (err: Error) => {
+      (err: VCLError) => {
         console.log('VCL verify Error:', err);
       }
     );
   };
 
   const generateSignedJwt = () => {
-    vcl.generateSignedJwt(Constants.SomeJson, 'iss123', 'jti123').then(
-      (jwt: VCLJWT) => {
-        console.log('VCL generated signed jwt:', jwt);
+    vcl
+      .generateSignedJwt({
+        payload: Constants.SomeJson,
+        iss: 'iss123',
+        jti: 'jti123',
+      })
+      .then(
+        (jwt: VCLJwt) => {
+          console.log('VCL generated signed jwt:', jwt);
+        },
+        (err: VCLError) => {
+          console.log('VCL sign Error:', err);
+        }
+      );
+  };
+
+  const generateDidJwk = () => {
+    vcl.generateDidJwk().then(
+      (didJwk: VCLDidJwk) => {
+        console.log('VCL DID:JWK generated: ', didJwk);
       },
-      (err: Error) => {
-        console.log('VCL sign Error:', err);
+      (err: VCLError) => {
+        console.log('VCL DID:JWK generation failed:', err);
       }
     );
   };
@@ -425,13 +486,15 @@ export default function App() {
         <Button title="Verify Jwt" onPress={verifyJwt} />
         <View style={styles.space} />
         <Button title="Generate Signed Jwt" onPress={generateSignedJwt} />
+        <View style={styles.space} />
+        <Button title="Generate DID:JWK" onPress={generateDidJwk} />
       </View>
     );
   } else if (initState === InitState.InitializationFailed) {
     return (
       <View style={styles.container}>
         <Text>Initialization Failed</Text>
-        <Text>{error}</Text>
+        <Text>{JSON.stringify(error)}</Text>
       </View>
     );
   } else {

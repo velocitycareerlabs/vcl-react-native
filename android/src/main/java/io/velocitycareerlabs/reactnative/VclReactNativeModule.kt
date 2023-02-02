@@ -29,15 +29,16 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToFinalizedOffersDes
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToGenerateOffersDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwt
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToOrganizationsSearchDescriptor
-import io.velocitycareerlabs.reactnative.utlis.Converter.mapToPublicKey
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwkPublic
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToToken
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToVerifiedProfileDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
 import io.velocitycareerlabs.api.entities.VCLError
 import io.velocitycareerlabs.reactnative.extensions.toThrowable
+import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
-import org.json.JSONObject
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
 import java.lang.Exception
 
 /**
@@ -188,7 +189,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
     promise: Promise
   ) {
     try {
-      mapToCredentialManifestDescriptor(credentialManifestDescriptorMap)?.let{ credentialManifestDescriptor ->
+      mapToCredentialManifestDescriptor(credentialManifestDescriptorMap)?.let { credentialManifestDescriptor ->
         vcl.getCredentialManifest(credentialManifestDescriptor,
           {
             promise.resolve(credentialManifestToMap(it))
@@ -196,7 +197,8 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
           {
             promise.reject(it.toThrowable())
           })
-      } ?: promise.reject(VCLError("Unexpected Credential Credential Manifest Descriptor: $credentialManifestDescriptorMap"))
+      }
+        ?: promise.reject(VCLError("Unexpected Credential Credential Manifest Descriptor: $credentialManifestDescriptorMap"))
     } catch (ex: Exception) {
       promise.reject(VCLError(ex.message))
     }
@@ -304,11 +306,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun verifyJwt(
     jwtMap: ReadableMap,
-    publicKeyMap: ReadableMap,
+    jwkPublicMap: ReadableMap,
     promise: Promise
   ) {
     try {
-      vcl.verifyJwt(mapToJwt(jwtMap), mapToPublicKey(publicKeyMap),
+      vcl.verifyJwt(mapToJwt(jwtMap), mapToJwkPublic(jwkPublicMap),
         {
           promise.resolve(it)
         },
@@ -322,17 +324,30 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
 
   @ReactMethod
   fun generateSignedJwt(
-    jwtJsonMap: ReadableMap,
-    iss: String,
-    jti: String,
+    jwtDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    var json: JSONObject? = null
     try {
-      json = JSONObject(jwtJsonMap.toHashMap())
-      vcl.generateSignedJwt(json, iss, jti,
+      vcl.generateSignedJwt(mapToJwtDescriptor(jwtDescriptorMap),
         {
           promise.resolve(Converter.jwtToMap(it))
+        },
+        {
+          promise.reject(it.toThrowable())
+        })
+    } catch (e: Exception) {
+      promise.reject(VCLError(e.message))
+    }
+  }
+
+  @ReactMethod
+  fun generateDidJwk(
+    promise: Promise
+  ) {
+    try {
+      vcl.generateDidJwk(
+        {
+          promise.resolve(didJwkToMap(it))
         },
         {
           promise.reject(it.toThrowable())

@@ -6,11 +6,9 @@
  */
 
 import type { Dictionary } from '../Dictionary';
-import type { VCLRegions } from './VCLRegions';
 
-export interface VCLCountry {
+export interface VCLJwtDescriptor {
   payload: Dictionary<any>;
-  code: string;
-  name: string;
-  regions: VCLRegions;
+  iss: string;
+  jti: string;
 }

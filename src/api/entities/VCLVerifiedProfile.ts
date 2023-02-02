@@ -9,7 +9,7 @@ import type { VCLServiceTypes } from './VCLServiceTypes';
 import type { Dictionary } from '../Dictionary';
 
 export interface VCLVerifiedProfile {
-  payload: Dictionary<string>;
+  payload: Dictionary<any>;
   credentialSubject: Dictionary<string>;
   name: string;
   logo: string;

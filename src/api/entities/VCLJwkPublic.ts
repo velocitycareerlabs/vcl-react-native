@@ -5,8 +5,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { VCLJwt } from './VCLJwt';
-
-export interface VCLJwtVerifiableCredentials {
-  all: VCLJwt[];
+export interface VCLJwkPublic {
+  valueStr: string;
 }

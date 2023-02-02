@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { VCLJWT } from './VCLJWT';
+import type { VCLJwt } from './VCLJwt';
 
 export interface VCLCredentialManifest {
-  jwt: VCLJWT;
+  jwt: VCLJwt;
   iss: string;
   did: string;
   exchangeId: string;

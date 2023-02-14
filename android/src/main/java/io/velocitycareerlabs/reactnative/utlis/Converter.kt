@@ -220,21 +220,21 @@ object Converter {
   }
 
   fun presentationSubmissionResultToMap(
-    presentationSubmissionResult: VCLPresentationSubmissionResult
+    presentationSubmissionResult: VCLSubmissionResult
   ): ReadableMap {
     val presentationSubmissionResultMap = Arguments.createMap()
     presentationSubmissionResultMap.putMap(
-      VCLIdentificationSubmissionResult.KeyToken, tokenToMap(presentationSubmissionResult.token)
+      VCLSubmissionResult.KeyToken, tokenToMap(presentationSubmissionResult.token)
     )
     presentationSubmissionResultMap.putMap(
-      VCLIdentificationSubmissionResult.KeyExchange,
+      VCLSubmissionResult.KeyExchange,
       exchangeToMap(presentationSubmissionResult.exchange)
     )
     presentationSubmissionResultMap.putString(
-      VCLIdentificationSubmissionResult.KeyJti, presentationSubmissionResult.jti
+      VCLSubmissionResult.KeyJti, presentationSubmissionResult.jti
     )
     presentationSubmissionResultMap.putString(
-      VCLIdentificationSubmissionResult.KeySubmissionId, presentationSubmissionResult.submissionId
+      VCLSubmissionResult.KeySubmissionId, presentationSubmissionResult.submissionId
     )
     return presentationSubmissionResultMap
   }

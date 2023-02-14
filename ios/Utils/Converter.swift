@@ -213,13 +213,13 @@ func dictionaryToPresentationSubmission(
 }
 
 func presentationSubmissionResultToDictionary(
-    _ presentationSubmissionResult: VCLPresentationSubmissionResult
+    _ presentationSubmissionResult: VCLSubmissionResult
 ) -> [String: Any] {
     var presentationSubmissionResulDictionary = [String: Any]()
-    presentationSubmissionResulDictionary["token"] = tokenToDictionary(presentationSubmissionResult.token)
-    presentationSubmissionResulDictionary["exchange"] = exchangeToDictionary(presentationSubmissionResult.exchange)
-    presentationSubmissionResulDictionary["jti"] = presentationSubmissionResult.jti
-    presentationSubmissionResulDictionary["submissionId"] = presentationSubmissionResult.submissionId
+    presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeyToken] = tokenToDictionary(presentationSubmissionResult.token)
+    presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeyExchange] = exchangeToDictionary(presentationSubmissionResult.exchange)
+    presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeyJti] = presentationSubmissionResult.jti
+    presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeySubmissionId] = presentationSubmissionResult.submissionId
     return presentationSubmissionResulDictionary
 }
 

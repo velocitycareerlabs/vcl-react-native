@@ -133,10 +133,6 @@ func dictionaryTopPresentationRequestDescriptor(
 ) -> VCLPresentationRequestDescriptor {
     return VCLPresentationRequestDescriptor(
         deepLink: dictionaryToDeepLink(presentationRequestDescriptorLinkDictionary["deepLink"] as? [String: Any]),
-        serviceType: dictionaryToServiceType(
-            serviceTypeDictionary: presentationRequestDescriptorLinkDictionary,
-            defaultServiceType: VCLServiceType.Inspector
-        ),
         pushDelegate: dictionaryToPushDelegate(presentationRequestDescriptorLinkDictionary["pushDelegate"] as? [String: Any])
     )
 }
@@ -157,14 +153,14 @@ func tokenToDictionary(_ token: VCLToken) -> [String: Any] {
     return ["value": token.value]
 }
 
-func dictionaryToServiceType(
-    serviceTypeDictionary: [String: Any],
-    defaultServiceType: VCLServiceType
-) -> VCLServiceType {
-    if let serviceType = serviceTypeDictionary["serviceType"] as? String {
-        return VCLServiceType.fromString(value: serviceType)
+func dictionaryToIssuingType(
+    issuingTypeDictionary: [String: Any],
+    defaultIssuingType: VCLIssuingType
+) -> VCLIssuingType {
+    if let issuingType = issuingTypeDictionary["issuingType"] as? String {
+        return VCLIssuingType.fromString(value: issuingType)
     }
-    return defaultServiceType
+    return defaultIssuingType
 }
 
 func dictionaryToPresentationRequest(
@@ -292,7 +288,8 @@ func dictionaryToFilter(
             credentialTypesList?.append(credentialType)
         }
     }
-    return VCLFilter(did: did, serviceTypes: serviceTypesList, credentialTypes: credentialTypesList)
+    var serviceTypes: VCLServiceTypes? = serviceTypesList != nil ? VCLServiceTypes(all: serviceTypesList ?? [VCLServiceType]()) : nil
+    return VCLFilter(did: did, serviceTypes: serviceTypes, credentialTypes: credentialTypesList)
 }
 
 func dictionaryToPage(_ pageDictionary: [String: Any]?) -> VCLPage {
@@ -364,9 +361,9 @@ func dictionaryToCredentialManifestDescriptorByDeepLink(
         deepLink: dictionaryToDeepLink(
             credentialManifestDescriptorByDeepLinkDictionary["deepLink"] as? [String : Any]
         ),
-        serviceType: dictionaryToServiceType(
-            serviceTypeDictionary: credentialManifestDescriptorByDeepLinkDictionary,
-            defaultServiceType: VCLServiceType.Issuer
+        issuingType: dictionaryToIssuingType(
+            issuingTypeDictionary: credentialManifestDescriptorByDeepLinkDictionary,
+            defaultIssuingType: VCLIssuingType.Career
         )
     )
 }
@@ -380,9 +377,9 @@ func dictionaryToCredentialManifestDescriptorByService(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorByServiceDictionary["service"] as? [String : Any]
         ),
-        serviceType: dictionaryToServiceType(
-            serviceTypeDictionary: credentialManifestDescriptorByServiceDictionary,
-            defaultServiceType: VCLServiceType.Issuer
+        issuingType: dictionaryToIssuingType(
+            issuingTypeDictionary: credentialManifestDescriptorByServiceDictionary,
+            defaultIssuingType: VCLIssuingType.Career
         ),
         credentialTypes: credentialManifestDescriptorByServiceDictionary["credentialTypes"] as? [String],
         pushDelegate: pushDelegate
@@ -395,10 +392,6 @@ func dictionaryToCredentialManifestDescriptorRefresh(
     return VCLCredentialManifestDescriptorRefresh(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorRefreshDictionary["service"] as? [String : Any]
-        ),
-        serviceType: dictionaryToServiceType(
-            serviceTypeDictionary: credentialManifestDescriptorRefreshDictionary,
-            defaultServiceType: VCLServiceType.Issuer
         ),
         credentialIds: credentialManifestDescriptorRefreshDictionary["credentialIds"] as? [String] ?? [String]()
     )
@@ -521,12 +514,6 @@ func readableMapToCredentialTypesUIFormSchemaDescriptor(
 func dictionaryToVerifiedProfileDescriptor(
     _ verifiedProfileDescriptor: [String: Any]
 ) -> VCLVerifiedProfileDescriptor {
-    if let serviceTypeStr = verifiedProfileDescriptor["serviceType"] as? String {
-        return VCLVerifiedProfileDescriptor(
-            did: (verifiedProfileDescriptor["did"] as? String) ?? "",
-            serviceType: VCLServiceType.fromString(value: serviceTypeStr)
-        )
-    }
     return VCLVerifiedProfileDescriptor(did: (verifiedProfileDescriptor["did"] as? String) ?? "")
 }
 

@@ -135,10 +135,6 @@ object Converter {
   fun mapTopPresentationRequestDescriptor(presentationRequestDescriptorLinkMap: ReadableMap) =
     VCLPresentationRequestDescriptor(
       deepLink = mapToDeepLink(presentationRequestDescriptorLinkMap.getMapOpt("deepLink")),
-      serviceType = mapToServiceType(
-        presentationRequestDescriptorLinkMap,
-        VCLServiceType.Inspector
-      ),
       pushDelegate = mapToPushDelegate(presentationRequestDescriptorLinkMap.getMapOpt("pushDelegate"))
     )
 
@@ -151,13 +147,13 @@ object Converter {
     return retVal
   }
 
-  fun mapToServiceType(
-    serviceTypeMap: ReadableMap,
-    defaultServiceType: VCLServiceType
+  fun mapToIssuingType(
+    issuingTypeMap: ReadableMap,
+    defaultIssuingType: VCLIssuingType
   ) =
-    serviceTypeMap.getStringOpt("serviceType")?.let { serviceType ->
-      VCLServiceType.fromString(serviceType)
-    } ?: defaultServiceType
+    issuingTypeMap.getStringOpt("issuingType")?.let { issuingType ->
+      VCLIssuingType.fromString(issuingType)
+    } ?: defaultIssuingType
 
   fun mapToToken(tokenMap: ReadableMap?) =
     VCLToken(tokenMap?.getStringOpt("value") ?: "")
@@ -304,9 +300,10 @@ object Converter {
         credentialType?.let { ct -> credentialTypesList?.add(ct) }
       }
     }
+    val serviceTypes = serviceTypesList?.let { VCLServiceTypes(it) }
     return VCLFilter(
       did = did,
-      serviceTypes = serviceTypesList,
+      serviceTypes = serviceTypes,
       credentialTypes = credentialTypesList
     )
   }
@@ -390,9 +387,9 @@ object Converter {
   ): VCLCredentialManifestDescriptorByDeepLink {
     return VCLCredentialManifestDescriptorByDeepLink(
       mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink")),
-      mapToServiceType(
+      mapToIssuingType(
         credentialManifestDescriptorByDeepLinkMap,
-        VCLServiceType.Issuer
+        VCLIssuingType.Career
       )
     )
   }
@@ -406,9 +403,9 @@ object Converter {
       service = mapToServiceCredentialAgentIssuer(
         credentialManifestDescriptorByServiceMap.getMapOpt("service")
       ),
-      serviceType = mapToServiceType(
+      issuingType = mapToIssuingType(
         credentialManifestDescriptorByServiceMap,
-        VCLServiceType.Issuer
+        VCLIssuingType.Career
       ),
       credentialTypes =
       (credentialManifestDescriptorByServiceMap.getArrayOpt("credentialTypes")?.toArrayList()
@@ -423,10 +420,6 @@ object Converter {
     return VCLCredentialManifestDescriptorRefresh(
       service = mapToServiceCredentialAgentIssuer(
         credentialManifestDescriptorRefreshMap.getMapOpt("service")
-      ),
-      serviceType = mapToServiceType(
-        credentialManifestDescriptorRefreshMap,
-        VCLServiceType.Issuer
       ),
       credentialIds = credentialManifestDescriptorRefreshMap.getArrayOpt("credentialIds")
         ?.toArrayList()?.toList() as? List<String> ?: listOf()
@@ -559,10 +552,8 @@ object Converter {
 
   fun mapToVerifiedProfileDescriptor(verifiedProfileDescriptor: ReadableMap) =
     VCLVerifiedProfileDescriptor(
-      did = verifiedProfileDescriptor.getStringOpt("did") ?: "",
-      serviceType = verifiedProfileDescriptor.getStringOpt("serviceType")?.let {
-        VCLServiceType.fromString(it)
-      })
+      did = verifiedProfileDescriptor.getStringOpt("did") ?: ""
+    )
 
   fun verifiedProfileToMap(
     verifiedProfile: VCLVerifiedProfile

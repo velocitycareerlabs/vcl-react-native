@@ -393,6 +393,10 @@ func dictionaryToCredentialManifestDescriptorRefresh(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorRefreshDictionary["service"] as? [String : Any]
         ),
+        serviceType: dictionaryToServiceType(
+            serviceTypeDictionary: credentialManifestDescriptorRefreshDictionary,
+            defaultServiceType: VCLServiceType.Issuer
+        ),
         credentialIds: credentialManifestDescriptorRefreshDictionary["credentialIds"] as? [String] ?? [String]()
     )
 }
@@ -514,6 +518,12 @@ func readableMapToCredentialTypesUIFormSchemaDescriptor(
 func dictionaryToVerifiedProfileDescriptor(
     _ verifiedProfileDescriptor: [String: Any]
 ) -> VCLVerifiedProfileDescriptor {
+    if let serviceTypeStr = verifiedProfileDescriptor["serviceType"] as? String {
+        return VCLVerifiedProfileDescriptor(
+            did: (verifiedProfileDescriptor["did"] as? String) ?? "",
+            serviceType: VCLServiceType.fromString(value: serviceTypeStr)
+        )
+    }
     return VCLVerifiedProfileDescriptor(did: (verifiedProfileDescriptor["did"] as? String) ?? "")
 }
 

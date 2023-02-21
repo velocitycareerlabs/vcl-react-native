@@ -5,6 +5,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export interface VCLVerifiedProfileDescriptor {
-  did: string;
+export enum VCLIssuingType {
+  Career = 'Career',
+  Identity = 'Identity',
+  Refresh = 'Refresh',
+  Undefined = 'Undefined',
 }

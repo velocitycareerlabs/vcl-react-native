@@ -44,6 +44,8 @@ import type { VCLPushDelegate } from './api/entities/VCLPushDelegate';
 import type { VCLService } from './api/entities/VCLService';
 import type { VCLServiceCredentialAgentIssuer } from './api/entities/VCLServiceCredentialAgentIssuer';
 import { VCLServiceType } from './api/entities/VCLServiceType';
+import type { VCLServiceTypes } from './api/entities/VCLServiceTypes';
+import { VCLIssuingType } from './api/entities/VCLIssuingType';
 import type { VCLSubmissionResult } from './api/entities/VCLSubmissionResult';
 import type { VCLToken } from './api/entities/VCLToken';
 import type { VCLVerifiableCredential } from './api/entities/VCLVerifiableCredential';
@@ -98,6 +100,8 @@ export {
   VCLService,
   VCLServiceCredentialAgentIssuer,
   VCLServiceType,
+  VCLServiceTypes,
+  VCLIssuingType,
   VCLSubmissionResult,
   VCLToken,
   VCLVerifiableCredential,

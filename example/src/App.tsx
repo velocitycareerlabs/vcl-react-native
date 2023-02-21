@@ -45,7 +45,6 @@ import vcl, {
   VCLError,
   VCLErrorCode,
   VCLCredentialTypes,
-  VCLServiceType,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export const enum InitState {
@@ -220,7 +219,6 @@ export default function App() {
     let credentialManifestDescriptorByOrganization: VCLCredentialManifestDescriptorByService =
       {
         service: serviceCredentialAgentIssuer,
-        serviceType: VCLServiceType.Issuer,
         credentialTypes: [
           'CertificationV1.0',
           'EducationDegreeStudyV1.0',
@@ -275,7 +273,6 @@ export default function App() {
     let credentialManifestDescriptorRefresh: VCLCredentialManifestDescriptorRefresh =
       {
         service: service,
-        serviceType: VCLServiceType.Issuer,
         credentialIds: Constants.CredentialIds,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorRefresh).then(

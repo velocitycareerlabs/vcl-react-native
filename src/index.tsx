@@ -57,7 +57,7 @@ import type { VCLPresentationRequestDescriptor } from './api/entities/VCLPresent
 import type { VCLJwtDescriptor } from './api/entities/VCLJwtDescriptor';
 import type { VCLDidJwk } from './api/entities/VCLDidJwk';
 import { VCLErrorCode } from './api/entities/VCLErrorCode';
-import type { VCLError, toVclError } from './api/entities/VCLError';
+import { VCLError } from './api/entities/VCLError';
 
 export default VclApi;
 export {
@@ -113,5 +113,4 @@ export {
   VCLDidJwk,
   VCLErrorCode,
   VCLError,
-  toVclError,
 };

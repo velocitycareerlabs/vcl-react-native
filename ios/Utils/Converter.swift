@@ -28,6 +28,8 @@ func dictionaryToEnvironment(
     switch environmentDictionary["value"] {
     case VCLEnvironment.DEV.rawValue:
         return VCLEnvironment.DEV
+    case VCLEnvironment.QA.rawValue:
+        return VCLEnvironment.QA
     case VCLEnvironment.STAGING.rawValue:
         return VCLEnvironment.STAGING
     case VCLEnvironment.PROD.rawValue:

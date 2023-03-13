@@ -35,6 +35,7 @@ object Converter {
   fun mapToEnvironment(environmentMap: ReadableMap) =
     when (environmentMap.getStringOpt("value")) {
       VCLEnvironment.DEV.value -> VCLEnvironment.DEV
+      VCLEnvironment.QA.value -> VCLEnvironment.QA
       VCLEnvironment.STAGING.value -> VCLEnvironment.STAGING
       VCLEnvironment.PROD.value -> VCLEnvironment.PROD
       else -> VCLEnvironment.PROD

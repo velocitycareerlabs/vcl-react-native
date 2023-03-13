@@ -6,21 +6,22 @@
  */
 
 export class VCLError extends Error {
-  description?: string;
-  code?: number;
+  payload?: string;
+  error?: string;
+  errorCode?: string;
+  statusCode?: number;
 
   constructor(error: any) {
     super(error);
     try {
       const errorJson = JSON.parse(error.message);
-      this.description = errorJson.description;
-      this.code = parseInt(errorJson.code, 10);
+      this.payload = errorJson.payload;
+      this.error = errorJson.error;
+      this.errorCode = errorJson.errorCode;
+      this.message = errorJson.message;
+      this.statusCode = parseInt(errorJson.statusCode, 10);
     } catch (e) {
-      this.description = JSON.stringify(error);
+      this.message = JSON.stringify(error);
     }
   }
 }
-
-export const toVclError = (error: any) => {
-  return new VCLError(error);
-};

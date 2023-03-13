@@ -31,10 +31,10 @@ import type { VCLSubmissionResult } from './entities/VCLSubmissionResult';
 import type { VCLPresentationRequestDescriptor } from './entities/VCLPresentationRequestDescriptor';
 import type { VCLJwtDescriptor } from './entities/VCLJwtDescriptor';
 import type { VCLDidJwk } from './entities/VCLDidJwk';
-import { toVclError } from './entities/VCLError';
 import type { VCLCredentialTypes } from './entities/VCLCredentialTypes';
 
 import { NativeModules } from 'react-native';
+import { VCLError } from './entities/VCLError';
 const { VclReactNative } = NativeModules;
 
 export const VclApi = {
@@ -44,7 +44,7 @@ export const VclApi = {
     try {
       return await VclReactNative.initialize(initializationDescriptor);
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -52,7 +52,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getCountries();
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -60,7 +60,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getCredentialTypes();
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -68,7 +68,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getCredentialTypeSchemas();
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -80,7 +80,7 @@ export const VclApi = {
         presentationRequestDescriptor
       );
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -90,7 +90,7 @@ export const VclApi = {
     try {
       return await VclReactNative.submitPresentation(presentationSubmission);
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -100,7 +100,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getExchangeProgress(exchangeDescriptor);
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -112,7 +112,7 @@ export const VclApi = {
         organizationsSearchDescriptor
       );
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -124,7 +124,7 @@ export const VclApi = {
         credentialManifestDescriptor
       );
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -134,7 +134,7 @@ export const VclApi = {
     try {
       return await VclReactNative.generateOffers(generateOffersDescriptor);
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -148,7 +148,7 @@ export const VclApi = {
         token
       );
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -162,7 +162,7 @@ export const VclApi = {
         token
       );
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -174,7 +174,7 @@ export const VclApi = {
         credentialTypesUIFormSchemaDescriptor
       );
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -184,7 +184,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getVerifiedProfile(verifiedProfileDescriptor);
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -192,7 +192,7 @@ export const VclApi = {
     try {
       return await VclReactNative.verifyJwt(jwt, jwkPublic);
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -202,7 +202,7 @@ export const VclApi = {
     try {
       return await VclReactNative.generateSignedJwt(jwtDescriptor);
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 
@@ -210,7 +210,7 @@ export const VclApi = {
     try {
       return await VclReactNative.generateDidJwk();
     } catch (e) {
-      throw toVclError(e);
+      throw new VCLError(e);
     }
   },
 };

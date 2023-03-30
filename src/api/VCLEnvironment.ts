@@ -11,6 +11,7 @@ export interface VCLEnvironment {
 
 export enum VCLEnvTypes {
   DEV = 'dev',
+  QA = 'qa',
   STAGING = 'staging',
   PROD = 'prod',
 }

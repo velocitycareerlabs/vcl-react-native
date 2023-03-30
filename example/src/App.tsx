@@ -45,6 +45,7 @@ import vcl, {
   VCLError,
   VCLErrorCode,
   VCLCredentialTypes,
+  VCLIssuingType,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export const enum InitState {
@@ -141,10 +142,10 @@ export default function App() {
         submitPresentation(presentationRequest);
       },
       (err: VCLError) => {
-        if (err.code === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLErrorCode.VerificationError) {
           console.log(
             'VCL Presentation Request service type VERIFICATION failed:',
-            err.description
+            err.message
           );
         } else {
           console.log('VCL Presentation Request failed:', err);
@@ -231,10 +232,10 @@ export default function App() {
         generateOffers(credentialManifest);
       },
       (err: VCLError) => {
-        if (err.code === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLErrorCode.VerificationError) {
           console.log(
             'VCL Credential Manifest service type VERIFICATION failed:',
-            err.description
+            err.message
           );
         } else {
           console.log('VCL Credential Manifest failed:', err);
@@ -254,10 +255,10 @@ export default function App() {
         generateOffers(credentialManifest);
       },
       (err: VCLError) => {
-        if (err.code === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLErrorCode.VerificationError) {
           console.log(
             'VCL Credential Manifest service type VERIFICATION failed:',
-            err.description
+            err.message
           );
         } else {
           console.log('VCL Credential Manifest failed:', err);
@@ -282,10 +283,10 @@ export default function App() {
         );
       },
       (err: VCLError) => {
-        if (err.code === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLErrorCode.VerificationError) {
           console.log(
             'VCL Refresh Credentials service type VERIFICATION failed:',
-            err.description
+            err.message
           );
         } else {
           console.log('VCL Refresh Credentials failed:', err);
@@ -390,12 +391,12 @@ export default function App() {
         console.log('VCL Verified Profile: ', verifiedProfile.payload);
       },
       (err: VCLError) => {
-        if (err.code === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLErrorCode.VerificationError) {
           console.log(
             'VCL Profile verification is faile dwith error:',
             err,
             'and error code: ',
-            err.code
+            err.message
           );
         } else {
           console.log('VCL Verified profile failed:', err);

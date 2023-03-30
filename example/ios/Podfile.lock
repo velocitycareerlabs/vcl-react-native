@@ -274,10 +274,10 @@ PODS:
     - React-jsi (= 0.67.5)
     - React-logger (= 0.67.5)
     - React-perflogger (= 0.67.5)
-  - VCL (1.8.0)
-  - vcl-react-native (1.8.0):
+  - VCL (1.10.1)
+  - vcl-react-native (1.10.1):
     - React
-    - VCL (= 1.8.0)
+    - VCL (= 1.10.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -416,10 +416,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: c3b8a3245267a3849b0c7cb91a37606bf5f3aa65
   React-runtimeexecutor: 434efc9e5b6d0f14f49867f130b39376c971c1aa
   ReactCommon: a30c2448e5a88bae6fcb0e3da124c14ae493dac1
-  VCL: 0ed20cfd73206bcf5d87b4bf8ce46586f22ffb07
-  vcl-react-native: 83f2fd6d31cb5c388a06679c5db3b66879aefc7b
+  VCL: c2b4a379b03ebe05d86fee618e8e2caf39939ff0
+  vcl-react-native: d48fbce58c72cda267163d285543444cf21184c3
   Yoga: 099a946cbf84c9b32ffdc4278d72db26710ecf92
 
 PODFILE CHECKSUM: 9b18e0a8c5982bdba8bc0b9957b0710582bc4170
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0

@@ -245,9 +245,17 @@ export default function App() {
   };
 
   const getCredentialManifestByDeepLink = () => {
+    var deepLink: VCLDeepLink = {
+      value: Constants.CredentialManifestDeepLinkStrDev,
+    };
+    if (environment.value === VCLEnvTypes.STAGING) {
+      deepLink = {
+        value: Constants.CredentialManifestDeepLinkStrStaging,
+      };
+    }
     let credentialManifestDescriptorByDeepLink: VCLCredentialManifestDescriptorByDeepLink =
       {
-        deepLink: { value: Constants.CredentialManifestDeepLinkStrDev },
+        deepLink: deepLink,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorByDeepLink).then(
       (credentialManifest: VCLCredentialManifest) => {

@@ -9,10 +9,10 @@ import type { Dictionary } from '../Dictionary';
 
 export interface VCLCredentialType {
   payload: Dictionary<any>;
-  id: string;
-  schema: string;
-  createdAt: string;
-  schemaName: string;
-  credentialType: string;
-  recommended: boolean;
+  id?: string;
+  schema?: string;
+  createdAt?: string;
+  schemaName?: string;
+  credentialType?: string;
+  recommended?: boolean;
 }

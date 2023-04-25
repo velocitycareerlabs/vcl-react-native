@@ -394,10 +394,14 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VclReactNativeExample/Pods-VclReactNativeExample-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/VCL/VCL.framework/VCL",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/VCL/VCCrypto.framework/VCCrypto",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/VCL/VCToken.framework/VCToken",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VCL.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VCCrypto.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VCToken.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

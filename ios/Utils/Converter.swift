@@ -535,8 +535,8 @@ func dictionaryToJwtDescriptor(
 ) -> VCLJwtDescriptor {
     return VCLJwtDescriptor(
         payload: jwtDescriptorDictionary["payload"] as? [String: Any] ?? [String: Any](),
-        iss: jwtDescriptorDictionary["iss"] as? String ?? "",
-        jti: jwtDescriptorDictionary["jti"] as? String ?? ""
+        jti: jwtDescriptorDictionary["jti"] as? String ?? "",
+        iss: jwtDescriptorDictionary["iss"] as? String ?? ""
     )
 }
 

@@ -467,11 +467,12 @@ object Converter {
   ): VCLGenerateOffersDescriptor {
     val verifiableCredentialsReadableArr =
       generateOffersDescriptorMap.getArrayOpt("identificationVerifiableCredentials")
-    val verifiableCredentialsList = mutableListOf<VCLVerifiableCredential>()
+    var verifiableCredentialsList: MutableList<VCLVerifiableCredential>? = null
     verifiableCredentialsReadableArr?.let {
+      verifiableCredentialsList = mutableListOf()
       for (i in 0 until it.size()) {
         val verifiableCredentialMap = it.getMapOpt(i)
-        verifiableCredentialsList.add(
+        verifiableCredentialsList?.add(
           VCLVerifiableCredential(
             inputDescriptor = verifiableCredentialMap?.getStringOpt("inputDescriptor") ?: "",
             jwtVc = verifiableCredentialMap?.getStringOpt("jwtVc") ?: "",

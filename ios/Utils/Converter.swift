@@ -429,11 +429,12 @@ func dictionaryToGenerateOffersDescriptor(
     _ generateOffersDescriptorDictionary: [String: Any]
 ) -> VCLGenerateOffersDescriptor {
     let verifiableCredentialsArr = generateOffersDescriptorDictionary["identificationVerifiableCredentials"] as? [Any]
-    var verifiableCredentialsList = [VCLVerifiableCredential]()
+    var verifiableCredentialsList: [VCLVerifiableCredential]? = nil
     if let verifiableCredentials = verifiableCredentialsArr {
+        verifiableCredentialsList = [VCLVerifiableCredential]()
         for i in 0..<verifiableCredentials.count {
             let verifiableCredentialDict = verifiableCredentials[i] as? [String: String]
-            verifiableCredentialsList.append(
+            verifiableCredentialsList?.append(
                 VCLVerifiableCredential(
                     inputDescriptor: verifiableCredentialDict?["inputDescriptor"] ?? "",
                     jwtVc: verifiableCredentialDict?["jwtVc"] ?? ""

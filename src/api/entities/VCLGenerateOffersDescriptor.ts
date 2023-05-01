@@ -12,5 +12,5 @@ export interface VCLGenerateOffersDescriptor {
   credentialManifest: VCLCredentialManifest;
   types?: string[];
   offerHashes?: string[];
-  identificationVerifiableCredentials: VCLVerifiableCredential[];
+  identificationVerifiableCredentials?: VCLVerifiableCredential[];
 }

@@ -1,6 +1,6 @@
 {
   "name": "@velocitycareerlabs/vcl-react-native",
-  "version": "1.11.5",
+  "version": "1.11.6",
   "description": "Velocity Career Labs React Native SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

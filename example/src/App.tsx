@@ -365,6 +365,15 @@ export default function App() {
     vcl.finalizeOffers(finalizeOffersDescriptor, generatedOffers.token).then(
       (jwtVerifiableCredentials: VCLJwtVerifiableCredentials) => {
         console.log('VCL Finalized Offers received:', jwtVerifiableCredentials);
+        console.log('VCL finalized Offers');
+        console.log(
+          'VCL Passed Credentials:',
+          jwtVerifiableCredentials.passedCredentials
+        );
+        console.log(
+          'VCL Failed Credentials:',
+          jwtVerifiableCredentials.failedCredentials
+        );
       },
       (err: VCLError) => {
         console.log('VCL finalizeOffers Error:', err);

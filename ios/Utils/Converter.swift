@@ -494,10 +494,14 @@ func jwtVerifiableCredentialsToDictionary(
     _ jwtVerifiableCredentials: VCLJwtVerifiableCredentials
 ) -> [String: Any] {
     var jwtVerifiableCredentialsDictionary = [String: Any]()
-    let jwtArr = jwtVerifiableCredentials.all.map {
+    let passedCredentials = jwtVerifiableCredentials.passedCredentials.map {
         $0.encodedJwt
     }
-    jwtVerifiableCredentialsDictionary["all"] = jwtArr
+    let failedCredentials = jwtVerifiableCredentials.failedCredentials.map {
+        $0.encodedJwt
+    }
+    jwtVerifiableCredentialsDictionary["passedCredentials"] = passedCredentials
+    jwtVerifiableCredentialsDictionary["failedCredentials"] = failedCredentials
     return jwtVerifiableCredentialsDictionary
 }
 

@@ -531,11 +531,16 @@ object Converter {
     jwtVerifiableCredentials: VCLJwtVerifiableCredentials
   ): ReadableMap {
     val jwtVerifiableCredentialsMap = Arguments.createMap()
-    val jwtArr = Arguments.createArray()
-    jwtVerifiableCredentials.all.forEach {
-      jwtArr.pushString(it.signedJwt.serialize())
+    val passedCredentials = Arguments.createArray()
+    val failedCredentials = Arguments.createArray()
+    jwtVerifiableCredentials.passedCredentials.forEach {
+      passedCredentials.pushString(it.signedJwt.serialize())
     }
-    jwtVerifiableCredentialsMap.putArray("all", jwtArr)
+    jwtVerifiableCredentials.failedCredentials.forEach {
+      failedCredentials.pushString(it.signedJwt.serialize())
+    }
+    jwtVerifiableCredentialsMap.putArray("passedCredentials", passedCredentials)
+    jwtVerifiableCredentialsMap.putArray("failedCredentials", failedCredentials)
     return jwtVerifiableCredentialsMap
   }
 

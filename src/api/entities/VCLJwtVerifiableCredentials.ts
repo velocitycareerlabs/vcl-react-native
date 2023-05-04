@@ -8,5 +8,6 @@
 import type { VCLJwt } from './VCLJwt';
 
 export interface VCLJwtVerifiableCredentials {
-  all: VCLJwt[];
+  passedCredentials: VCLJwt[];
+  failedCredentials: VCLJwt[];
 }

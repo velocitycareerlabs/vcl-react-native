@@ -3,9 +3,10 @@ source 'https://github.com/velocitycareerlabs/Specs.git'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11'
+platform :ios, '13'
 
 target 'VclReactNativeExample' do
+  use_frameworks!
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])

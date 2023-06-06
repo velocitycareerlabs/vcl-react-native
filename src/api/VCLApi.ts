@@ -85,10 +85,14 @@ export const VclApi = {
   },
 
   submitPresentation: async (
-    presentationSubmission: VCLPresentationSubmission
+    presentationSubmission: VCLPresentationSubmission,
+    didJwk: VCLDidJwk
   ): Promise<VCLSubmissionResult> => {
     try {
-      return await VclReactNative.submitPresentation(presentationSubmission);
+      return await VclReactNative.submitPresentation(
+        presentationSubmission,
+        didJwk
+      );
     } catch (e) {
       throw new VCLError(e);
     }
@@ -129,10 +133,14 @@ export const VclApi = {
   },
 
   generateOffers: async (
-    generateOffersDescriptor: VCLGenerateOffersDescriptor
+    generateOffersDescriptor: VCLGenerateOffersDescriptor,
+    didJwk: VCLDidJwk
   ): Promise<VCLOffers> => {
     try {
-      return await VclReactNative.generateOffers(generateOffersDescriptor);
+      return await VclReactNative.generateOffers(
+        generateOffersDescriptor,
+        didJwk
+      );
     } catch (e) {
       throw new VCLError(e);
     }
@@ -154,11 +162,13 @@ export const VclApi = {
 
   finalizeOffers: async (
     finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+    didJwk: VCLDidJwk,
     token: VCLToken
   ): Promise<VCLJwtVerifiableCredentials> => {
     try {
       return await VclReactNative.finalizeOffers(
         finalizeOffersDescriptor,
+        didJwk,
         token
       );
     } catch (e) {

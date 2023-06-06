@@ -6,5 +6,16 @@
  */
 
 export interface VCLDidJwk {
+  /**
+   * The id of private key save in secure enclave
+   */
+  keyId: string;
+  /**
+   * The did:jwk
+   */
   value: string;
+  /**
+   * kid of jwt - did:jwk suffixed with #0
+   */
+  kid: string;
 }

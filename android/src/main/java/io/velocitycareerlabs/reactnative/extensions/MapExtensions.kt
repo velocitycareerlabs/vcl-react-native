@@ -9,7 +9,9 @@
 
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
+import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -100,11 +102,24 @@ fun ReadableMap.toJsonObject(): JSONObject {
     JSONObject(this.toHashMap())
   } catch (e: Exception) {
     e.printStackTrace()
-    JSONObject("{}")
+    JSONObject()
   }
 }
 
 fun WritableMap.toJsonObject(): JSONObject {
   return (this as ReadableMap).toJsonObject()
+}
+
+fun ReadableArray.toJsonArray(): JSONArray {
+  return try {
+    JSONArray(this.toArrayList())
+  } catch (e: Exception) {
+    e.printStackTrace()
+    JSONArray()
+  }
+}
+
+fun WritableArray.toJsonArray(): JSONArray {
+  return (this as ReadableArray).toJsonArray()
 }
 

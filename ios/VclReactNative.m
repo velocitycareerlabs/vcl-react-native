@@ -26,6 +26,7 @@ RCT_EXTERN_METHOD(getPresentationRequest:(NSDictionary*)presentationRequestDescr
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(submitPresentation:(NSDictionary*)presentationSubmissionDictionary
+                  withDidJwkDictionary:(NSDictionary*)didJwkDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
@@ -42,6 +43,7 @@ RCT_EXTERN_METHOD(getCredentialManifest:(NSDictionary*)credentialManifestDescrip
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(generateOffers:(NSDictionary*)generateOffersDescriptorDictionary
+                  withDidJwkDictionary:(NSDictionary*)didJwkDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
@@ -51,6 +53,7 @@ RCT_EXTERN_METHOD(checkForOffers:(NSDictionary*)generateOffersDescriptorDictiona
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(finalizeOffers:(NSDictionary*)finalizeOffersDescriptorDictionary
+                  withDidJwkDictionary:(NSDictionary*)didJwkDictionary
                   withTokenDictionary:(NSDictionary*)tokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)

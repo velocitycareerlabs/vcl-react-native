@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.dependency "React"
-  s.dependency "VCL", "1.12.1"
+  s.dependency "VCL", "1.13.0"
 end

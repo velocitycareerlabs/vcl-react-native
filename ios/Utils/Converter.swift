@@ -450,14 +450,24 @@ func dictionaryToGenerateOffersDescriptor(
     )
 }
 
-func generatedOffersToDictionary(
-    _ offers: VCLOffers
-) -> [String: Any] {
-    var generatedOffersDictionary = [String: Any]()
-    generatedOffersDictionary["all"] = offers.all
-    generatedOffersDictionary["responseCode"] = offers.responseCode
-    generatedOffersDictionary["token"] = tokenToDictionary(offers.token)
-    return generatedOffersDictionary
+func offersToDictionary(_ offers: VCLOffers) -> [String: Any] {
+    var offersDictionary = [String: Any]()
+    offersDictionary["payload"] = offers.payload
+    offersDictionary["all"] = offers.all
+    offersDictionary["responseCode"] = offers.responseCode
+    offersDictionary["token"] = tokenToDictionary(offers.token)
+    offersDictionary["challenge"] = offers.challenge
+    return offersDictionary
+}
+
+func dictionaryToOffers(_ offersDictionary: [String : Any]?) -> VCLOffers {
+    return VCLOffers(
+        payload: offersDictionary?["payload"] as? [String: Any] ?? [String: Any](),
+        all: offersDictionary?["all"] as? [[String: Any]] ?? [[String: Any]](),
+        responseCode: offersDictionary?["responseCode"] as? Int ?? 0,
+        token: dictionaryToToken(offersDictionary?["token"] as? [String: Any]),
+        challenge: offersDictionary?["challenge"] as? String ?? ""
+    )
 }
 
 func credentialTypesFormSchemaToDictionary(
@@ -485,6 +495,7 @@ func dictionaryToFinalizedOffersDescriptor(
 ) -> VCLFinalizeOffersDescriptor {
     return VCLFinalizeOffersDescriptor(
         credentialManifest: dictionaryToCredentialManifest(finalizedOffersDescriptorDictionary["credentialManifest"] as? [String : Any]),
+        offers: dictionaryToOffers(finalizedOffersDescriptorDictionary["offers"] as? [String : Any]),
         approvedOfferIds: finalizedOffersDescriptorDictionary["approvedOfferIds"] as? [String] ?? [String](),
         rejectedOfferIds: finalizedOffersDescriptorDictionary["rejectedOfferIds"] as? [String] ?? [String]()
     )
@@ -545,10 +556,18 @@ func dictionaryToJwtDescriptor(
     )
 }
 
-func didJwkToDictionary(
-    _ didJwk: VCLDidJwk
-) -> [String: Any] {
+func didJwkToDictionary(_ didJwk: VCLDidJwk) -> [String: Any] {
     var didJwkDictionary = [String: Any]()
+    didJwkDictionary["keyId"] = didJwk.keyId
     didJwkDictionary["value"] = didJwk.value
+    didJwkDictionary["kid"] = didJwk.kid
     return didJwkDictionary
+}
+
+func dictionaryToJwk(_ didJwkDictionary: [String: Any]) -> VCLDidJwk {
+    return VCLDidJwk(
+        keyId: didJwkDictionary["keyId"] as? String ?? "",
+        value: didJwkDictionary["value"] as? String ?? "",
+        kid: didJwkDictionary["kid"] as? String ?? ""
+    )
 }

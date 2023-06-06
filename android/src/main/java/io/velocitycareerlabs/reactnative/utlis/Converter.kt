@@ -11,6 +11,7 @@ import com.facebook.react.bridge.*
 import io.velocitycareerlabs.api.*
 import io.velocitycareerlabs.api.entities.*
 import io.velocitycareerlabs.reactnative.extensions.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -20,11 +21,9 @@ import java.lang.Exception
 object Converter {
 
   fun mapToInitializationDescriptor(
-    reactContext: ReactApplicationContext,
     initializationDescriptorMap: ReadableMap
   ) =
     VCLInitializationDescriptor(
-      context = reactContext,
       environment = mapToEnvironment(
         initializationDescriptorMap.getMapOpt("environment")
           ?: mapOf(Pair("value", VCLEnvironment.PROD.value)).toReadableMap()
@@ -490,14 +489,26 @@ object Converter {
     )
   }
 
-  fun generatedOffersToMap(
+  fun offersToMap(
     offers: VCLOffers
   ): ReadableMap {
     val generatedOffersMap = Arguments.createMap()
+    generatedOffersMap.putMap("payload", offers.payload.toReadableMap())
     generatedOffersMap.putArray("all", offers.all.toReadableArray())
     generatedOffersMap.putInt("responseCode", offers.responseCode)
     generatedOffersMap.putMap("token", tokenToMap(offers.token))
+    generatedOffersMap.putString("challenge", offers.challenge)
     return generatedOffersMap
+  }
+
+  fun mapToOffers(offersMap: ReadableMap?): VCLOffers {
+    return VCLOffers(
+      payload = offersMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject(),
+      all = offersMap?.getArrayOpt("all")?.toJsonArray() ?: JSONArray(),
+      responseCode = offersMap?.getIntOpt("responseCode") ?: -1,
+      token = mapToToken(offersMap?.getMapOpt("token")),
+      challenge = offersMap?.getStringOpt("challenge") ?: ""
+    )
   }
 
   fun credentialTypesFormSchemaToMap(
@@ -521,6 +532,7 @@ object Converter {
     finalizedOffersDescriptorMap: ReadableMap
   ) = VCLFinalizeOffersDescriptor(
     credentialManifest = mapToCredentialManifest(finalizedOffersDescriptorMap.getMapOpt("credentialManifest")),
+    offers = mapToOffers(finalizedOffersDescriptorMap.getMapOpt("offers")),
     approvedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("approvedOfferIds")?.toArrayList()
       ?.toList() as? List<String>) ?: listOf(),
     rejectedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("rejectedOfferIds")?.toArrayList()
@@ -581,12 +593,19 @@ object Converter {
     jti = jwtDescriptorDictionary.getStringOpt("jti") ?: ""
   )
 
-  fun didJwkToMap(
-    didJwk: VCLDidJwk
-  ): ReadableMap {
+  fun didJwkToMap(didJwk: VCLDidJwk): ReadableMap {
     val didJwkMap = Arguments.createMap()
+    didJwkMap.putString("keyId", didJwk.keyId)
     didJwkMap.putString("value", didJwk.value)
+    didJwkMap.putString("kid", didJwk.kid)
     return didJwkMap
   }
+
+  fun mapToDidJwk(didJwkMap: ReadableMap) =
+    VCLDidJwk(
+      keyId = didJwkMap.getStringOpt("keyId") ?: "",
+      value = didJwkMap.getStringOpt("value") ?: "",
+      kid = didJwkMap.getStringOpt("kid") ?: "",
+    )
 }
 

@@ -45,7 +45,6 @@ import vcl, {
   VCLError,
   VCLErrorCode,
   VCLCredentialTypes,
-  VCLIssuingType,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export const enum InitState {
@@ -57,6 +56,8 @@ export const enum InitState {
 const environment: VCLEnvironment = {
   value: VCLEnvTypes.DEV,
 };
+
+var didJwk: VCLDidJwk;
 
 export default function App() {
   const [initState, setInitState] = React.useState<InitState>(
@@ -73,13 +74,25 @@ export default function App() {
     };
     vcl.initialize(initializationDescriptor).then(
       () => {
-        console.log('VCL Initialized');
-        setInitState(InitState.InitializationSucceed);
+        console.log('VCL initialization succeed!');
+
+        vcl.generateDidJwk().then(
+          (resDidJwk: VCLDidJwk) => {
+            didJwk = resDidJwk;
+            console.log(`VCL did:jwk is ${JSON.stringify(didJwk)}`);
+            setInitState(InitState.InitializationSucceed);
+          },
+          (err: VCLError) => {
+            console.log('VCL Failed to generate did:jwk with error:', err);
+            setInitState(InitState.InitializationFailed);
+            setError(err);
+          }
+        );
       },
       (err: VCLError) => {
+        console.log('VCL Initialization with error:', err);
         setInitState(InitState.InitializationFailed);
         setError(err);
-        console.log('VCL Initialization error:', err);
       }
     );
   }, []);
@@ -159,8 +172,7 @@ export default function App() {
       presentationRequest: presentationRequest,
       verifiableCredentials: Constants.PresentationSelectionsList,
     };
-
-    vcl.submitPresentation(presentationSubmission).then(
+    vcl.submitPresentation(presentationSubmission, didJwk).then(
       (presentationSubmissionResult: VCLSubmissionResult) => {
         console.log(
           'VCL Presentation submission result:',
@@ -282,7 +294,7 @@ export default function App() {
     let credentialManifestDescriptorRefresh: VCLCredentialManifestDescriptorRefresh =
       {
         service: service,
-        credentialIds: Constants.CredentialIds,
+        credentialIds: Constants.CredentialIdsToRefresh,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorRefresh).then(
       (credentialManifest: VCLCredentialManifest) => {
@@ -310,7 +322,7 @@ export default function App() {
       identificationVerifiableCredentials: Constants.IdentificationList,
     };
 
-    vcl.generateOffers(generateOffersDescriptor).then(
+    vcl.generateOffers(generateOffersDescriptor, didJwk).then(
       (offers: VCLOffers) => {
         console.log(`VCL Generated Offers: ${offers.all}`);
         console.log(
@@ -359,26 +371,32 @@ export default function App() {
       Utils.getApprovedRejectedOfferIdsMock(generatedOffers);
     let finalizeOffersDescriptor: VCLFinalizeOffersDescriptor = {
       credentialManifest: credentialManifest,
+      offers: generatedOffers,
       approvedOfferIds: approvedRejectedOfferIds[0],
       rejectedOfferIds: approvedRejectedOfferIds[1],
     };
-    vcl.finalizeOffers(finalizeOffersDescriptor, generatedOffers.token).then(
-      (jwtVerifiableCredentials: VCLJwtVerifiableCredentials) => {
-        console.log('VCL Finalized Offers received:', jwtVerifiableCredentials);
-        console.log('VCL finalized Offers');
-        console.log(
-          'VCL Passed Credentials:',
-          jwtVerifiableCredentials.passedCredentials
-        );
-        console.log(
-          'VCL Failed Credentials:',
-          jwtVerifiableCredentials.failedCredentials
-        );
-      },
-      (err: VCLError) => {
-        console.log('VCL finalizeOffers Error:', err);
-      }
-    );
+    vcl
+      .finalizeOffers(finalizeOffersDescriptor, didJwk, generatedOffers.token)
+      .then(
+        (jwtVerifiableCredentials: VCLJwtVerifiableCredentials) => {
+          console.log(
+            'VCL Finalized Offers received:',
+            jwtVerifiableCredentials
+          );
+          console.log('VCL finalized Offers');
+          console.log(
+            'VCL Passed Credentials:',
+            jwtVerifiableCredentials.passedCredentials
+          );
+          console.log(
+            'VCL Failed Credentials:',
+            jwtVerifiableCredentials.failedCredentials
+          );
+        },
+        (err: VCLError) => {
+          console.log('VCL finalizeOffers Error:', err);
+        }
+      );
   };
 
   const getCredentialTypesUIFormSchema = () => {
@@ -423,7 +441,7 @@ export default function App() {
   };
 
   const verifyJwt = () => {
-    vcl.verifyJwt(Constants.SomeJwt, Constants.SomeJjwkPublic).then(
+    vcl.verifyJwt(Constants.SomeJwt, Constants.SomeJwkPublic).then(
       (isVerified: boolean) => {
         console.log('VCL verified jwt:', isVerified);
       },
@@ -436,7 +454,8 @@ export default function App() {
   const generateSignedJwt = () => {
     vcl
       .generateSignedJwt({
-        payload: Constants.SomeJson,
+        keyId: didJwk.keyId,
+        payload: Constants.SomePayload,
         iss: 'iss123',
         jti: 'jti123',
       })
@@ -452,11 +471,11 @@ export default function App() {
 
   const generateDidJwk = () => {
     vcl.generateDidJwk().then(
-      (didJwk: VCLDidJwk) => {
-        console.log('VCL DID:JWK generated: ', didJwk);
+      (resDidJwk: VCLDidJwk) => {
+        console.log('VCL did:jwk generated: ', resDidJwk);
       },
       (err: VCLError) => {
-        console.log('VCL DID:JWK generation failed:', err);
+        console.log('VCL did:jwk generation failed:', err);
       }
     );
   };

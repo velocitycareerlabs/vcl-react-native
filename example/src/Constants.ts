@@ -5,13 +5,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/* eslint-disable eslint-comments/no-unused-disable */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import {
   VCLJwt,
   VCLOrganizationsSearchDescriptor,
-  VCLPushDelegate,
   VCLVerifiedProfileDescriptor,
   VCLServiceType,
   VCLJwkPublic,
@@ -63,7 +59,7 @@ export abstract class Constants {
   ];
 
   static readonly IdentificationList = [
-    { nputDescriptor: 'PhoneV1.0', jwtVc: Constants.AdamSmithPhoneJwt },
+    { inputDescriptor: 'PhoneV1.0', jwtVc: Constants.AdamSmithPhoneJwt },
     { inputDescriptor: 'EmailV1.0', jwtVc: Constants.AdamSmithEmailJwt },
     {
       inputDescriptor: 'DriversLicenseV1.0',
@@ -71,48 +67,30 @@ export abstract class Constants {
     },
   ];
 
-  static readonly OrganizationsSearchDescriptor = {
-    filter: {
-      // did: DID,
-      serviceTypes: { serviceType: VCLServiceType.Issuer },
-      credentialTypes: ['EducationDegree'],
-    },
-    page: { size: '1', skip: '1' },
-    sort: [
-      ['createdAt', 'DESC'],
-      ['pdatedAt', 'ASC'],
-    ],
-    query: 'Bank',
-  };
+  static readonly OrganizationsSearchDescriptor: VCLOrganizationsSearchDescriptor =
+    {
+      filter: {
+        // did: DID,
+        serviceTypes: [VCLServiceType.Issuer],
+        credentialTypes: ['EducationDegree'],
+      },
+      page: { size: '1', skip: '1' },
+      sort: [
+        ['createdAt', 'DESC'],
+        ['pdatedAt', 'ASC'],
+      ],
+      query: 'Bank',
+    };
 
   static readonly DidDev =
     'did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw';
   static readonly DidStaging =
     'did:ion:EiDaeg3OofbDCdaQi5-zOLGfhZ9-boS0-w5URDfVwrI7BQ';
 
-  static readonly OrganizationsSearchDescriptorByDidDev = {
-    filter: { did: Constants.DidDev },
-  };
-  static readonly OrganizationsSearchDescriptorByDidStaging = {
-    filter: { did: Constants.DidStaging },
-  };
-
-  static readonly OrganizationJson =
-    '   {\n' +
-    '      "name":"Association of Chartered Certified Accountants",\n' +
-    '      "location":{\n' +
-    '         "countryCode":"UK",\n' +
-    '         "regionCode":"ENG"\n' +
-    '      },\n' +
-    '      "logo":"https:\\/\\/docs.velocitycareerlabs.io\\/Logos\\/ACCA.png",\n' +
-    '      "website":"https:\\/\\/example.com",\n' +
-    '      "founded":"1904",\n' +
-    '      "permittedVelocityServiceCategories":[\n' +
-    '         "",\n' +
-    '         "Issuer"\n' +
-    '      ],\n' +
-    '      "did":"did:velocity:0x5b4a5d2fdfdbd34e73904a0c8022ed4c22136add"\n' +
-    '   }';
+  static readonly OrganizationsSearchDescriptorByDidDev: VCLOrganizationsSearchDescriptor =
+    { filter: { did: Constants.DidDev } };
+  static readonly OrganizationsSearchDescriptorByDidStaging: VCLOrganizationsSearchDescriptor =
+    { filter: { did: Constants.DidStaging } };
 
   static readonly CredentialTypes = [
     'EducationDegreeRegistrationV1.0',
@@ -123,15 +101,15 @@ export abstract class Constants {
 
   static readonly ResidentPermitV10 = 'ResidentPermitV1.0';
 
-  static readonly VerifiedProfileDescriptor = {
+  static readonly VerifiedProfileDescriptor: VCLVerifiedProfileDescriptor = {
     did: Constants.DidDev,
   };
 
-  static readonly SomeJwt = {
+  static readonly SomeJwt: VCLJwt = {
     encodedJwt:
       'eyJ0eXAiOiJKV1QiLCJraWQiOiJkaWQ6dmVsb2NpdHk6MHhkNGRmMjk3MjZkNTAwZjliODViYzZjN2YxYjNjMDIxZjE2MzA1NjkyI2tleS0xIiwiYWxnIjoiRVMyNTZLIn0.eyJleGNoYW5nZV9pZCI6IjYxMmYzM2Q1OTRhN2IyMDAwYTExZDM3YiIsIm1ldGFkYXRhIjp7ImNsaWVudF9uYW1lIjoiTWljcm9zb2Z0IENvcnBvcmF0aW9uIiwibG9nb191cmkiOiJodHRwczovL2Fnc29sLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAxOC8wOS9uZXctbWljcm9zb2Z0LWxvZ28tU0laRUQtU1FVQVJFLmpwZyIsInRvc191cmkiOiJodHRwczovL3d3dy52ZWxvY2l0eWV4cGVyaWVuY2VjZW50ZXIuY29tL3Rlcm1zLWFuZC1jb25kaXRpb25zLXZuZiIsIm1heF9yZXRlbnRpb25fcGVyaW9kIjoiMm0iLCJwcm9ncmVzc191cmkiOiJodHRwczovL2RldmFnZW50LnZlbG9jaXR5Y2FyZWVybGFicy5pby9hcGkvaG9sZGVyL3YwLjYvb3JnL2RpZDp2ZWxvY2l0eToweGQ0ZGYyOTcyNmQ1MDBmOWI4NWJjNmM3ZjFiM2MwMjFmMTYzMDU2OTIvZ2V0LWV4Y2hhbmdlLXByb2dyZXNzIiwic3VibWl0X3ByZXNlbnRhdGlvbl91cmkiOiJodHRwczovL2RldmFnZW50LnZlbG9jaXR5Y2FyZWVybGFicy5pby9hcGkvaG9sZGVyL3YwLjYvb3JnL2RpZDp2ZWxvY2l0eToweGQ0ZGYyOTcyNmQ1MDBmOWI4NWJjNmM3ZjFiM2MwMjFmMTYzMDU2OTIvaXNzdWUvc3VibWl0LWlkZW50aWZpY2F0aW9uIiwiY2hlY2tfb2ZmZXJzX3VyaSI6Imh0dHBzOi8vZGV2YWdlbnQudmVsb2NpdHljYXJlZXJsYWJzLmlvL2FwaS9ob2xkZXIvdjAuNi9vcmcvZGlkOnZlbG9jaXR5OjB4ZDRkZjI5NzI2ZDUwMGY5Yjg1YmM2YzdmMWIzYzAyMWYxNjMwNTY5Mi9pc3N1ZS9jcmVkZW50aWFsLW9mZmVycyIsImZpbmFsaXplX29mZmVyc191cmkiOiJodHRwczovL2RldmFnZW50LnZlbG9jaXR5Y2FyZWVybGFicy5pby9hcGkvaG9sZGVyL3YwLjYvb3JnL2RpZDp2ZWxvY2l0eToweGQ0ZGYyOTcyNmQ1MDBmOWI4NWJjNmM3ZjFiM2MwMjFmMTYzMDU2OTIvaXNzdWUvZmluYWxpemUtb2ZmZXJzIn0sInByZXNlbnRhdGlvbl9kZWZpbml0aW9uIjp7ImlkIjoiNjEyZjMzZDU5NGE3YjIwMDBhMTFkMzdiLjYwZTgwZGY5MGY5YjhlMDAxYzY4ZmMzMyIsInB1cnBvc2UiOiJDcmVkZW50aWFsIElzc3VhbmNlIiwiZm9ybWF0Ijp7Imp3dF92cCI6eyJhbGciOlsic2VjcDI1NmsxIl19fSwiaW5wdXRfZGVzY3JpcHRvcnMiOlt7ImlkIjoiUGhvbmUiLCJzY2hlbWEiOlt7InVyaSI6Imh0dHBzOi8vZGV2c2VydmljZXMudmVsb2NpdHljYXJlZXJsYWJzLmlvL2FwaS92MC42L3NjaGVtYXMvcGhvbmUuc2NoZW1hLmpzb24ifV19LHsiaWQiOiJFbWFpbCIsInNjaGVtYSI6W3sidXJpIjoiaHR0cHM6Ly9kZXZzZXJ2aWNlcy52ZWxvY2l0eWNhcmVlcmxhYnMuaW8vYXBpL3YwLjYvc2NoZW1hcy9lbWFpbC5zY2hlbWEuanNvbiJ9XX0seyJpZCI6IklkRG9jdW1lbnQiLCJzY2hlbWEiOlt7InVyaSI6Imh0dHBzOi8vZGV2c2VydmljZXMudmVsb2NpdHljYXJlZXJsYWJzLmlvL2FwaS92MC42L3NjaGVtYXMvaWQtZG9jdW1lbnQudjEuc2NoZW1hLmpzb24ifV19XX0sIm91dHB1dF9kZXNjcmlwdG9ycyI6W3siaWQiOiJQYXN0RW1wbG95bWVudFBvc2l0aW9uIiwic2NoZW1hIjpbeyJ1cmkiOiJodHRwczovL2RldnNlcnZpY2VzLnZlbG9jaXR5Y2FyZWVybGFicy5pby9hcGkvdjAuNi9zY2hlbWFzL3Bhc3QtZW1wbG95bWVudC1wb3NpdGlvbi5zY2hlbWEuanNvbiJ9XX1dLCJpc3N1ZXIiOnsiaWQiOiJkaWQ6dmVsb2NpdHk6MHhkNGRmMjk3MjZkNTAwZjliODViYzZjN2YxYjNjMDIxZjE2MzA1NjkyIn0sImlzcyI6ImRpZDp2ZWxvY2l0eToweGQ0ZGYyOTcyNmQ1MDBmOWI4NWJjNmM3ZjFiM2MwMjFmMTYzMDU2OTIiLCJpYXQiOjE2MzA0ODM0MTMsImV4cCI6MTYzMTA4ODIxMywibmJmIjoxNjMwNDgzNDEzfQ.9py7xxe60rFa_kpbG7OptU8ekKgLJGSiMfQctNvHctclPiqvnuZ-Bh1jjN0rh7V5yqFpvz8wqPTD-4Rs_1zIGg',
   };
-  static readonly SomeJwkPublic = {
+  static readonly SomeJwkPublic: VCLJwkPublic = {
     valueStr:
       '{"alg":"ES256K","use":"sig","kid":"uemn6l5ro6hLNrgiPRl1Dy51V9whez4tu4hlwsNOTVk","crv":"secp256k1","x":"oLYCa-AlnVpW8Rq9iST_1eY_XoyvGRry7y1xS4vU4qo","y":"PUMAsawZ24WaSnRIdDb_wNbShAvfsGF71ke1DcJGxlM","kty":"EC"}',
   };

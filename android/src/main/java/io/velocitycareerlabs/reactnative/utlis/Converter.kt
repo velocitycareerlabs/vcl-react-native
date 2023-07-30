@@ -22,22 +22,40 @@ object Converter {
 
   fun mapToInitializationDescriptor(
     initializationDescriptorMap: ReadableMap
-  ) =
-    VCLInitializationDescriptor(
+  ) = VCLInitializationDescriptor(
       environment = mapToEnvironment(
-        initializationDescriptorMap.getMapOpt("environment")
-          ?: mapOf(Pair("value", VCLEnvironment.PROD.value)).toReadableMap()
+          initializationDescriptorMap.getStringOpt("environment")
+      ),
+      keyServiceType = mapToKeyServiceType(
+        initializationDescriptorMap.getStringOpt("keyServiceType")
+      ),
+      xVnfProtocolVersion = mapToXVnfProtocolVersion(
+        (initializationDescriptorMap.getStringOpt("xVnfProtocolVersion"))
       ),
       cacheSequence = initializationDescriptorMap.getIntOpt("cacheSequence") ?: 0
     )
 
-  fun mapToEnvironment(environmentMap: ReadableMap) =
-    when (environmentMap.getStringOpt("value")) {
-      VCLEnvironment.DEV.value -> VCLEnvironment.DEV
-      VCLEnvironment.QA.value -> VCLEnvironment.QA
-      VCLEnvironment.STAGING.value -> VCLEnvironment.STAGING
-      VCLEnvironment.PROD.value -> VCLEnvironment.PROD
-      else -> VCLEnvironment.PROD
+  private fun mapToEnvironment(environment: String?) =
+    when(environment) {
+      VCLEnvironment.Dev.value -> VCLEnvironment.Dev
+      VCLEnvironment.Qa.value -> VCLEnvironment.Qa
+      VCLEnvironment.Staging.value -> VCLEnvironment.Staging
+      VCLEnvironment.Prod.value -> VCLEnvironment.Prod
+      else -> VCLEnvironment.Prod
+    }
+
+  private fun mapToKeyServiceType(keyServiceType: String?) =
+    when(keyServiceType) {
+      VCLKeyServiceType.Local.value -> VCLKeyServiceType.Local
+      VCLKeyServiceType.Remote.value -> VCLKeyServiceType.Remote
+      else -> VCLKeyServiceType.Local
+    }
+
+  private fun mapToXVnfProtocolVersion(xVnfProtocolVersion: String?) =
+    when(xVnfProtocolVersion) {
+      VCLXVnfProtocolVersion.XVnfProtocolVersion1.value -> VCLXVnfProtocolVersion.XVnfProtocolVersion1
+      VCLXVnfProtocolVersion.XVnfProtocolVersion2.value -> VCLXVnfProtocolVersion.XVnfProtocolVersion2
+      else -> VCLXVnfProtocolVersion.XVnfProtocolVersion1
     }
 
   fun regionToMap(
@@ -177,7 +195,7 @@ object Converter {
   ): ReadableMap {
     val presentationRequestMap = Arguments.createMap()
     val jwtMap = Arguments.createMap()
-    jwtMap.putString("encodedJwt", presentationRequest.jwt.signedJwt.serialize())
+    jwtMap.putString("encodedJwt", presentationRequest.jwt.encodedJwt)
     presentationRequestMap.putMap("jwt", jwtMap)
     val jwkMap = Arguments.createMap()
     jwkMap.putString("valueStr", presentationRequest.jwkPublic.valueStr)
@@ -443,12 +461,13 @@ object Converter {
   ): ReadableMap {
     val credentialManifestMap = Arguments.createMap()
     val jwtMap = Arguments.createMap()
-    jwtMap.putString("encodedJwt", credentialManifest.jwt.signedJwt.serialize())
+    jwtMap.putString("encodedJwt", credentialManifest.jwt.encodedJwt)
     credentialManifestMap.putMap("jwt", jwtMap)
     credentialManifestMap.putString("did", credentialManifest.did)
     credentialManifestMap.putString("iss", credentialManifest.iss)
     credentialManifestMap.putString("exchangeId", credentialManifest.exchangeId)
     credentialManifestMap.putString("vendorOriginContext", credentialManifest.vendorOriginContext)
+    credentialManifestMap.putMap("verifiedProfile", credentialManifest.verifiedProfile.payload.toReadableMap())
     return credentialManifestMap
   }
 
@@ -458,7 +477,12 @@ object Converter {
     val jwt =
       VCLJwt(encodedJwt = credentialManifestMap?.getMapOpt("jwt")?.getStringOpt("encodedJwt") ?: "")
     val vendorOriginContext: String? = credentialManifestMap?.getStringOpt("vendorOriginContext")
-    return VCLCredentialManifest(jwt = jwt, vendorOriginContext = vendorOriginContext)
+    val verifiedProfileMap: ReadableMap? = credentialManifestMap?.getMapOpt("verifiedProfile")
+    return VCLCredentialManifest(
+      jwt = jwt,
+      vendorOriginContext = vendorOriginContext,
+      verifiedProfile = VCLVerifiedProfile(payload = verifiedProfileMap?.toJsonObject() ?: JSONObject())
+    )
   }
 
   fun mapToGenerateOffersDescriptor(
@@ -546,10 +570,10 @@ object Converter {
     val passedCredentials = Arguments.createArray()
     val failedCredentials = Arguments.createArray()
     jwtVerifiableCredentials.passedCredentials.forEach {
-      passedCredentials.pushString(it.signedJwt.serialize())
+      passedCredentials.pushString(it.encodedJwt)
     }
     jwtVerifiableCredentials.failedCredentials.forEach {
-      failedCredentials.pushString(it.signedJwt.serialize())
+      failedCredentials.pushString(it.encodedJwt)
     }
     jwtVerifiableCredentialsMap.putArray("passedCredentials", passedCredentials)
     jwtVerifiableCredentialsMap.putArray("failedCredentials", failedCredentials)
@@ -558,7 +582,7 @@ object Converter {
 
   fun jwtToMap(jwt: VCLJwt): ReadableMap {
     val jwtReadableMap = Arguments.createMap()
-    jwtReadableMap.putString("encodedJwt", jwt.signedJwt.serialize())
+    jwtReadableMap.putString("encodedJwt", jwt.encodedJwt)
     return jwtReadableMap
   }
 
@@ -593,19 +617,26 @@ object Converter {
     jti = jwtDescriptorDictionary.getStringOpt("jti") ?: ""
   )
 
-  fun didJwkToMap(didJwk: VCLDidJwk): ReadableMap {
-    val didJwkMap = Arguments.createMap()
-    didJwkMap.putString("keyId", didJwk.keyId)
-    didJwkMap.putString("value", didJwk.value)
-    didJwkMap.putString("kid", didJwk.kid)
-    return didJwkMap
+  fun didJwkToMap(didJwk: VCLDidJwk?): ReadableMap? {
+    didJwk?.let {
+      val didJwkMap = Arguments.createMap()
+      didJwkMap.putString("keyId", it.keyId)
+      didJwkMap.putString("value", it.value)
+      didJwkMap.putString("kid", it.kid)
+      return didJwkMap
+    }
+    return null
   }
 
-  fun mapToDidJwk(didJwkMap: ReadableMap) =
-    VCLDidJwk(
-      keyId = didJwkMap.getStringOpt("keyId") ?: "",
-      value = didJwkMap.getStringOpt("value") ?: "",
-      kid = didJwkMap.getStringOpt("kid") ?: "",
-    )
+  fun mapToDidJwk(didJwkMap: ReadableMap?): VCLDidJwk? {
+    didJwkMap?.let {
+      return VCLDidJwk(
+        keyId = it.getStringOpt("keyId") ?: "",
+        value = it.getStringOpt("value") ?: "",
+        kid = it.getStringOpt("kid") ?: ""
+      )
+    }
+    return null
+  }
 }
 

@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 05/07/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 //
 
 import Foundation
@@ -16,26 +16,58 @@ func dictionaryToInitializationDescriptor(
 ) -> VCLInitializationDescriptor {
     return VCLInitializationDescriptor(
         environment: dictionaryToEnvironment(
-            initializationDescriptorDictionary["environment"] as? [String: String] ?? ["value": VCLEnvironment.PROD.rawValue]
+            initializationDescriptorDictionary["environment"] as? String
+        ),
+        keyServiceType: dictionaryToKeyServiceType(
+            initializationDescriptorDictionary["keyServiceType"] as? String
+            ),
+        xVnfProtocolVersion: dictionaryToXVnfProtocolVersion (
+            initializationDescriptorDictionary["xVnfProtocolVersion"] as? String
         ),
         cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0
     )
 }
 
-func dictionaryToEnvironment(
-    _ environmentDictionary: [String: String]
+private func dictionaryToEnvironment(
+    _ environment: String?
 ) -> VCLEnvironment {
-    switch environmentDictionary["value"] {
-    case VCLEnvironment.DEV.rawValue:
-        return VCLEnvironment.DEV
-    case VCLEnvironment.QA.rawValue:
-        return VCLEnvironment.QA
-    case VCLEnvironment.STAGING.rawValue:
-        return VCLEnvironment.STAGING
-    case VCLEnvironment.PROD.rawValue:
-        return VCLEnvironment.PROD
+    switch environment {
+    case VCLEnvironment.Dev.rawValue:
+        return VCLEnvironment.Dev
+    case VCLEnvironment.Qa.rawValue:
+        return VCLEnvironment.Qa
+    case VCLEnvironment.Staging.rawValue:
+        return VCLEnvironment.Staging
+    case VCLEnvironment.Prod.rawValue:
+        return VCLEnvironment.Prod
     default:
-        return VCLEnvironment.PROD
+        return VCLEnvironment.Prod
+    }
+}
+
+private func dictionaryToKeyServiceType(
+    _ keyServiceType: String?
+) -> VCLKeyServiceType {
+    switch keyServiceType {
+    case VCLKeyServiceType.Local.rawValue:
+        return VCLKeyServiceType.Local
+    case VCLKeyServiceType.Remote.rawValue:
+        return VCLKeyServiceType.Remote
+    default:
+        return VCLKeyServiceType.Local
+    }
+}
+
+private func dictionaryToXVnfProtocolVersion(
+    _ xVnfProtocolVersion: String?
+) -> VCLXVnfProtocolVersion {
+    switch xVnfProtocolVersion {
+    case VCLXVnfProtocolVersion.XVnfProtocolVersion1.rawValue:
+        return VCLXVnfProtocolVersion.XVnfProtocolVersion1
+    case VCLXVnfProtocolVersion.XVnfProtocolVersion2.rawValue:
+        return VCLXVnfProtocolVersion.XVnfProtocolVersion2
+    default:
+        return VCLXVnfProtocolVersion.XVnfProtocolVersion1
     }
 }
 
@@ -414,15 +446,21 @@ func credentialManifestToDictionary(
     credentialManifestDictinary["iss"] = credentialManifest.iss
     credentialManifestDictinary["exchangeId"] = credentialManifest.exchangeId
     credentialManifestDictinary["vendorOriginContext"] = credentialManifest.vendorOriginContext
+    credentialManifestDictinary["verifiedProfile"] = credentialManifest.verifiedProfile.payload
     return credentialManifestDictinary
 }
 
 func dictionaryToCredentialManifest(
-    _ credentialMAnifestDictionary: [String: Any]?
+    _ credentialManifestDictionary: [String: Any]?
 ) -> VCLCredentialManifest {
-    let jwt: VCLJwt = VCLJwt(encodedJwt: (credentialMAnifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
-    let vendorOriginContext: String? = credentialMAnifestDictionary?["vendorOriginContext"] as? String
-    return VCLCredentialManifest(jwt: jwt, vendorOriginContext: vendorOriginContext)
+    let jwt: VCLJwt = VCLJwt(encodedJwt: (credentialManifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
+    let vendorOriginContext: String? = credentialManifestDictionary?["vendorOriginContext"] as? String
+    let verifiedProfileDictionary: [String: Any]? = credentialManifestDictionary?["verifiedProfile"] as? [String: Any]
+    return VCLCredentialManifest(
+        jwt: jwt,
+        vendorOriginContext: vendorOriginContext,
+        verifiedProfile: VCLVerifiedProfile(payload: verifiedProfileDictionary ?? [:])
+        )
 }
 
 func dictionaryToGenerateOffersDescriptor(
@@ -556,18 +594,24 @@ func dictionaryToJwtDescriptor(
     )
 }
 
-func didJwkToDictionary(_ didJwk: VCLDidJwk) -> [String: Any] {
-    var didJwkDictionary = [String: Any]()
-    didJwkDictionary["keyId"] = didJwk.keyId
-    didJwkDictionary["value"] = didJwk.value
-    didJwkDictionary["kid"] = didJwk.kid
-    return didJwkDictionary
+func didJwkToDictionary(_ didJwk: VCLDidJwk?) -> [String: Any]? {
+    if let didJwk = didJwk {
+        return [
+            "keyId": didJwk.keyId,
+            "value": didJwk.value,
+            "kid": didJwk.kid
+        ]
+    }
+    return nil
 }
 
-func dictionaryToJwk(_ didJwkDictionary: [String: Any]) -> VCLDidJwk {
-    return VCLDidJwk(
-        keyId: didJwkDictionary["keyId"] as? String ?? "",
-        value: didJwkDictionary["value"] as? String ?? "",
-        kid: didJwkDictionary["kid"] as? String ?? ""
-    )
+func dictionaryToJwk(_ didJwkDictionary: [String: Any]?) -> VCLDidJwk? {
+    if let didJwkDictionary = didJwkDictionary {
+        return VCLDidJwk(
+            keyId: didJwkDictionary["keyId"] as? String ?? "",
+            value: didJwkDictionary["value"] as? String ?? "",
+            kid: didJwkDictionary["kid"] as? String ?? ""
+        )
+    }
+    return nil
 }

@@ -86,7 +86,7 @@ export const VclApi = {
 
   submitPresentation: async (
     presentationSubmission: VCLPresentationSubmission,
-    didJwk: VCLDidJwk
+    didJwk?: VCLDidJwk
   ): Promise<VCLSubmissionResult> => {
     try {
       return await VclReactNative.submitPresentation(
@@ -134,7 +134,7 @@ export const VclApi = {
 
   generateOffers: async (
     generateOffersDescriptor: VCLGenerateOffersDescriptor,
-    didJwk: VCLDidJwk
+    didJwk?: VCLDidJwk
   ): Promise<VCLOffers> => {
     try {
       return await VclReactNative.generateOffers(
@@ -162,8 +162,8 @@ export const VclApi = {
 
   finalizeOffers: async (
     finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-    didJwk: VCLDidJwk,
-    token: VCLToken
+    token: VCLToken,
+    didJwk?: VCLDidJwk
   ): Promise<VCLJwtVerifiableCredentials> => {
     try {
       return await VclReactNative.finalizeOffers(

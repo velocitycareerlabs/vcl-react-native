@@ -40,7 +40,6 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDidJwk
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
-import io.velocitycareerlabs.reactnative.utlis.Converter.mapToOffers
 import java.lang.Exception
 
 /**
@@ -52,7 +51,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
     const val ModuleName = "VclReactNative"
   }
 
-  private val vcl = VCLProvider.vclInstance(reactContext.applicationContext)
+  private val vcl = VCLProvider.vclInstance()
 
   override fun getName(): String {
     return ModuleName
@@ -65,6 +64,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   ) {
     try {
       vcl.initialize(
+        context = reactContext.applicationContext,
         initializationDescriptor = mapToInitializationDescriptor(
           initializationDescriptor
         ),
@@ -131,7 +131,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun submitPresentation(
     presentationSubmissionMap: ReadableMap,
-    didJwkMap: ReadableMap,
+    didJwkMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
@@ -210,7 +210,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun generateOffers(
     generateOffersDescriptorMap: ReadableMap,
-    didJwkMap: ReadableMap,
+    didJwkMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
@@ -252,7 +252,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun finalizeOffers(
     finalizeOffersDescriptorMap: ReadableMap,
-    didJwkMap: ReadableMap,
+    didJwkMap: ReadableMap? = null,
     tokenMap: ReadableMap,
     promise: Promise
   ) {

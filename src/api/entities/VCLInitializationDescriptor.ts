@@ -6,8 +6,12 @@
  */
 
 import type { VCLEnvironment } from '../VCLEnvironment';
+import type { VCLKeyServiceType } from '../VCLKeyServiceType';
+import type { VCLXVnfProtocolVersion } from '../VCLXVnfProtocolVersion';
 
 export interface VCLInitializationDescriptor {
   environment?: VCLEnvironment;
+  keyServiceType?: VCLKeyServiceType;
+  xVnfProtocolVersion?: VCLXVnfProtocolVersion;
   cacheSequence?: number;
 }

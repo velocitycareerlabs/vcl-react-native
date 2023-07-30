@@ -5,9 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export enum VCLEnvironment {
-  Dev = 'dev',
-  Qa = 'qa',
-  Staging = 'staging',
-  Prod = 'prod',
+export enum VCLStatusCode {
+  NetworkError = 1,
+  VerificationError = 403,
 }

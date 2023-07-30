@@ -81,7 +81,7 @@ class VclReactNative: NSObject {
     @objc(submitPresentation:withDidJwkDictionary:withResolver:withRejecter:)
     func submitPresentation(
         presentationSubmissionDictionary: [String: Any],
-        didJwkDictionary: [String: Any],
+        didJwkDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.submitPresentation(
@@ -149,7 +149,7 @@ class VclReactNative: NSObject {
     @objc(generateOffers:withDidJwkDictionary:withResolver:withRejecter:)
     func generateOffers(
         generateOffersDescriptorDictionary: [String: Any],
-        didJwkDictionary: [String: Any],
+        didJwkDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.generateOffers(
@@ -183,7 +183,7 @@ class VclReactNative: NSObject {
     @objc(finalizeOffers:withDidJwkDictionary:withTokenDictionary:withResolver:withRejecter:)
     func finalizeOffers(
         finalizeOffersDescriptorDictionary: [String: Any],
-        didJwkDictionary: [String: Any],
+        didJwkDictionary: [String: Any]? = nil,
         tokenDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {

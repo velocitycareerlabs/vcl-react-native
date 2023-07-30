@@ -6,8 +6,10 @@
  */
 
 import { VclApi } from './api/VCLApi';
-import type { VCLEnvironment } from './api/VCLEnvironment';
-import { VCLEnvTypes } from './api/VCLEnvironment';
+import { VCLEnvironment } from './api/VCLEnvironment';
+import { VCLXVnfProtocolVersion } from './api/VCLXVnfProtocolVersion';
+// import type { VCLKeyServiceType } from './api/VCLKeyServiceType';
+// import { VCLKeyServiceTypes } from './api/VCLKeyServiceType';
 import type { VCLCountry } from './api/entities/VCLCountry';
 import type { VCLCountries } from './api/entities/VCLCountries';
 import { VCLCountryCodes } from './api/entities/VCLCountries';
@@ -56,14 +58,15 @@ import type { VCLInitializationDescriptor } from './api/entities/VCLInitializati
 import type { VCLPresentationRequestDescriptor } from './api/entities/VCLPresentationRequestDescriptor';
 import type { VCLJwtDescriptor } from './api/entities/VCLJwtDescriptor';
 import type { VCLDidJwk } from './api/entities/VCLDidJwk';
-import { VCLErrorCode } from './api/entities/VCLErrorCode';
 import { VCLError } from './api/entities/VCLError';
+import { VCLStatusCode } from './api/entities/VCLStatusCode';
+import { VCLErrorCode } from './api/entities/VCLErrorCode';
 
 export default VclApi;
 export {
   Dictionary,
   VCLEnvironment,
-  VCLEnvTypes,
+  VCLXVnfProtocolVersion,
   VCLCountry,
   VCLCountries,
   VCLCountryCodes,
@@ -111,6 +114,7 @@ export {
   VCLPresentationRequestDescriptor,
   VCLJwtDescriptor,
   VCLDidJwk,
-  VCLErrorCode,
   VCLError,
+  VCLStatusCode,
+  VCLErrorCode,
 };

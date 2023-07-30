@@ -6,6 +6,12 @@
  */
 
 export enum VCLErrorCode {
-  NetworkError = 1,
-  VerificationError = 403,
+  // Credential issuer verification error codes:
+  CredentialTypeNotRegistered = 'credential_type_not_registered',
+  IssuerRequiresIdentityPermission = 'issuer_requires_identity_permission',
+  IssuerRequiresNotaryPermission = 'issuer_requires_notary_permission',
+  CredentialSubjectContextMissing = 'credential_subject_context_missing',
+  InvalidCredentialSubjectType = 'invalid_credential_subject_type',
+  InvalidCredentialSubjectContext = 'invalid_credential_subject_context',
+  IssuerUnexpectedPermissionFailure = 'issuer_unexpected_permission_failure',
 }

@@ -24,7 +24,8 @@ func dictionaryToInitializationDescriptor(
         xVnfProtocolVersion: dictionaryToXVnfProtocolVersion (
             initializationDescriptorDictionary["xVnfProtocolVersion"] as? String
         ),
-        cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0
+        cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0,
+        isDebugOn: initializationDescriptorDictionary["isDebugOn"] as? Bool ?? false
     )
 }
 

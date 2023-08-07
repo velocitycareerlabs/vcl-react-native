@@ -32,8 +32,9 @@ object Converter {
       xVnfProtocolVersion = mapToXVnfProtocolVersion(
         (initializationDescriptorMap.getStringOpt("xVnfProtocolVersion"))
       ),
-      cacheSequence = initializationDescriptorMap.getIntOpt("cacheSequence") ?: 0
-    )
+      cacheSequence = initializationDescriptorMap.getIntOpt("cacheSequence") ?: 0,
+      isDebugOn = initializationDescriptorMap.getBooleanOpt("isDebugOn") ?: false
+  )
 
   private fun mapToEnvironment(environment: String?) =
     when(environment) {

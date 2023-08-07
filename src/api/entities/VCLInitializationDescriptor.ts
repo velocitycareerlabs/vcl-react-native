@@ -14,4 +14,5 @@ export interface VCLInitializationDescriptor {
   keyServiceType?: VCLKeyServiceType;
   xVnfProtocolVersion?: VCLXVnfProtocolVersion;
   cacheSequence?: number;
+  isDebugOn?: boolean;
 }

@@ -10,4 +10,5 @@ import type { VCLEnvironment } from '../VCLEnvironment';
 export interface VCLInitializationDescriptor {
   environment?: VCLEnvironment;
   cacheSequence?: number;
+  isDebugOn?: boolean;
 }

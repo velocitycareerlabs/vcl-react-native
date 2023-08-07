@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 05/07/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 //
 
 import Foundation
@@ -18,7 +18,8 @@ func dictionaryToInitializationDescriptor(
         environment: dictionaryToEnvironment(
             initializationDescriptorDictionary["environment"] as? [String: String] ?? ["value": VCLEnvironment.PROD.rawValue]
         ),
-        cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0
+        cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0,
+        isDebugOn: initializationDescriptorDictionary["isDebugOn"] as? Bool ?? false
     )
 }
 

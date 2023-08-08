@@ -28,6 +28,7 @@
 		134814201AA4EA6300B7C361 /* libVclReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVclReactNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		289FEEA127DE121D00E58425 /* Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		289FEEA327DE121D00E58425 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		28ADE5EF2A82C7EA001A8453 /* GlobalConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConfig.swift; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* VclReactNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VclReactNative.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* VclReactNative-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VclReactNative-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* VclReactNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VclReactNative.swift; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 			children = (
 				289FEEA227DE121D00E58425 /* Extensions */,
 				289FEEA027DE121D00E58425 /* Utils */,
+				28ADE5EF2A82C7EA001A8453 /* GlobalConfig.swift */,
 				F4FF95D6245B92E800C19C63 /* VclReactNative.swift */,
 				B3E7B5891CC2AC0600A0062D /* VclReactNative.m */,
 				F4FF95D5245B92E700C19C63 /* VclReactNative-Bridging-Header.h */,

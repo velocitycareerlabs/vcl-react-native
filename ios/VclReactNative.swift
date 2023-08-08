@@ -11,13 +11,22 @@ class VclReactNative: NSObject {
     
     private let vcl = VCLProvider.vclInstance()
     
+    private func initGlobalConfigurations(
+      _ initializationDescriptor: VCLInitializationDescriptor
+    ) {
+      GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
+      GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
+    }
+    
     @objc(initialize:withResolver:withRejecter:)
     func initialize(
         initializationDescriptorDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
+        let initializationDescriptor = dictionaryToInitializationDescriptor(initializationDescriptorDictionary)
+        initGlobalConfigurations(initializationDescriptor)
         vcl.initialize(
-            initializationDescriptor: dictionaryToInitializationDescriptor(initializationDescriptorDictionary),
+            initializationDescriptor: initializationDescriptor,
             successHandler: {
                 resolve("VCL initialization succeed!")
             },
@@ -128,15 +137,17 @@ class VclReactNative: NSObject {
         credentialManifestDescriptorDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
+        VCLLog.d("credentialManifestDescriptorDictionary: \(credentialManifestDescriptorDictionary)")
         if let credentialManifestDescriptor = dictionaryToCredentialManifestDescriptor(credentialManifestDescriptorDictionary) {
-        vcl.getCredentialManifest(
-            credentialManifestDescriptor: credentialManifestDescriptor,
-            successHandler: {
-                resolve(credentialManifestToDictionary($0))
-            },
-            errorHandler: {
-                reject(nil, $0.toDictionary().toJsonString(), $0)
-            })
+            VCLLog.d("credentialManifestDescriptor: \(credentialManifestDescriptor.toPropsString())")
+            vcl.getCredentialManifest(
+                credentialManifestDescriptor: credentialManifestDescriptor,
+                successHandler: {
+                    resolve(credentialManifestToDictionary($0))
+                },
+                errorHandler: {
+                    reject(nil, $0.toDictionary().toJsonString(), $0)
+                })
         } else {
             reject(nil, "Unexpected Credential Credential Manifest Descriptor: \(credentialManifestDescriptorDictionary)", nil)
         }

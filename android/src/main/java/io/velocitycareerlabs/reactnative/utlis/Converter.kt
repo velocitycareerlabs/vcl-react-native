@@ -14,9 +14,6 @@ import io.velocitycareerlabs.reactnative.extensions.*
 import org.json.JSONObject
 import java.lang.Exception
 
-/**
- * Created by Michael Avoyan on 04/07/2021.
- */
 object Converter {
 
   fun mapToInitializationDescriptor(

@@ -35,16 +35,20 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToVerifiedProfileDes
 import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
 import io.velocitycareerlabs.api.entities.VCLError
+import io.velocitycareerlabs.api.entities.VCLInitializationDescriptor
 import io.velocitycareerlabs.reactnative.extensions.toThrowable
 import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
+import io.velocitycareerlabs.reactnative.utlis.VCLLog
 import java.lang.Exception
 
 /**
  * Created by Michael Avoyan on 01/07/2021.
  */
 class VclReactNativeModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+
+  val TAG = "VclReactNativeModule"
 
   companion object {
     const val ModuleName = "VclReactNative"
@@ -56,17 +60,26 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
     return ModuleName
   }
 
+  private fun initGlobalConfigurations(
+    initializationDescriptor: VCLInitializationDescriptor
+  ) {
+    GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
+    GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
+  }
+
   @ReactMethod
   fun initialize(
-    initializationDescriptor: ReadableMap,
+    initializationDescriptorMap: ReadableMap,
     promise: Promise
   ) {
     try {
+      val initializationDescriptor = mapToInitializationDescriptor(
+        reactContext,
+        initializationDescriptorMap
+      )
+      initGlobalConfigurations(initializationDescriptor)
       vcl.initialize(
-        initializationDescriptor = mapToInitializationDescriptor(
-          reactContext,
-          initializationDescriptor
-        ),
+        initializationDescriptor = initializationDescriptor,
         successHandler = {
           promise.resolve("VCL initialization succeed!")
         },
@@ -189,7 +202,9 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
     promise: Promise
   ) {
     try {
+      VCLLog.d(TAG, "credentialManifestDescriptorMap map: $credentialManifestDescriptorMap")
       mapToCredentialManifestDescriptor(credentialManifestDescriptorMap)?.let { credentialManifestDescriptor ->
+        VCLLog.d(TAG, "credentialManifestDescriptor VCL entity: ${credentialManifestDescriptor.toPropsString()}")
         vcl.getCredentialManifest(credentialManifestDescriptor,
           {
             promise.resolve(credentialManifestToMap(it))

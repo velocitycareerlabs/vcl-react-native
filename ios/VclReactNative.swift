@@ -137,9 +137,9 @@ class VclReactNative: NSObject {
         credentialManifestDescriptorDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
-        VCLLog.d("credentialManifestDescriptorDictionary: \(credentialManifestDescriptorDictionary)")
+        VCLLog.d("credentialManifestDescriptorDictionary dictionary: \(credentialManifestDescriptorDictionary)")
         if let credentialManifestDescriptor = dictionaryToCredentialManifestDescriptor(credentialManifestDescriptorDictionary) {
-            VCLLog.d("credentialManifestDescriptor: \(credentialManifestDescriptor.toPropsString())")
+            VCLLog.d("credentialManifestDescriptor VCL entity: \(credentialManifestDescriptor.toPropsString())")
             vcl.getCredentialManifest(
                 credentialManifestDescriptor: credentialManifestDescriptor,
                 successHandler: {

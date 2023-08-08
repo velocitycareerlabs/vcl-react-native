@@ -15,8 +15,8 @@ struct GlobalConfig {
     static var CurrentEnvironment = VCLEnvironment.PROD
     
     static var IsDebugOn = false
-
+    
     static let LogTagPrefix = "VCL RN iOS "
-
+    
     static var IsLoggerOn: Bool { get { CurrentEnvironment != VCLEnvironment.PROD || GlobalConfig.IsDebugOn } }
 }

@@ -428,9 +428,9 @@ object Converter {
   fun mapToServiceCredentialAgentIssuer(
     serviceMap: ReadableMap?
   ): VCLServiceCredentialAgentIssuer {
-    var payload = JSONObject("{}")
+    var payload = JSONObject()
     try {
-      payload = JSONObject(serviceMap?.getMapOpt("payload").toString()).getJSONObject("NativeMap")
+      payload = serviceMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject()
     } catch (ex: Exception) {
       ex.printStackTrace()
     }

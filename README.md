@@ -2,6 +2,19 @@
 
 Velocity Career Labs React Native SDK
 
+Android:
+kotlin version: 1.7.21
+minSdkVersion 24
+targetSdkVersion 33
+
+iOS:
+swift version: 5
+deployment target: 13
+
+React Native:
+react version 17.0.2
+react native version 0.67.5
+
 ## Installation
  
 Note that you should have access to [vcl-react-native](https://github.com/velocitycareerlabs/vcl-react-native) repository to be able to use the library

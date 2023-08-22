@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		289FEEA427DE121D00E58425 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289FEEA127DE121D00E58425 /* Converter.swift */; };
-		289FEEA527DE121D00E58425 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289FEEA327DE121D00E58425 /* StringExtensions.swift */; };
 		F4FF95D7245B92E800C19C63 /* VclReactNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* VclReactNative.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,10 +24,12 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libVclReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVclReactNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		289FEEA127DE121D00E58425 /* Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
-		289FEEA327DE121D00E58425 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
-		28ADE5EF2A82C7EA001A8453 /* GlobalConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConfig.swift; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* VclReactNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VclReactNative.m; sourceTree = "<group>"; };
+		282F3B532A8E20E8003AF65C /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
+		282F3B542A8E20E8003AF65C /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		282F3B552A8E20E8003AF65C /* GlobalConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConfig.swift; sourceTree = "<group>"; };
+		282F3B572A8E20E8003AF65C /* VCLLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLLog.swift; sourceTree = "<group>"; };
+		282F3B582A8E20E8003AF65C /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
+		B3E7B5891CC2AC0600A0062D /* VclReactNative.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VclReactNative.mm; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* VclReactNative-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VclReactNative-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* VclReactNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VclReactNative.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -53,30 +53,32 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		289FEEA027DE121D00E58425 /* Utils */ = {
+		282F3B522A8E20E8003AF65C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				289FEEA127DE121D00E58425 /* Converter.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		289FEEA227DE121D00E58425 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				289FEEA327DE121D00E58425 /* StringExtensions.swift */,
+				282F3B532A8E20E8003AF65C /* DictionaryExtensions.swift */,
+				282F3B542A8E20E8003AF65C /* StringExtensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		282F3B562A8E20E8003AF65C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				282F3B572A8E20E8003AF65C /* VCLLog.swift */,
+				282F3B582A8E20E8003AF65C /* Converter.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				289FEEA227DE121D00E58425 /* Extensions */,
-				289FEEA027DE121D00E58425 /* Utils */,
-				28ADE5EF2A82C7EA001A8453 /* GlobalConfig.swift */,
+				282F3B522A8E20E8003AF65C /* Extensions */,
+				282F3B552A8E20E8003AF65C /* GlobalConfig.swift */,
+				282F3B562A8E20E8003AF65C /* Utils */,
 				F4FF95D6245B92E800C19C63 /* VclReactNative.swift */,
-				B3E7B5891CC2AC0600A0062D /* VclReactNative.m */,
+				B3E7B5891CC2AC0600A0062D /* VclReactNative.mm */,
 				F4FF95D5245B92E700C19C63 /* VclReactNative-Bridging-Header.h */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
@@ -139,8 +141,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				289FEEA527DE121D00E58425 /* StringExtensions.swift in Sources */,
-				289FEEA427DE121D00E58425 /* Converter.swift in Sources */,
 				F4FF95D7245B92E800C19C63 /* VclReactNative.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,6 +176,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -226,6 +227,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

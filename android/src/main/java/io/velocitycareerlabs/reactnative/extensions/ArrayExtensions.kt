@@ -12,10 +12,6 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableArray
 import java.lang.Exception
 
-/**
- * Created by Michael Avoyan on 25/10/2021.
- */
-
 fun ReadableArray.getBooleanOpt(index: Int): Boolean? {
   return try {
     this.getBoolean(index)

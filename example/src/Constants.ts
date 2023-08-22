@@ -6,11 +6,11 @@
  */
 
 import {
-  VCLJwt,
-  VCLOrganizationsSearchDescriptor,
-  VCLVerifiedProfileDescriptor,
+  type VCLJwt,
+  type VCLOrganizationsSearchDescriptor,
+  type VCLVerifiedProfileDescriptor,
   VCLServiceType,
-  VCLJwkPublic,
+  type VCLJwkPublic,
 } from '@velocitycareerlabs/vcl-react-native';
 
 export abstract class Constants {
@@ -44,10 +44,14 @@ export abstract class Constants {
   ];
 
   static readonly IssuingServiceEndPoint =
-    'https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:velocity:0x571cf9ef33b111b7060942eb43133c0b347c7ca3/issue/get-credential-manifest';
+    'https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA/issue/get-credential-manifest';
 
-  static readonly IssuingServiceJsonStr =
-    '{"id":"did:velocity:0x571cf9ef33b111b7060942eb43133c0b347c7ca3#credential-agent-issuer-1","type":"VelocityCredentialAgentIssuer_v1.0","credentialTypes":["Course","EducationDegree","Badge"],"serviceEndpoint":"$IssuingServiceEndPoint"}';
+  static readonly IssuingServiceJsonStr = `{
+    "id": "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA#credential-agent-issuer-1",
+    "type": "VelocityCredentialAgentIssuer_v1.0",
+    "credentialTypes": ["Course", "EducationDegree", "Badge"],
+    "serviceEndpoint": "${Constants.IssuingServiceEndPoint}"
+  }`;
 
   static readonly PresentationSelectionsList = [
     { inputDescriptor: 'PhoneV1.0', jwtVc: Constants.AdamSmithPhoneJwt },
@@ -82,10 +86,11 @@ export abstract class Constants {
       query: 'Bank',
     };
 
+  // University of Massachusetts Amherst
   static readonly DidDev =
-    'did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw';
+    'did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA';
   static readonly DidStaging =
-    'did:ion:EiDaeg3OofbDCdaQi5-zOLGfhZ9-boS0-w5URDfVwrI7BQ';
+    'did:ion:EiC8GZpBYJXt5UhqxZJbixJyMjrGw0yw8yFN6HjaM1ogSw';
 
   static readonly OrganizationsSearchDescriptorByDidDev: VCLOrganizationsSearchDescriptor =
     { filter: { did: Constants.DidDev } };

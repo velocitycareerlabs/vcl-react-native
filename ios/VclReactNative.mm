@@ -78,4 +78,10 @@ RCT_EXTERN_METHOD(generateSignedJwt:(NSDictionary*)jwtDescriptorDictionary
 RCT_EXTERN_METHOD(generateDidJwk:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
+
++ (BOOL)requiresMainQueueSetup
+{
+  return NO;
+}
+
 @end

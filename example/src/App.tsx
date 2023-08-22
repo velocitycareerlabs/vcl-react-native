@@ -12,37 +12,37 @@ import { StyleSheet, View, Text, Button } from 'react-native';
 import { Utils } from './Utils';
 import { Constants } from './Constants';
 import vcl, {
-  VCLCountries,
+  type VCLCountries,
   VCLCountryCodes,
-  VCLCredentialManifest,
-  VCLCredentialManifestDescriptorByDeepLink,
-  VCLCredentialManifestDescriptorByService,
-  VCLCredentialManifestDescriptorRefresh,
-  VCLCredentialTypeSchemas,
-  VCLCredentialTypesUIFormSchema,
-  VCLCredentialTypesUIFormSchemaDescriptor,
+  type VCLCredentialManifest,
+  type VCLCredentialManifestDescriptorByDeepLink,
+  type VCLCredentialManifestDescriptorByService,
+  type VCLCredentialManifestDescriptorRefresh,
+  type VCLCredentialTypeSchemas,
+  type VCLCredentialTypesUIFormSchema,
+  type VCLCredentialTypesUIFormSchemaDescriptor,
   VCLEnvironment,
-  VCLExchange,
-  VCLExchangeDescriptor,
-  VCLFinalizeOffersDescriptor,
-  VCLGenerateOffersDescriptor,
-  VCLJwt,
-  VCLJwtVerifiableCredentials,
-  VCLOffers,
-  VCLOrganizations,
-  VCLPresentationRequest,
-  VCLPresentationSubmission,
-  VCLSubmissionResult,
-  VCLService,
-  VCLServiceCredentialAgentIssuer,
-  VCLToken,
-  VCLVerifiedProfile,
-  VCLDeepLink,
-  VCLInitializationDescriptor,
-  VCLPresentationRequestDescriptor,
-  VCLDidJwk,
+  type VCLExchange,
+  type VCLExchangeDescriptor,
+  type VCLFinalizeOffersDescriptor,
+  type VCLGenerateOffersDescriptor,
+  type VCLJwt,
+  type VCLJwtVerifiableCredentials,
+  type VCLOffers,
+  type VCLOrganizations,
+  type VCLPresentationRequest,
+  type VCLPresentationSubmission,
+  type VCLSubmissionResult,
+  type VCLService,
+  type VCLServiceCredentialAgentIssuer,
+  type VCLToken,
+  type VCLVerifiedProfile,
+  type VCLDeepLink,
+  type VCLInitializationDescriptor,
+  type VCLPresentationRequestDescriptor,
+  type VCLDidJwk,
   VCLError,
-  VCLCredentialTypes,
+  type VCLCredentialTypes,
   VCLStatusCode,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   VCLXVnfProtocolVersion,
@@ -218,7 +218,8 @@ export default function App() {
 
         let serviceCredentialAgentIssuer: VCLServiceCredentialAgentIssuer = {
           payload:
-            organizations.all[0].serviceCredentialAgentIssuers[0].payload,
+            organizations.all[0]?.serviceCredentialAgentIssuers[0]?.payload ??
+            {},
         };
         getCredentialManifestByService(serviceCredentialAgentIssuer);
       },
@@ -374,8 +375,8 @@ export default function App() {
     let finalizeOffersDescriptor: VCLFinalizeOffersDescriptor = {
       credentialManifest: credentialManifest,
       offers: generatedOffers,
-      approvedOfferIds: approvedRejectedOfferIds[0],
-      rejectedOfferIds: approvedRejectedOfferIds[1],
+      approvedOfferIds: approvedRejectedOfferIds[0] as string[],
+      rejectedOfferIds: approvedRejectedOfferIds[1] as string[],
     };
     vcl
       .finalizeOffers(

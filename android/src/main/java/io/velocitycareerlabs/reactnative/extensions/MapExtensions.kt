@@ -15,10 +15,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
 
-/**
- * Created by Michael Avoyan on 25/10/2021.
- */
-
 fun ReadableMap.getBooleanOpt(key: String): Boolean? {
   return try {
     this.getBoolean(key)

@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
- package io.velocitycareerlabs.reactnative
+package io.velocitycareerlabs.reactnative
 
 import com.facebook.react.bridge.*
 import io.velocitycareerlabs.reactnative.utlis.Converter
@@ -44,9 +44,6 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
 import io.velocitycareerlabs.reactnative.utlis.VCLLog
 import java.lang.Exception
 
-/**
- * Created by Michael Avoyan on 01/07/2021.
- */
 class VclReactNativeModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
   val TAG = "VclReactNativeModule"

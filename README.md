@@ -2,18 +2,28 @@
 
 Velocity Career Labs React Native SDK
 
+
 Android:
+
 kotlin version: 1.7.21
+
 minSdkVersion 24
+
 targetSdkVersion 33
 
+
 iOS:
+
 swift version: 5
+
 deployment target: 13
 
+
 React Native:
-react version 17.0.2
-react native version 0.67.5
+
+react version 18.2.0
+
+react native version 0.72.4
 
 # React Native SDK
 

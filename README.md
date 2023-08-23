@@ -2,30 +2,52 @@
 
 Velocity Career Labs React Native SDK
 
+Android:
+kotlin version: 1.7.21
+minSdkVersion 24
+targetSdkVersion 33
+
+iOS:
+swift version: 5
+deployment target: 13
+
+React Native:
+react version 17.0.2
+react native version 0.67.5
+
+# React Native SDK
+
+The React Native SDK is a wrapper of iOS and Android SDKs.
+The minimum supported Android API is 21.
+The iOS target deployment API is 12.0.
+
 ## Installation
-
-```sh
-npm install @velocitycareerlabs/vcl-react-native
+- Add the path to the Velocity specs to the head of the Pod file in the iOS folder
+`source 'https://github.com/velocitycareerlabs/Specs.git'`
+- SDK installation:
+```js 
+yarn add @velocitycareerlabs/vcl-react-native --save
+```
+  or
+```js 
+npm install @velocitycareerlabs/vcl-react-native --save
 ```
 
-## Usage
-
+### Usage
+To start using the VCL SDK, you’ll need to create its object and initialize it in Velocity Network&trade;:
 ```js
-import { multiply } from '@velocitycareerlabs/vcl-react-native';
-
-// ...
-
-const result = await multiply(3, 7);
+import vcl from '@velocitycareerlabs/vcl-react-native';
 ```
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
-
-## License
-
-MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+```js
+const initializationDescriptor: VCLInitializationDescriptor = {
+  environment: environment,
+};
+vcl.initialize(initializationDescriptor).then(
+  () => {
+    // Do your magic
+  },
+  (err: VCLError) => {
+    // Handle initialization failure 
+  }
+);
+```

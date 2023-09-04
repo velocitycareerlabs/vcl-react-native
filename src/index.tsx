@@ -64,12 +64,19 @@ import { VCLErrorCode } from './api/entities/VCLErrorCode';
 
 export default VclApi;
 export {
-  Dictionary,
   VCLEnvironment,
   VCLXVnfProtocolVersion,
+  VCLCountryCodes,
+  VCLServiceType,
+  VCLIssuingType,
+  VCLError,
+  VCLStatusCode,
+  VCLErrorCode,
+};
+export type {
+  Dictionary,
   VCLCountry,
   VCLCountries,
-  VCLCountryCodes,
   VCLRegion,
   VCLRegions,
   VCLCredentialManifest,
@@ -102,9 +109,7 @@ export {
   VCLPushDelegate,
   VCLService,
   VCLServiceCredentialAgentIssuer,
-  VCLServiceType,
   VCLServiceTypes,
-  VCLIssuingType,
   VCLSubmissionResult,
   VCLToken,
   VCLVerifiableCredential,
@@ -114,7 +119,4 @@ export {
   VCLPresentationRequestDescriptor,
   VCLJwtDescriptor,
   VCLDidJwk,
-  VCLError,
-  VCLStatusCode,
-  VCLErrorCode,
 };

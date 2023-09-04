@@ -1,6 +1,6 @@
 {
   "name": "@velocitycareerlabs/vcl-react-native",
-  "version": "1.14.8",
+  "version": "1.15.3",
   "description": "Velocity Career Labs React Native SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -13,23 +13,30 @@
     "android",
     "ios",
     "cpp",
-    "vcl-react-native.podspec",
+    "*.podspec",
     "!lib/typescript/example",
-    "!android/build",
     "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
     "!**/__tests__",
     "!**/__fixtures__",
-    "!**/__mocks__"
+    "!**/__mocks__",
+    "!**/.*"
   ],
   "scripts": {
     "test": "jest",
-    "typescript": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build && husky install",
+    "prepack": "bob build",
     "release": "release-it",
     "example": "yarn --cwd example",
-    "pods": "cd example && cd ios && pod cache clean --all && pod install --repo-update",
-    "bootstrap": "yarn example && yarn"
+    "build:android": "cd example/android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
+    "build:ios": "cd example/ios && xcodebuild -workspace VclReactNativeExample.xcworkspace -scheme VclReactNativeExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
+    "bootstrap": "yarn example && yarn install && yarn example pods",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build"
   },
   "keywords": [
     "react-native",
@@ -37,7 +44,7 @@
     "android"
   ],
   "repository": "https://github.com/velocitycareerlabs/vcl-react-native",
-  "author": "Michael Avoyan <michael.avoyan@velocitycareerlabs.com> (https://github.com/velocitycareerlabs)",
+  "author": "Michael Avoyan <michael.avoyan.dev@gmail.com> (https://github.com/velocitycareerlabs)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/velocitycareerlabs/vcl-react-native/issues"
@@ -47,42 +54,45 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^11.0.0",
-    "@react-native-community/eslint-config": "^2.0.0",
-    "@release-it/conventional-changelog": "^2.0.0",
-    "@types/jest": "^27.4.1",
-    "@types/react": "^17.0.39",
-    "@types/react-native": "^0.66.15",
-    "commitlint": "^11.0.0",
-    "eslint": "^7.2.0",
-    "eslint-config-prettier": "^7.0.0",
-    "eslint-plugin-prettier": "^3.1.3",
-    "husky": "^8.0.3",
-    "jest": "^27.5.1",
+    "@commitlint/config-conventional": "^17.0.2",
+    "@evilmartians/lefthook": "^1.2.2",
+    "@react-native-community/eslint-config": "^3.0.2",
+    "@release-it/conventional-changelog": "^5.0.0",
+    "@types/jest": "^28.1.2",
+    "@types/react": "~17.0.21",
+    "@types/react-native": "0.70.0",
+    "commitlint": "^17.0.2",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.1",
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
-    "react": "17.0.2",
-    "react-native": "0.67.5",
-    "react-native-builder-bob": "^0.18.0",
-    "release-it": "^14.2.2",
-    "typescript": "^4.6.2"
+    "react": "18.2.0",
+    "react-native": "0.72.4",
+    "react-native-builder-bob": "^0.21.3",
+    "release-it": "^15.0.0",
+    "turbo": "^1.10.7",
+    "typescript": "^5.0.2"
+  },
+  "resolutions": {
+    "@types/react": "17.0.21"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
   },
+  "engines": {
+    "node": ">= 16.0.0"
+  },
+  "packageManager": "^yarn@1.22.15",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "yarn lint && yarn typescript"
-    }
   },
   "commitlint": {
     "extends": [
@@ -113,7 +123,6 @@
       "prettier"
     ],
     "rules": {
-      "no-unused-vars": "off",
       "prettier/prettier": [
         "error",
         {

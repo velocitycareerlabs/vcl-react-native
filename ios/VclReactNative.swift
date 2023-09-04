@@ -12,7 +12,7 @@ class VclReactNative: NSObject {
     private let vcl = VCLProvider.vclInstance()
     
     private func initGlobalConfigurations(
-          _ initializationDescriptor: VCLInitializationDescriptor
+        _ initializationDescriptor: VCLInitializationDescriptor
     ) {
         GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
         GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
@@ -215,15 +215,15 @@ class VclReactNative: NSObject {
         credentialTypesUIFormSchemaDescriptorDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
-      vcl.getCredentialTypesUIFormSchema(
-        credentialTypesUIFormSchemaDescriptor: readableMapToCredentialTypesUIFormSchemaDescriptor(credentialTypesUIFormSchemaDescriptorDictionary),
-        successHandler: {
-          resolve(credentialTypesFormSchemaToDictionary($0))
-        },
-        errorHandler: {
-            reject(nil, $0.toDictionary().toJsonString(), $0)
-        }
-      )
+        vcl.getCredentialTypesUIFormSchema(
+            credentialTypesUIFormSchemaDescriptor: readableMapToCredentialTypesUIFormSchemaDescriptor(credentialTypesUIFormSchemaDescriptorDictionary),
+            successHandler: {
+                resolve(credentialTypesFormSchemaToDictionary($0))
+            },
+            errorHandler: {
+                reject(nil, $0.toDictionary().toJsonString(), $0)
+            }
+        )
     }
     
     @objc(getVerifiedProfile:withResolver:withRejecter:)

@@ -4,14 +4,10 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
- 
+
  package io.velocitycareerlabs.reactnative.extensions
 
 import com.facebook.react.bridge.*
-
-/**
- * Created by Michael Avoyan on 01/07/2021.
- */
 
 fun Map<String, Any>.toWritableMap(): WritableMap {
   val writableMap = Arguments.createMap()

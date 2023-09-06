@@ -44,8 +44,6 @@ import vcl, {
   VCLError,
   type VCLCredentialTypes,
   VCLStatusCode,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  VCLXVnfProtocolVersion,
 } from '@velocitycareerlabs/vcl-react-native';
 import { useRef } from 'react';
 

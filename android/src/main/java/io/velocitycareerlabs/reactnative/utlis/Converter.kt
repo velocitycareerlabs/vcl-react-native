@@ -143,6 +143,8 @@ object Converter {
       credentialType.putString("schemaName", it.schemaName)
       credentialType.putString("credentialType", it.credentialType)
       credentialType.putBoolean("recommended", it.recommended)
+      credentialType.putArray("jsonldContext", it.jsonldContext?.toReadableArray())
+      credentialType.putString("issuerCategory", it.issuerCategory)
       credentialTypesArray.pushMap(credentialType)
     }
     return credentialTypesArray

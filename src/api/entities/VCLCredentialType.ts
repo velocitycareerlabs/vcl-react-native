@@ -15,4 +15,6 @@ export interface VCLCredentialType {
   schemaName?: string;
   credentialType?: string;
   recommended?: boolean;
+  jsonldContext?: string[];
+  issuerCategory?: string;
 }

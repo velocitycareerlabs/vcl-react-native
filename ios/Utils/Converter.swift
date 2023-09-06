@@ -158,6 +158,8 @@ private func parseCredentialTypesArray(_ credentialTypesArr: [VCLCredentialType]
         credentialType["schemaName"] = $0.schemaName
         credentialType["credentialType"] = $0.credentialType
         credentialType["recommended"] = $0.recommended
+        credentialType["jsonldContext"] = $0.jsonldContext
+        credentialType["issuerCategory"] = $0.issuerCategory
         credentialTypesArray.append(credentialType)
     }
     return credentialTypesArray

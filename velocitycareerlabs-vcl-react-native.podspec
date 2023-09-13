@@ -16,7 +16,8 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
-  # s.static_framework = true
+  # https://github.com/CocoaPods/CocoaPods/issues/7234#issuecomment-346136322
+  s.static_framework = true
   
   s.dependency "VCL", "1.14.9"
 

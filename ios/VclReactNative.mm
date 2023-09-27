@@ -67,7 +67,7 @@ RCT_EXTERN_METHOD(getVerifiedProfile:(NSDictionary*)verifiedProfileDescriptorDic
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(verifyJwt:(NSDictionary*)jwtDictionary
-                  withJwkPublicDictionary:(NSDictionary*)jwkPublicDictionary
+                  withPublicJwkDictionary:(NSDictionary*)publicJwkDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 

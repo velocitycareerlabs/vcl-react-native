@@ -7,8 +7,7 @@
 
 package io.velocitycareerlabs.reactnative.extensions
 
-import io.velocitycareerlabs.api.entities.VCLError
-import org.json.JSONObject
+import io.velocitycareerlabs.api.entities.error.VCLError
 
 fun VCLError.toThrowable() =
   Throwable(this.toJsonObject().toString())

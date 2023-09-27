@@ -6,12 +6,12 @@
  */
 
 import type { VCLJwt } from './VCLJwt';
-import type { VCLJwkPublic } from './VCLJwkPublic';
+import type { VCLPublicJwk } from './VCLPublicJwk';
 
 export interface VCLPresentationRequest {
   exchangeId: string;
   jwt: VCLJwt;
-  jwkPublic: VCLJwkPublic;
+  publicJwk: VCLPublicJwk;
   keyID: string;
   presentationDefinitionId: string;
   iss: string;

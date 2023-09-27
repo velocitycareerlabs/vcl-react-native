@@ -241,15 +241,15 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(verifyJwt:withJwkPublicDictionary:withResolver:withRejecter:)
+    @objc(verifyJwt:withPublicJwkDictionary:withResolver:withRejecter:)
     func verifyJwt(
         jwtDictionary: [String: Any],
-        jwkPublicDictionary: [String: Any],
+        publicJwkDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.verifyJwt(
             jwt: dictionaryToJwt(jwtDictionary),
-            jwkPublic: dictionaryToPJwkPublic(jwkPublicDictionary),
+            publicJwk: dictionaryToPublicJwk(publicJwkDictionary),
             successHandler: {
                 resolve($0)
             },

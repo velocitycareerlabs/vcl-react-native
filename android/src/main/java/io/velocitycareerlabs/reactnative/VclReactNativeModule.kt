@@ -29,13 +29,13 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToFinalizedOffersDes
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToGenerateOffersDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwt
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToOrganizationsSearchDescriptor
-import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwkPublic
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToPublicJwk
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToToken
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToVerifiedProfileDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
-import io.velocitycareerlabs.api.entities.VCLError
-import io.velocitycareerlabs.api.entities.VCLInitializationDescriptor
+import io.velocitycareerlabs.api.entities.error.VCLError
+import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
 import io.velocitycareerlabs.reactnative.extensions.toThrowable
 import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDidJwk
@@ -325,11 +325,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun verifyJwt(
     jwtMap: ReadableMap,
-    jwkPublicMap: ReadableMap,
+    publicJwkMap: ReadableMap,
     promise: Promise
   ) {
     try {
-      vcl.verifyJwt(mapToJwt(jwtMap), mapToJwkPublic(jwkPublicMap),
+      vcl.verifyJwt(mapToJwt(jwtMap), mapToPublicJwk(publicJwkMap),
         {
           promise.resolve(it)
         },

@@ -44,6 +44,7 @@ import vcl, {
   VCLError,
   type VCLCredentialTypes,
   VCLStatusCode,
+  VCLXVnfProtocolVersion,
 } from '@velocitycareerlabs/vcl-react-native';
 import { useRef } from 'react';
 
@@ -68,26 +69,25 @@ export default function App() {
 
     const initializationDescriptor: VCLInitializationDescriptor = {
       environment: environment,
-      // xVnfProtocolVersion: VCLXVnfProtocolVersion.XVnfProtocolVersion2,
+      xVnfProtocolVersion: VCLXVnfProtocolVersion.XVnfProtocolVersion2,
       cacheSequence: 0,
     };
     vcl.initialize(initializationDescriptor).then(
       () => {
         console.log('VCL initialization succeed!');
-        setInitState(InitState.InitializationSucceed);
 
-        // vcl.generateDidJwk().then(
-        //   (resDidJwk: VCLDidJwk) => {
-        //     didJwkRef.current = resDidJwk;
-        //     console.log(`VCL did:jwk is ${JSON.stringify(didJwkRef.current)}`);
-        //     setInitState(InitState.InitializationSucceed);
-        //   },
-        //   (err: VCLError) => {
-        //     console.log('VCL Failed to generate did:jwk with error:', err);
-        //     setInitState(InitState.InitializationFailed);
-        //     setError(err);
-        //   }
-        // );
+        vcl.generateDidJwk().then(
+          (resDidJwk: VCLDidJwk) => {
+            didJwkRef.current = resDidJwk;
+            console.log(`VCL did:jwk is ${JSON.stringify(didJwkRef.current)}`);
+            setInitState(InitState.InitializationSucceed);
+          },
+          (err: VCLError) => {
+            console.log('VCL Failed to generate did:jwk with error:', err);
+            setInitState(InitState.InitializationFailed);
+            setError(err);
+          }
+        );
       },
       (err: VCLError) => {
         console.log('VCL Initialization with error:', err);
@@ -477,6 +477,7 @@ export default function App() {
   const generateDidJwk = () => {
     vcl.generateDidJwk().then(
       (resDidJwk: VCLDidJwk) => {
+        didJwkRef.current = resDidJwk;
         console.log('VCL did:jwk generated: ', resDidJwk);
       },
       (err: VCLError) => {

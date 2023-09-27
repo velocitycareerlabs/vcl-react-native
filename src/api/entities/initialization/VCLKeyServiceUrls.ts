@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export enum VCLKeyServiceType {
-  Local = 'local',
-  Remote = 'remote',
+export interface VCLKeyServiceUrls {
+  createDidKeyServiceUrl: string;
 }

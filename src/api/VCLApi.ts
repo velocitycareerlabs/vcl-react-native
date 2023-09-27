@@ -21,12 +21,12 @@ import type { VCLOrganizations } from './entities/VCLOrganizations';
 import type { VCLOrganizationsSearchDescriptor } from './entities/VCLOrganizationsSearchDescriptor';
 import type { VCLPresentationRequest } from './entities/VCLPresentationRequest';
 import type { VCLPresentationSubmission } from './entities/VCLPresentationSubmission';
-import type { VCLJwkPublic } from './entities/VCLJwkPublic';
+import type { VCLPublicJwk } from './entities/VCLPublicJwk';
 import type { VCLToken } from './entities/VCLToken';
 import type { VCLVerifiedProfile } from './entities/VCLVerifiedProfile';
 import type { VCLVerifiedProfileDescriptor } from './entities/VCLVerifiedProfileDescriptor';
 import type { VCLCountries } from './entities/VCLCountries';
-import type { VCLInitializationDescriptor } from './entities/VCLInitializationDescriptor';
+import type { VCLInitializationDescriptor } from './entities/initialization/VCLInitializationDescriptor';
 import type { VCLSubmissionResult } from './entities/VCLSubmissionResult';
 import type { VCLPresentationRequestDescriptor } from './entities/VCLPresentationRequestDescriptor';
 import type { VCLJwtDescriptor } from './entities/VCLJwtDescriptor';
@@ -34,7 +34,7 @@ import type { VCLDidJwk } from './entities/VCLDidJwk';
 import type { VCLCredentialTypes } from './entities/VCLCredentialTypes';
 
 import { NativeModules } from 'react-native';
-import { VCLError } from './entities/VCLError';
+import { VCLError } from './entities/error/VCLError';
 const { VclReactNative } = NativeModules;
 
 export const VclApi = {
@@ -198,7 +198,7 @@ export const VclApi = {
     }
   },
 
-  verifyJwt: async (jwt: VCLJwt, jwkPublic: VCLJwkPublic): Promise<boolean> => {
+  verifyJwt: async (jwt: VCLJwt, jwkPublic: VCLPublicJwk): Promise<boolean> => {
     try {
       return await VclReactNative.verifyJwt(jwt, jwkPublic);
     } catch (e) {

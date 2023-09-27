@@ -18,58 +18,52 @@ func dictionaryToInitializationDescriptor(
         environment: dictionaryToEnvironment(
             initializationDescriptorDictionary["environment"] as? String
         ),
-        keyServiceType: dictionaryToKeyServiceType(
-            initializationDescriptorDictionary["keyServiceType"] as? String
-            ),
         xVnfProtocolVersion: dictionaryToXVnfProtocolVersion (
             initializationDescriptorDictionary["xVnfProtocolVersion"] as? String
         ),
         cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0,
-        isDebugOn: initializationDescriptorDictionary["isDebugOn"] as? Bool ?? false
+        isDebugOn: initializationDescriptorDictionary["isDebugOn"] as? Bool ?? false,
+        cryptoServicesDescriptor: dictionaryToCryptoServicesDescriptor(
+            initializationDescriptorDictionary["cryptoServicesDescriptor"] as? [String : Any]
+        )
     )
 }
 
 private func dictionaryToEnvironment(
     _ environment: String?
 ) -> VCLEnvironment {
-    switch environment {
-    case VCLEnvironment.Dev.rawValue:
-        return VCLEnvironment.Dev
-    case VCLEnvironment.Qa.rawValue:
-        return VCLEnvironment.Qa
-    case VCLEnvironment.Staging.rawValue:
-        return VCLEnvironment.Staging
-    case VCLEnvironment.Prod.rawValue:
-        return VCLEnvironment.Prod
-    default:
-        return VCLEnvironment.Prod
-    }
+    return VCLEnvironment.fromString(value: environment ?? "")
 }
 
-private func dictionaryToKeyServiceType(
-    _ keyServiceType: String?
-) -> VCLKeyServiceType {
-    switch keyServiceType {
-    case VCLKeyServiceType.Local.rawValue:
-        return VCLKeyServiceType.Local
-    case VCLKeyServiceType.Remote.rawValue:
-        return VCLKeyServiceType.Remote
-    default:
-        return VCLKeyServiceType.Local
-    }
+private func dictionaryToCryptoServicesDescriptor(
+    _ cryptoServicesDescriptorDictionary: [String: Any]?
+) -> VCLCryptoServicesDescriptor {
+    let cryptoServiceType =
+    VCLCryptoServiceType.fromString(
+        value: cryptoServicesDescriptorDictionary?["cryptoServiceType"] as? String ?? ""
+    )
+    let remoteCryptoServicesUrlsDescriptorDictionary = cryptoServicesDescriptorDictionary?["remoteCryptoServicesUrlsDescriptor"] as? [String: Any]
+    let keyServiceUrls = remoteCryptoServicesUrlsDescriptorDictionary?["keyServiceUrls"] as? [String: Any]
+    let jwtServiceUrls = remoteCryptoServicesUrlsDescriptorDictionary?["jwtServiceUrls"] as? [String: Any]
+    let remoteCryptoServicesUrlsDescriptor = VCLRemoteCryptoServicesUrlsDescriptor(
+        keyServiceUrls:  VCLKeyServiceUrls(
+            createDidKeyServiceUrl: keyServiceUrls?["createDidKeyServiceUrl"] as? String ?? ""
+        ),
+        jwtServiceUrls:  VCLJwtServiceUrls(
+            jwtSignServiceUrl: jwtServiceUrls?["jwtSignServiceUrl"] as? String ?? "",
+            jwtVerifyServiceUrl: jwtServiceUrls?["jwtVerifyServiceUrl"] as? String ?? ""
+        )
+    )
+    return VCLCryptoServicesDescriptor(
+        cryptoServiceType: cryptoServiceType,
+        remoteCryptoServicesUrlsDescriptor: remoteCryptoServicesUrlsDescriptor
+    )
 }
 
 private func dictionaryToXVnfProtocolVersion(
     _ xVnfProtocolVersion: String?
 ) -> VCLXVnfProtocolVersion {
-    switch xVnfProtocolVersion {
-    case VCLXVnfProtocolVersion.XVnfProtocolVersion1.rawValue:
-        return VCLXVnfProtocolVersion.XVnfProtocolVersion1
-    case VCLXVnfProtocolVersion.XVnfProtocolVersion2.rawValue:
-        return VCLXVnfProtocolVersion.XVnfProtocolVersion2
-    default:
-        return VCLXVnfProtocolVersion.XVnfProtocolVersion1
-    }
+    return VCLXVnfProtocolVersion.fromString(value: xVnfProtocolVersion ?? "")
 }
 
 func regionToDictionary(
@@ -205,7 +199,7 @@ func dictionaryToPresentationRequest(
 ) -> VCLPresentationRequest {
     return VCLPresentationRequest(
         jwt: dictionaryToJwt(presentationRequestDictionary?["jwt"] as? [String : Any]),
-        jwkPublic: dictionaryToPJwkPublic(presentationRequestDictionary?["jwkPublic"] as? [String: Any]),
+        publicJwk: dictionaryToPublicJwk(presentationRequestDictionary?["publicJwk"] as? [String: Any]),
         deepLink: dictionaryToDeepLink(presentationRequestDictionary?["deepLink"] as? [String : Any])
     )
 }
@@ -215,9 +209,9 @@ func presentationRequestToDictionary(
 ) -> [String: Any] {
     var presentationRequestDictionary = [String: Any]()
     presentationRequestDictionary["jwt"] = ["encodedJwt": presentationRequest.jwt.encodedJwt]
-    var jwkPublicDictionary = [String: Any]()
-    jwkPublicDictionary["valueStr"] = presentationRequest.jwkPublic.valueStr
-    presentationRequestDictionary["jwkPublic"] = jwkPublicDictionary
+    var publicJwkDictionary = [String: Any]()
+    publicJwkDictionary["valueStr"] = presentationRequest.publicJwk.valueStr
+    presentationRequestDictionary["publicJwk"] = publicJwkDictionary
     presentationRequestDictionary["iss"] = presentationRequest.iss
     presentationRequestDictionary["exchangeId"] = presentationRequest.exchangeId
     presentationRequestDictionary["presentationDefinitionId"] = presentationRequest.presentationDefinitionId
@@ -525,10 +519,10 @@ func dictionaryToJwt(
     return VCLJwt(encodedJwt: jwtDictionary?["encodedJwt"] as? String ?? "")
 }
 
-func dictionaryToPJwkPublic(
-    _ jwkPublicDictionary: [String: Any]?
-) -> VCLJwkPublic {
-    return VCLJwkPublic(valueStr: (jwkPublicDictionary?["valueStr"] as? String ?? ""))
+func dictionaryToPublicJwk(
+    _ publicJwkDictionary: [String: Any]?
+) -> VCLPublicJwk {
+    return VCLPublicJwk(valueStr: (publicJwkDictionary?["valueStr"] as? String ?? ""))
 }
 
 func dictionaryToFinalizedOffersDescriptor(
@@ -600,9 +594,10 @@ func dictionaryToJwtDescriptor(
 func didJwkToDictionary(_ didJwk: VCLDidJwk?) -> [String: Any]? {
     if let didJwk = didJwk {
         return [
-            "keyId": didJwk.keyId,
-            "value": didJwk.value,
-            "kid": didJwk.kid
+            "did": didJwk.did,
+            "publicJwk": didJwk.publicJwk.valueDict,
+            "kid": didJwk.kid,
+            "keyId": didJwk.keyId
         ]
     }
     return nil
@@ -611,9 +606,10 @@ func didJwkToDictionary(_ didJwk: VCLDidJwk?) -> [String: Any]? {
 func dictionaryToJwk(_ didJwkDictionary: [String: Any]?) -> VCLDidJwk? {
     if let didJwkDictionary = didJwkDictionary {
         return VCLDidJwk(
-            keyId: didJwkDictionary["keyId"] as? String ?? "",
-            value: didJwkDictionary["value"] as? String ?? "",
-            kid: didJwkDictionary["kid"] as? String ?? ""
+            did: didJwkDictionary["did"] as? String ?? "",
+            publicJwk: dictionaryToPublicJwk(didJwkDictionary["publicJwk"] as? [String: Any]),
+            kid: didJwkDictionary["kid"] as? String ?? "",
+            keyId: didJwkDictionary["keyId"] as? String ?? ""
         )
     }
     return nil

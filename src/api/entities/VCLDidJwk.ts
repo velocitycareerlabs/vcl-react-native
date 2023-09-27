@@ -5,17 +5,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { VCLPublicJwk } from './VCLPublicJwk';
+
 export interface VCLDidJwk {
-  /**
-   * The id of private key save in secure enclave
-   */
-  keyId: string;
   /**
    * The did:jwk
    */
-  value: string;
+  did: string;
+  /**
+   * public JWK
+   */
+  publicJwk: VCLPublicJwk;
   /**
    * kid of jwt - did:jwk suffixed with #0
    */
   kid: string;
+  /**
+   * The id of private key save in secure enclave
+   */
+  keyId: string;
 }

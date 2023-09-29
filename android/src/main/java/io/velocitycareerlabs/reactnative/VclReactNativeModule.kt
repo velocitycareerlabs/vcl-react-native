@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
- package io.velocitycareerlabs.reactnative
+package io.velocitycareerlabs.reactnative
 
 import com.facebook.react.bridge.*
 import io.velocitycareerlabs.reactnative.utlis.Converter
@@ -16,7 +16,7 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.credentialTypesFormSche
 import io.velocitycareerlabs.reactnative.utlis.Converter.credentialTypesToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.exchangeToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.jwtVerifiableCredentialsToMap
-import io.velocitycareerlabs.reactnative.utlis.Converter.generatedOffersToMap
+import io.velocitycareerlabs.reactnative.utlis.Converter.offersToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToCredentialManifestDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.organizationsToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToPresentationSubmission
@@ -29,23 +29,21 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToFinalizedOffersDes
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToGenerateOffersDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwt
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToOrganizationsSearchDescriptor
-import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwkPublic
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToPublicJwk
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToToken
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToVerifiedProfileDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
-import io.velocitycareerlabs.api.entities.VCLError
-import io.velocitycareerlabs.api.entities.VCLInitializationDescriptor
+import io.velocitycareerlabs.api.entities.error.VCLError
+import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
 import io.velocitycareerlabs.reactnative.extensions.toThrowable
 import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDidJwk
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
 import io.velocitycareerlabs.reactnative.utlis.VCLLog
 import java.lang.Exception
 
-/**
- * Created by Michael Avoyan on 01/07/2021.
- */
 class VclReactNativeModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
   val TAG = "VclReactNativeModule"
@@ -74,11 +72,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   ) {
     try {
       val initializationDescriptor = mapToInitializationDescriptor(
-        reactContext,
         initializationDescriptorMap
       )
       initGlobalConfigurations(initializationDescriptor)
       vcl.initialize(
+        context = reactContext.applicationContext,
         initializationDescriptor = initializationDescriptor,
         successHandler = {
           promise.resolve("VCL initialization succeed!")
@@ -123,12 +121,12 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
 
   @ReactMethod
   fun getPresentationRequest(
-    presentationRequestDescriptorReadableMap: ReadableMap,
+    presentationRequestDescriptorMap: ReadableMap,
     promise: Promise
   ) {
     try {
       vcl.getPresentationRequest(
-        mapTopPresentationRequestDescriptor(presentationRequestDescriptorReadableMap),
+        mapTopPresentationRequestDescriptor(presentationRequestDescriptorMap),
         {
           promise.resolve(presentationRequestToMap(it))
         },
@@ -142,12 +140,14 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
 
   @ReactMethod
   fun submitPresentation(
-    presentationSubmissionReadableMap: ReadableMap,
+    presentationSubmissionMap: ReadableMap,
+    didJwkMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.submitPresentation(
-        mapToPresentationSubmission(presentationSubmissionReadableMap),
+        mapToPresentationSubmission(presentationSubmissionMap),
+        mapToDidJwk(didJwkMap),
         {
           promise.resolve(presentationSubmissionResultToMap(it))
         },
@@ -161,11 +161,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
 
   @ReactMethod
   fun getExchangeProgress(
-    exchangeDescriptorReadableMap: ReadableMap,
+    exchangeDescriptorMap: ReadableMap,
     promise: Promise
   ) {
     try {
-      vcl.getExchangeProgress(mapToExchangeDescriptor(exchangeDescriptorReadableMap),
+      vcl.getExchangeProgress(mapToExchangeDescriptor(exchangeDescriptorMap),
         {
           promise.resolve(exchangeToMap(it))
         },
@@ -222,13 +222,15 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun generateOffers(
     generateOffersDescriptorMap: ReadableMap,
+    didJwkMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.generateOffers(
         mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
+        mapToDidJwk(didJwkMap),
         {
-          promise.resolve(generatedOffersToMap(it))
+          promise.resolve(offersToMap(it))
         },
         {
           promise.reject(it.toThrowable())
@@ -249,7 +251,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
         mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
         mapToToken(tokenMap),
         {
-          promise.resolve(generatedOffersToMap(it))
+          promise.resolve(offersToMap(it))
         },
         {
           promise.reject(it.toThrowable())
@@ -262,12 +264,14 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun finalizeOffers(
     finalizeOffersDescriptorMap: ReadableMap,
+    didJwkMap: ReadableMap? = null,
     tokenMap: ReadableMap,
     promise: Promise
   ) {
     try {
       vcl.finalizeOffers(
         mapToFinalizedOffersDescriptor(finalizeOffersDescriptorMap),
+        mapToDidJwk(didJwkMap),
         mapToToken(tokenMap),
         {
           promise.resolve(jwtVerifiableCredentialsToMap(it))
@@ -321,11 +325,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun verifyJwt(
     jwtMap: ReadableMap,
-    jwkPublicMap: ReadableMap,
+    publicJwkMap: ReadableMap,
     promise: Promise
   ) {
     try {
-      vcl.verifyJwt(mapToJwt(jwtMap), mapToJwkPublic(jwkPublicMap),
+      vcl.verifyJwt(mapToJwt(jwtMap), mapToPublicJwk(publicJwkMap),
         {
           promise.resolve(it)
         },

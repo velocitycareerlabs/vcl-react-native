@@ -9,7 +9,9 @@ import type { Dictionary } from '../Dictionary';
 import type { VCLToken } from './VCLToken';
 
 export interface VCLOffers {
+  payload: Dictionary<any>;
   all: Dictionary<any>[];
   responseCode: number;
   token: VCLToken;
+  challenge: string;
 }

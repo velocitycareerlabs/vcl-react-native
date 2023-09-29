@@ -6,8 +6,13 @@
  */
 
 import { VclApi } from './api/VCLApi';
-import type { VCLEnvironment } from './api/VCLEnvironment';
-import { VCLEnvTypes } from './api/VCLEnvironment';
+import { VCLEnvironment } from './api/VCLEnvironment';
+import { VCLXVnfProtocolVersion } from './api/VCLXVnfProtocolVersion';
+import { VCLCryptoServiceType } from './api/VCLCryptoServiceType';
+import type { VCLCryptoServicesDescriptor } from './api/entities/initialization/VCLCryptoServicesDescriptor';
+import type { VCLJwtServiceUrls } from './api/entities/initialization/VCLJwtServiceUrls';
+import type { VCLKeyServiceUrls } from './api/entities/initialization/VCLKeyServiceUrls';
+import type { VCLRemoteCryptoServicesUrlsDescriptor } from './api/entities/initialization/VCLRemoteCryptoServicesUrlsDescriptor';
 import type { VCLCountry } from './api/entities/VCLCountry';
 import type { VCLCountries } from './api/entities/VCLCountries';
 import { VCLCountryCodes } from './api/entities/VCLCountries';
@@ -39,7 +44,7 @@ import type { VCLOrganizationsSearchDescriptor } from './api/entities/VCLOrganiz
 import type { VCLPage } from './api/entities/VCLPage';
 import type { VCLPresentationRequest } from './api/entities/VCLPresentationRequest';
 import type { VCLPresentationSubmission } from './api/entities/VCLPresentationSubmission';
-import type { VCLJwkPublic } from './api/entities/VCLJwkPublic';
+import type { VCLPublicJwk } from './api/entities/VCLPublicJwk';
 import type { VCLPushDelegate } from './api/entities/VCLPushDelegate';
 import type { VCLService } from './api/entities/VCLService';
 import type { VCLServiceCredentialAgentIssuer } from './api/entities/VCLServiceCredentialAgentIssuer';
@@ -52,21 +57,29 @@ import type { VCLVerifiableCredential } from './api/entities/VCLVerifiableCreden
 import type { VCLVerifiedProfile } from './api/entities/VCLVerifiedProfile';
 import type { VCLVerifiedProfileDescriptor } from './api/entities/VCLVerifiedProfileDescriptor';
 import type { Dictionary } from './api/Dictionary';
-import type { VCLInitializationDescriptor } from './api/entities/VCLInitializationDescriptor';
+import type { VCLInitializationDescriptor } from './api/entities/initialization/VCLInitializationDescriptor';
 import type { VCLPresentationRequestDescriptor } from './api/entities/VCLPresentationRequestDescriptor';
 import type { VCLJwtDescriptor } from './api/entities/VCLJwtDescriptor';
 import type { VCLDidJwk } from './api/entities/VCLDidJwk';
-import { VCLErrorCode } from './api/entities/VCLErrorCode';
-import { VCLError } from './api/entities/VCLError';
+import { VCLError } from './api/entities/error/VCLError';
+import { VCLStatusCode } from './api/entities/error/VCLStatusCode';
+import { VCLErrorCode } from './api/entities/error/VCLErrorCode';
 
 export default VclApi;
 export {
-  Dictionary,
   VCLEnvironment,
-  VCLEnvTypes,
+  VCLXVnfProtocolVersion,
+  VCLCountryCodes,
+  VCLServiceType,
+  VCLIssuingType,
+  VCLError,
+  VCLStatusCode,
+  VCLErrorCode,
+};
+export type {
+  Dictionary,
   VCLCountry,
   VCLCountries,
-  VCLCountryCodes,
   VCLRegion,
   VCLRegions,
   VCLCredentialManifest,
@@ -95,13 +108,11 @@ export {
   VCLPage,
   VCLPresentationRequest,
   VCLPresentationSubmission,
-  VCLJwkPublic,
+  VCLPublicJwk,
   VCLPushDelegate,
   VCLService,
   VCLServiceCredentialAgentIssuer,
-  VCLServiceType,
   VCLServiceTypes,
-  VCLIssuingType,
   VCLSubmissionResult,
   VCLToken,
   VCLVerifiableCredential,
@@ -111,6 +122,9 @@ export {
   VCLPresentationRequestDescriptor,
   VCLJwtDescriptor,
   VCLDidJwk,
-  VCLErrorCode,
-  VCLError,
+  VCLCryptoServiceType,
+  VCLCryptoServicesDescriptor,
+  VCLJwtServiceUrls,
+  VCLKeyServiceUrls,
+  VCLRemoteCryptoServicesUrlsDescriptor,
 };

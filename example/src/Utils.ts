@@ -17,9 +17,9 @@ export class Utils {
     var offerId1 = '';
     var offerId2 = '';
     if (offers.all.length > 0)
-      offerId1 = (offers.all[0] as Dictionary<string>).id;
+      offerId1 = (offers.all[0] as Dictionary<string>).id ?? '';
     if (offers.all.length > 1)
-      offerId2 = (offers.all[1] as Dictionary<string>).id;
+      offerId2 = (offers.all[1] as Dictionary<string>).id ?? '';
 
     let approvedOfferIds: string[] = [offerId1].filter(
       (offer) => offer.length > 0

@@ -11,10 +11,10 @@ import io.velocitycareerlabs.api.VCLEnvironment
 
 internal object GlobalConfig {
 
-  var CurrentEnvironment = VCLEnvironment.PROD
+  var CurrentEnvironment = VCLEnvironment.Prod
 
   var IsDebugOn = false //BuildConfig.DEBUG
 
   const val LogTagPrefix = "VCL RN Android "
-  val IsLoggerOn get() = CurrentEnvironment != VCLEnvironment.PROD || IsDebugOn
+  val IsLoggerOn get() = CurrentEnvironment != VCLEnvironment.Prod || IsDebugOn
 }

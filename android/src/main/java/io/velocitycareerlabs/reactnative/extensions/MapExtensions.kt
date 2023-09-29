@@ -9,19 +9,17 @@
 
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
+import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
-
-/**
- * Created by Michael Avoyan on 25/10/2021.
- */
 
 fun ReadableMap.getBooleanOpt(key: String): Boolean? {
   return try {
     this.getBoolean(key)
   } catch (e: Exception) {
-    e.printStackTrace()
+//    e.printStackTrace()
     null
   }
 }
@@ -34,7 +32,7 @@ fun ReadableMap.getDoubleOpt(key: String): Double? {
   return try {
     this.getDouble(key)
   } catch (e: Exception) {
-    e.printStackTrace()
+//    e.printStackTrace()
     null
   }
 }
@@ -47,7 +45,7 @@ fun ReadableMap.getIntOpt(key: String): Int? {
   return try {
     this.getInt(key)
   } catch (e: Exception) {
-    e.printStackTrace()
+//    e.printStackTrace()
     null
   }
 }
@@ -60,7 +58,7 @@ fun ReadableMap.getStringOpt(key: String): String? {
   return try {
     this.getString(key)
   } catch (e: Exception) {
-    e.printStackTrace()
+//    e.printStackTrace()
     null
   }
 }
@@ -73,7 +71,7 @@ fun ReadableMap.getArrayOpt(key: String): ReadableArray? {
   return try {
     this.getArray(key)
   } catch (e: Exception) {
-    e.printStackTrace()
+//    e.printStackTrace()
     null
   }
 }
@@ -86,7 +84,7 @@ fun ReadableMap.getMapOpt(key: String): ReadableMap? {
   return try {
     this.getMap(key)
   } catch (e: Exception) {
-    e.printStackTrace()
+//    e.printStackTrace()
     null
   }
 }
@@ -99,12 +97,25 @@ fun ReadableMap.toJsonObject(): JSONObject {
   return try {
     JSONObject(this.toHashMap())
   } catch (e: Exception) {
-    e.printStackTrace()
-    JSONObject("{}")
+//    e.printStackTrace()
+    JSONObject()
   }
 }
 
 fun WritableMap.toJsonObject(): JSONObject {
   return (this as ReadableMap).toJsonObject()
+}
+
+fun ReadableArray.toJsonArray(): JSONArray {
+  return try {
+    JSONArray(this.toArrayList())
+  } catch (e: Exception) {
+//    e.printStackTrace()
+    JSONArray()
+  }
+}
+
+fun WritableArray.toJsonArray(): JSONArray {
+  return (this as ReadableArray).toJsonArray()
 }
 

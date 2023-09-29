@@ -5,13 +5,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export interface VCLEnvironment {
-  value: string;
-}
-
-export enum VCLEnvTypes {
-  DEV = 'dev',
-  QA = 'qa',
-  STAGING = 'staging',
-  PROD = 'prod',
+export enum VCLEnvironment {
+  Dev = 'dev',
+  Qa = 'qa',
+  Staging = 'staging',
+  Prod = 'prod',
 }

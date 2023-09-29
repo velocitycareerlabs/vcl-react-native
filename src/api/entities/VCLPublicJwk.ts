@@ -5,6 +5,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export interface VCLJwkPublic {
+export interface VCLPublicJwk {
   valueStr: string;
 }

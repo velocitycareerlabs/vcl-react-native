@@ -12,41 +12,41 @@ import { StyleSheet, View, Text, Button } from 'react-native';
 import { Utils } from './Utils';
 import { Constants } from './Constants';
 import vcl, {
-  VCLCountries,
+  type VCLCountries,
   VCLCountryCodes,
-  VCLCredentialManifest,
-  VCLCredentialManifestDescriptorByDeepLink,
-  VCLCredentialManifestDescriptorByService,
-  VCLCredentialManifestDescriptorRefresh,
-  VCLCredentialTypeSchemas,
-  VCLCredentialTypesUIFormSchema,
-  VCLCredentialTypesUIFormSchemaDescriptor,
+  type VCLCredentialManifest,
+  type VCLCredentialManifestDescriptorByDeepLink,
+  type VCLCredentialManifestDescriptorByService,
+  type VCLCredentialManifestDescriptorRefresh,
+  type VCLCredentialTypeSchemas,
+  type VCLCredentialTypesUIFormSchema,
+  type VCLCredentialTypesUIFormSchemaDescriptor,
   VCLEnvironment,
-  VCLEnvTypes,
-  VCLExchange,
-  VCLExchangeDescriptor,
-  VCLFinalizeOffersDescriptor,
-  VCLGenerateOffersDescriptor,
-  VCLJwt,
-  VCLJwtVerifiableCredentials,
-  VCLOffers,
-  VCLOrganizations,
-  VCLPresentationRequest,
-  VCLPresentationSubmission,
-  VCLSubmissionResult,
-  VCLService,
-  VCLServiceCredentialAgentIssuer,
-  VCLToken,
-  VCLVerifiedProfile,
-  VCLDeepLink,
-  VCLInitializationDescriptor,
-  VCLPresentationRequestDescriptor,
-  VCLDidJwk,
+  type VCLExchange,
+  type VCLExchangeDescriptor,
+  type VCLFinalizeOffersDescriptor,
+  type VCLGenerateOffersDescriptor,
+  type VCLJwt,
+  type VCLJwtVerifiableCredentials,
+  type VCLOffers,
+  type VCLOrganizations,
+  type VCLPresentationRequest,
+  type VCLPresentationSubmission,
+  type VCLSubmissionResult,
+  type VCLService,
+  type VCLServiceCredentialAgentIssuer,
+  type VCLToken,
+  type VCLVerifiedProfile,
+  type VCLDeepLink,
+  type VCLInitializationDescriptor,
+  type VCLPresentationRequestDescriptor,
+  type VCLDidJwk,
   VCLError,
-  VCLErrorCode,
-  VCLCredentialTypes,
-  VCLIssuingType,
+  type VCLCredentialTypes,
+  VCLStatusCode,
+  VCLXVnfProtocolVersion,
 } from '@velocitycareerlabs/vcl-react-native';
+import { useRef } from 'react';
 
 export const enum InitState {
   Initializing,
@@ -54,11 +54,11 @@ export const enum InitState {
   InitializationFailed,
 }
 
-const environment: VCLEnvironment = {
-  value: VCLEnvTypes.DEV,
-};
+const environment = VCLEnvironment.Dev;
 
 export default function App() {
+  const didJwkRef = useRef(null as unknown as VCLDidJwk);
+
   const [initState, setInitState] = React.useState<InitState>(
     InitState.Initializing
   );
@@ -69,17 +69,30 @@ export default function App() {
 
     const initializationDescriptor: VCLInitializationDescriptor = {
       environment: environment,
+      xVnfProtocolVersion: VCLXVnfProtocolVersion.XVnfProtocolVersion2,
       cacheSequence: 0,
     };
     vcl.initialize(initializationDescriptor).then(
       () => {
-        console.log('VCL Initialized');
-        setInitState(InitState.InitializationSucceed);
+        console.log('VCL initialization succeed!');
+
+        vcl.generateDidJwk().then(
+          (resDidJwk: VCLDidJwk) => {
+            didJwkRef.current = resDidJwk;
+            console.log(`VCL did:jwk is ${JSON.stringify(didJwkRef.current)}`);
+            setInitState(InitState.InitializationSucceed);
+          },
+          (err: VCLError) => {
+            console.log('VCL Failed to generate did:jwk with error:', err);
+            setInitState(InitState.InitializationFailed);
+            setError(err);
+          }
+        );
       },
       (err: VCLError) => {
+        console.log('VCL Initialization with error:', err);
         setInitState(InitState.InitializationFailed);
         setError(err);
-        console.log('VCL Initialization error:', err);
       }
     );
   }, []);
@@ -124,7 +137,7 @@ export default function App() {
     var deepLink: VCLDeepLink = {
       value: Constants.PresentationRequestDeepLinkStrDev,
     };
-    if (environment.value === VCLEnvTypes.STAGING) {
+    if (environment === VCLEnvironment.Staging.valueOf()) {
       deepLink = {
         value: Constants.PresentationRequestDeepLinkStrStaging,
       };
@@ -142,7 +155,7 @@ export default function App() {
         submitPresentation(presentationRequest);
       },
       (err: VCLError) => {
-        if (err.statusCode === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLStatusCode.VerificationError) {
           console.log(
             'VCL Presentation Request service type VERIFICATION failed:',
             err.message
@@ -159,8 +172,7 @@ export default function App() {
       presentationRequest: presentationRequest,
       verifiableCredentials: Constants.PresentationSelectionsList,
     };
-
-    vcl.submitPresentation(presentationSubmission).then(
+    vcl.submitPresentation(presentationSubmission, didJwkRef.current).then(
       (presentationSubmissionResult: VCLSubmissionResult) => {
         console.log(
           'VCL Presentation submission result:',
@@ -194,7 +206,7 @@ export default function App() {
   const searchForOrganizations = () => {
     let organizationDescriptor =
       Constants.OrganizationsSearchDescriptorByDidDev;
-    if (environment.value === VCLEnvTypes.STAGING) {
+    if (environment === VCLEnvironment.Staging.valueOf()) {
       organizationDescriptor =
         Constants.OrganizationsSearchDescriptorByDidStaging;
     }
@@ -204,7 +216,8 @@ export default function App() {
 
         let serviceCredentialAgentIssuer: VCLServiceCredentialAgentIssuer = {
           payload:
-            organizations.all[0].serviceCredentialAgentIssuers[0].payload,
+            organizations.all[0]?.serviceCredentialAgentIssuers[0]?.payload ??
+            {},
         };
         getCredentialManifestByService(serviceCredentialAgentIssuer);
       },
@@ -232,7 +245,7 @@ export default function App() {
         generateOffers(credentialManifest);
       },
       (err: VCLError) => {
-        if (err.statusCode === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLStatusCode.VerificationError) {
           console.log(
             'VCL Credential Manifest service type VERIFICATION failed:',
             err.message
@@ -248,7 +261,7 @@ export default function App() {
     var deepLink: VCLDeepLink = {
       value: Constants.CredentialManifestDeepLinkStrDev,
     };
-    if (environment.value === VCLEnvTypes.STAGING) {
+    if (environment === VCLEnvironment.Staging.valueOf()) {
       deepLink = {
         value: Constants.CredentialManifestDeepLinkStrStaging,
       };
@@ -263,7 +276,7 @@ export default function App() {
         generateOffers(credentialManifest);
       },
       (err: VCLError) => {
-        if (err.statusCode === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLStatusCode.VerificationError) {
           console.log(
             'VCL Credential Manifest service type VERIFICATION failed:',
             err.message
@@ -282,7 +295,7 @@ export default function App() {
     let credentialManifestDescriptorRefresh: VCLCredentialManifestDescriptorRefresh =
       {
         service: service,
-        credentialIds: Constants.CredentialIds,
+        credentialIds: Constants.CredentialIdsToRefresh,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorRefresh).then(
       (credentialManifest: VCLCredentialManifest) => {
@@ -291,7 +304,7 @@ export default function App() {
         );
       },
       (err: VCLError) => {
-        if (err.statusCode === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLStatusCode.VerificationError) {
           console.log(
             'VCL Refresh Credentials service type VERIFICATION failed:',
             err.message
@@ -310,7 +323,7 @@ export default function App() {
       identificationVerifiableCredentials: Constants.IdentificationList,
     };
 
-    vcl.generateOffers(generateOffersDescriptor).then(
+    vcl.generateOffers(generateOffersDescriptor, didJwkRef.current).then(
       (offers: VCLOffers) => {
         console.log(`VCL Generated Offers: ${offers.all}`);
         console.log(
@@ -359,26 +372,36 @@ export default function App() {
       Utils.getApprovedRejectedOfferIdsMock(generatedOffers);
     let finalizeOffersDescriptor: VCLFinalizeOffersDescriptor = {
       credentialManifest: credentialManifest,
-      approvedOfferIds: approvedRejectedOfferIds[0],
-      rejectedOfferIds: approvedRejectedOfferIds[1],
+      offers: generatedOffers,
+      approvedOfferIds: approvedRejectedOfferIds[0] as string[],
+      rejectedOfferIds: approvedRejectedOfferIds[1] as string[],
     };
-    vcl.finalizeOffers(finalizeOffersDescriptor, generatedOffers.token).then(
-      (jwtVerifiableCredentials: VCLJwtVerifiableCredentials) => {
-        console.log('VCL Finalized Offers received:', jwtVerifiableCredentials);
-        console.log('VCL finalized Offers');
-        console.log(
-          'VCL Passed Credentials:',
-          jwtVerifiableCredentials.passedCredentials
-        );
-        console.log(
-          'VCL Failed Credentials:',
-          jwtVerifiableCredentials.failedCredentials
-        );
-      },
-      (err: VCLError) => {
-        console.log('VCL finalizeOffers Error:', err);
-      }
-    );
+    vcl
+      .finalizeOffers(
+        finalizeOffersDescriptor,
+        generatedOffers.token,
+        didJwkRef.current
+      )
+      .then(
+        (jwtVerifiableCredentials: VCLJwtVerifiableCredentials) => {
+          console.log(
+            'VCL Finalized Offers received:',
+            jwtVerifiableCredentials
+          );
+          console.log('VCL finalized Offers');
+          console.log(
+            'VCL Passed Credentials:',
+            jwtVerifiableCredentials.passedCredentials
+          );
+          console.log(
+            'VCL Failed Credentials:',
+            jwtVerifiableCredentials.failedCredentials
+          );
+        },
+        (err: VCLError) => {
+          console.log('VCL finalizeOffers Error:', err);
+        }
+      );
   };
 
   const getCredentialTypesUIFormSchema = () => {
@@ -408,7 +431,7 @@ export default function App() {
         console.log('VCL Verified Profile: ', verifiedProfile.payload);
       },
       (err: VCLError) => {
-        if (err.statusCode === VCLErrorCode.VerificationError) {
+        if (err.statusCode === VCLStatusCode.VerificationError) {
           console.log(
             'VCL Profile verification is faile dwith error:',
             err,
@@ -423,7 +446,7 @@ export default function App() {
   };
 
   const verifyJwt = () => {
-    vcl.verifyJwt(Constants.SomeJwt, Constants.SomeJjwkPublic).then(
+    vcl.verifyJwt(Constants.SomeJwt, Constants.SomeJwkPublic).then(
       (isVerified: boolean) => {
         console.log('VCL verified jwt:', isVerified);
       },
@@ -436,7 +459,8 @@ export default function App() {
   const generateSignedJwt = () => {
     vcl
       .generateSignedJwt({
-        payload: Constants.SomeJson,
+        keyId: didJwkRef.current?.keyId,
+        payload: Constants.SomePayload,
         iss: 'iss123',
         jti: 'jti123',
       })
@@ -452,11 +476,12 @@ export default function App() {
 
   const generateDidJwk = () => {
     vcl.generateDidJwk().then(
-      (didJwk: VCLDidJwk) => {
-        console.log('VCL DID:JWK generated: ', didJwk);
+      (resDidJwk: VCLDidJwk) => {
+        didJwkRef.current = resDidJwk;
+        console.log('VCL did:jwk generated: ', resDidJwk);
       },
       (err: VCLError) => {
-        console.log('VCL DID:JWK generation failed:', err);
+        console.log('VCL did:jwk generation failed:', err);
       }
     );
   };

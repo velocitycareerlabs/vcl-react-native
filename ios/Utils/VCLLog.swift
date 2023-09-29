@@ -10,7 +10,7 @@
 import Foundation
 
 struct VCLLog {
-    
+
     enum LogLevel: String {
             case error = "⛔️"
             case warning = "⚠️"
@@ -33,7 +33,7 @@ struct VCLLog {
             VCLLog.e("\(error)", level: level, file: file, function: function, line: line)
         }
     }
-    
+
     static func e(_ error: String, level: LogLevel = .error, file: String = #file, function: String = #function, line: Int = #line) {
         if GlobalConfig.IsLoggerOn {
             print("\(level.rawValue), \((file as NSString).lastPathComponent), \(line), \(function), \(GlobalConfig.LogTagPrefix + error)")

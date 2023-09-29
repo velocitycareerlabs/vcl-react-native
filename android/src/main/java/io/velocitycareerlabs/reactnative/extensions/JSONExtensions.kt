@@ -4,17 +4,13 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
- 
+
  package io.velocitycareerlabs.reactnative.extensions
 
 import com.facebook.react.bridge.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-
-/**
- * Created by Michael Avoyan on 01/07/2021.
- */
 
 @Throws(JSONException::class)
 fun JSONObject.toWritableMap(): WritableMap {

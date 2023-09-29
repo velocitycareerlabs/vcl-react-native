@@ -11,12 +11,12 @@ import Foundation
 import VCL
 
 struct GlobalConfig {
-    
-    static var CurrentEnvironment = VCLEnvironment.PROD
-    
+
+    static var CurrentEnvironment = VCLEnvironment.Prod
+
     static var IsDebugOn = false
-    
+
     static let LogTagPrefix = "VCL RN iOS "
-    
-    static var IsLoggerOn: Bool { get { CurrentEnvironment != VCLEnvironment.PROD || GlobalConfig.IsDebugOn } }
+
+    static var IsLoggerOn: Bool { get { CurrentEnvironment != VCLEnvironment.Prod || GlobalConfig.IsDebugOn } }
 }

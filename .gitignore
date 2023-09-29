@@ -61,3 +61,4 @@ lib/
 ios/Pods/*
 *.hprof
 example/android/app/src/main/assets/index.android.bundle
+example/ios/.xcode.env

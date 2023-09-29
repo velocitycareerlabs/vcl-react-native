@@ -16,28 +16,54 @@ func dictionaryToInitializationDescriptor(
 ) -> VCLInitializationDescriptor {
     return VCLInitializationDescriptor(
         environment: dictionaryToEnvironment(
-            initializationDescriptorDictionary["environment"] as? [String: String] ?? ["value": VCLEnvironment.PROD.rawValue]
+            initializationDescriptorDictionary["environment"] as? String
+        ),
+        xVnfProtocolVersion: dictionaryToXVnfProtocolVersion (
+            initializationDescriptorDictionary["xVnfProtocolVersion"] as? String
         ),
         cacheSequence: initializationDescriptorDictionary["cacheSequence"] as? Int ?? 0,
-        isDebugOn: initializationDescriptorDictionary["isDebugOn"] as? Bool ?? false
+        isDebugOn: initializationDescriptorDictionary["isDebugOn"] as? Bool ?? false,
+        cryptoServicesDescriptor: dictionaryToCryptoServicesDescriptor(
+            initializationDescriptorDictionary["cryptoServicesDescriptor"] as? [String : Any]
+        )
     )
 }
 
-func dictionaryToEnvironment(
-    _ environmentDictionary: [String: String]
+private func dictionaryToEnvironment(
+    _ environment: String?
 ) -> VCLEnvironment {
-    switch environmentDictionary["value"] {
-    case VCLEnvironment.DEV.rawValue:
-        return VCLEnvironment.DEV
-    case VCLEnvironment.QA.rawValue:
-        return VCLEnvironment.QA
-    case VCLEnvironment.STAGING.rawValue:
-        return VCLEnvironment.STAGING
-    case VCLEnvironment.PROD.rawValue:
-        return VCLEnvironment.PROD
-    default:
-        return VCLEnvironment.PROD
-    }
+    return VCLEnvironment.fromString(value: environment ?? "")
+}
+
+private func dictionaryToCryptoServicesDescriptor(
+    _ cryptoServicesDescriptorDictionary: [String: Any]?
+) -> VCLCryptoServicesDescriptor {
+    let cryptoServiceType =
+    VCLCryptoServiceType.fromString(
+        value: cryptoServicesDescriptorDictionary?["cryptoServiceType"] as? String ?? ""
+    )
+    let remoteCryptoServicesUrlsDescriptorDictionary = cryptoServicesDescriptorDictionary?["remoteCryptoServicesUrlsDescriptor"] as? [String: Any]
+    let keyServiceUrls = remoteCryptoServicesUrlsDescriptorDictionary?["keyServiceUrls"] as? [String: Any]
+    let jwtServiceUrls = remoteCryptoServicesUrlsDescriptorDictionary?["jwtServiceUrls"] as? [String: Any]
+    let remoteCryptoServicesUrlsDescriptor = VCLRemoteCryptoServicesUrlsDescriptor(
+        keyServiceUrls:  VCLKeyServiceUrls(
+            createDidKeyServiceUrl: keyServiceUrls?["createDidKeyServiceUrl"] as? String ?? ""
+        ),
+        jwtServiceUrls:  VCLJwtServiceUrls(
+            jwtSignServiceUrl: jwtServiceUrls?["jwtSignServiceUrl"] as? String ?? "",
+            jwtVerifyServiceUrl: jwtServiceUrls?["jwtVerifyServiceUrl"] as? String ?? ""
+        )
+    )
+    return VCLCryptoServicesDescriptor(
+        cryptoServiceType: cryptoServiceType,
+        remoteCryptoServicesUrlsDescriptor: remoteCryptoServicesUrlsDescriptor
+    )
+}
+
+private func dictionaryToXVnfProtocolVersion(
+    _ xVnfProtocolVersion: String?
+) -> VCLXVnfProtocolVersion {
+    return VCLXVnfProtocolVersion.fromString(value: xVnfProtocolVersion ?? "")
 }
 
 func regionToDictionary(
@@ -126,6 +152,8 @@ private func parseCredentialTypesArray(_ credentialTypesArr: [VCLCredentialType]
         credentialType["schemaName"] = $0.schemaName
         credentialType["credentialType"] = $0.credentialType
         credentialType["recommended"] = $0.recommended
+        credentialType["jsonldContext"] = $0.jsonldContext
+        credentialType["issuerCategory"] = $0.issuerCategory
         credentialTypesArray.append(credentialType)
     }
     return credentialTypesArray
@@ -171,7 +199,7 @@ func dictionaryToPresentationRequest(
 ) -> VCLPresentationRequest {
     return VCLPresentationRequest(
         jwt: dictionaryToJwt(presentationRequestDictionary?["jwt"] as? [String : Any]),
-        jwkPublic: dictionaryToPJwkPublic(presentationRequestDictionary?["jwkPublic"] as? [String: Any]),
+        publicJwk: dictionaryToPublicJwk(presentationRequestDictionary?["publicJwk"] as? [String: Any]),
         deepLink: dictionaryToDeepLink(presentationRequestDictionary?["deepLink"] as? [String : Any])
     )
 }
@@ -181,9 +209,9 @@ func presentationRequestToDictionary(
 ) -> [String: Any] {
     var presentationRequestDictionary = [String: Any]()
     presentationRequestDictionary["jwt"] = ["encodedJwt": presentationRequest.jwt.encodedJwt]
-    var jwkPublicDictionary = [String: Any]()
-    jwkPublicDictionary["valueStr"] = presentationRequest.jwkPublic.valueStr
-    presentationRequestDictionary["jwkPublic"] = jwkPublicDictionary
+    var publicJwkDictionary = [String: Any]()
+    publicJwkDictionary["valueStr"] = presentationRequest.publicJwk.valueStr
+    presentationRequestDictionary["publicJwk"] = publicJwkDictionary
     presentationRequestDictionary["iss"] = presentationRequest.iss
     presentationRequestDictionary["exchangeId"] = presentationRequest.exchangeId
     presentationRequestDictionary["presentationDefinitionId"] = presentationRequest.presentationDefinitionId
@@ -415,15 +443,21 @@ func credentialManifestToDictionary(
     credentialManifestDictinary["iss"] = credentialManifest.iss
     credentialManifestDictinary["exchangeId"] = credentialManifest.exchangeId
     credentialManifestDictinary["vendorOriginContext"] = credentialManifest.vendorOriginContext
+    credentialManifestDictinary["verifiedProfile"] = credentialManifest.verifiedProfile.payload
     return credentialManifestDictinary
 }
 
 func dictionaryToCredentialManifest(
-    _ credentialMAnifestDictionary: [String: Any]?
+    _ credentialManifestDictionary: [String: Any]?
 ) -> VCLCredentialManifest {
-    let jwt: VCLJwt = VCLJwt(encodedJwt: (credentialMAnifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
-    let vendorOriginContext: String? = credentialMAnifestDictionary?["vendorOriginContext"] as? String
-    return VCLCredentialManifest(jwt: jwt, vendorOriginContext: vendorOriginContext)
+    let jwt: VCLJwt = VCLJwt(encodedJwt: (credentialManifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
+    let vendorOriginContext: String? = credentialManifestDictionary?["vendorOriginContext"] as? String
+    let verifiedProfileDictionary: [String: Any]? = credentialManifestDictionary?["verifiedProfile"] as? [String: Any]
+    return VCLCredentialManifest(
+        jwt: jwt,
+        vendorOriginContext: vendorOriginContext,
+        verifiedProfile: VCLVerifiedProfile(payload: verifiedProfileDictionary ?? [:])
+        )
 }
 
 func dictionaryToGenerateOffersDescriptor(
@@ -451,14 +485,24 @@ func dictionaryToGenerateOffersDescriptor(
     )
 }
 
-func generatedOffersToDictionary(
-    _ offers: VCLOffers
-) -> [String: Any] {
-    var generatedOffersDictionary = [String: Any]()
-    generatedOffersDictionary["all"] = offers.all
-    generatedOffersDictionary["responseCode"] = offers.responseCode
-    generatedOffersDictionary["token"] = tokenToDictionary(offers.token)
-    return generatedOffersDictionary
+func offersToDictionary(_ offers: VCLOffers) -> [String: Any] {
+    var offersDictionary = [String: Any]()
+    offersDictionary["payload"] = offers.payload
+    offersDictionary["all"] = offers.all
+    offersDictionary["responseCode"] = offers.responseCode
+    offersDictionary["token"] = tokenToDictionary(offers.token)
+    offersDictionary["challenge"] = offers.challenge
+    return offersDictionary
+}
+
+func dictionaryToOffers(_ offersDictionary: [String : Any]?) -> VCLOffers {
+    return VCLOffers(
+        payload: offersDictionary?["payload"] as? [String: Any] ?? [String: Any](),
+        all: offersDictionary?["all"] as? [[String: Any]] ?? [[String: Any]](),
+        responseCode: offersDictionary?["responseCode"] as? Int ?? 0,
+        token: dictionaryToToken(offersDictionary?["token"] as? [String: Any]),
+        challenge: offersDictionary?["challenge"] as? String ?? ""
+    )
 }
 
 func credentialTypesFormSchemaToDictionary(
@@ -475,10 +519,10 @@ func dictionaryToJwt(
     return VCLJwt(encodedJwt: jwtDictionary?["encodedJwt"] as? String ?? "")
 }
 
-func dictionaryToPJwkPublic(
-    _ jwkPublicDictionary: [String: Any]?
-) -> VCLJwkPublic {
-    return VCLJwkPublic(valueStr: (jwkPublicDictionary?["valueStr"] as? String ?? ""))
+func dictionaryToPublicJwk(
+    _ publicJwkDictionary: [String: Any]?
+) -> VCLPublicJwk {
+    return VCLPublicJwk(valueStr: (publicJwkDictionary?["valueStr"] as? String ?? ""))
 }
 
 func dictionaryToFinalizedOffersDescriptor(
@@ -486,6 +530,7 @@ func dictionaryToFinalizedOffersDescriptor(
 ) -> VCLFinalizeOffersDescriptor {
     return VCLFinalizeOffersDescriptor(
         credentialManifest: dictionaryToCredentialManifest(finalizedOffersDescriptorDictionary["credentialManifest"] as? [String : Any]),
+        offers: dictionaryToOffers(finalizedOffersDescriptorDictionary["offers"] as? [String : Any]),
         approvedOfferIds: finalizedOffersDescriptorDictionary["approvedOfferIds"] as? [String] ?? [String](),
         rejectedOfferIds: finalizedOffersDescriptorDictionary["rejectedOfferIds"] as? [String] ?? [String]()
     )
@@ -546,10 +591,26 @@ func dictionaryToJwtDescriptor(
     )
 }
 
-func didJwkToDictionary(
-    _ didJwk: VCLDidJwk
-) -> [String: Any] {
-    var didJwkDictionary = [String: Any]()
-    didJwkDictionary["value"] = didJwk.value
-    return didJwkDictionary
+func didJwkToDictionary(_ didJwk: VCLDidJwk?) -> [String: Any]? {
+    if let didJwk = didJwk {
+        return [
+            "did": didJwk.did,
+            "publicJwk": didJwk.publicJwk.valueDict,
+            "kid": didJwk.kid,
+            "keyId": didJwk.keyId
+        ]
+    }
+    return nil
+}
+
+func dictionaryToJwk(_ didJwkDictionary: [String: Any]?) -> VCLDidJwk? {
+    if let didJwkDictionary = didJwkDictionary {
+        return VCLDidJwk(
+            did: didJwkDictionary["did"] as? String ?? "",
+            publicJwk: dictionaryToPublicJwk(didJwkDictionary["publicJwk"] as? [String: Any]),
+            kid: didJwkDictionary["kid"] as? String ?? "",
+            keyId: didJwkDictionary["keyId"] as? String ?? ""
+        )
+    }
+    return nil
 }

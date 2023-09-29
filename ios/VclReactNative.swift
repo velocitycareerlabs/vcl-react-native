@@ -1,7 +1,7 @@
 //  Created by Michael Avoyan on 05/07/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 //
 
 import VCL
@@ -12,10 +12,10 @@ class VclReactNative: NSObject {
     private let vcl = VCLProvider.vclInstance()
     
     private func initGlobalConfigurations(
-      _ initializationDescriptor: VCLInitializationDescriptor
+        _ initializationDescriptor: VCLInitializationDescriptor
     ) {
-      GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
-      GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
+        GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
+        GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
     }
     
     @objc(initialize:withResolver:withRejecter:)
@@ -87,13 +87,17 @@ class VclReactNative: NSObject {
         )
     }
     
-    @objc(submitPresentation:withResolver:withRejecter:)
+    @objc(submitPresentation:withDidJwkDictionary:withResolver:withRejecter:)
     func submitPresentation(
         presentationSubmissionDictionary: [String: Any],
+        didJwkDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.submitPresentation(
-            presentationSubmission: dictionaryToPresentationSubmission(presentationSubmissionDictionary),
+            presentationSubmission: dictionaryToPresentationSubmission(
+                presentationSubmissionDictionary
+            ),
+            didJwk: dictionaryToJwk(didJwkDictionary),
             successHandler: {
                 resolve(presentationSubmissionResultToDictionary($0))
             },
@@ -153,15 +157,17 @@ class VclReactNative: NSObject {
         }
     }
     
-    @objc(generateOffers:withResolver:withRejecter:)
+    @objc(generateOffers:withDidJwkDictionary:withResolver:withRejecter:)
     func generateOffers(
         generateOffersDescriptorDictionary: [String: Any],
+        didJwkDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.generateOffers(
             generateOffersDescriptor: dictionaryToGenerateOffersDescriptor(generateOffersDescriptorDictionary),
+            didJwk: dictionaryToJwk(didJwkDictionary),
             successHandler: {
-                resolve(generatedOffersToDictionary($0))
+                resolve(offersToDictionary($0))
             },
             errorHandler: {
                 reject(nil, $0.toDictionary().toJsonString(), $0)
@@ -178,21 +184,23 @@ class VclReactNative: NSObject {
             generateOffersDescriptor: dictionaryToGenerateOffersDescriptor(generateOffersDescriptorDictionary),
             token: dictionaryToToken(tokenDictionary),
             successHandler: {
-                resolve(generatedOffersToDictionary($0))
+                resolve(offersToDictionary($0))
             },
             errorHandler: {
                 reject(nil, $0.toDictionary().toJsonString(), $0)
             })
     }
     
-    @objc(finalizeOffers:withTokenDictionary:withResolver:withRejecter:)
+    @objc(finalizeOffers:withDidJwkDictionary:withTokenDictionary:withResolver:withRejecter:)
     func finalizeOffers(
         finalizeOffersDescriptorDictionary: [String: Any],
+        didJwkDictionary: [String: Any]? = nil,
         tokenDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.finalizeOffers(
             finalizeOffersDescriptor: dictionaryToFinalizedOffersDescriptor(finalizeOffersDescriptorDictionary),
+            didJwk: dictionaryToJwk(didJwkDictionary),
             token: dictionaryToToken(tokenDictionary),
             successHandler: {
                 resolve(jwtVerifiableCredentialsToDictionary($0))
@@ -207,15 +215,15 @@ class VclReactNative: NSObject {
         credentialTypesUIFormSchemaDescriptorDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
-      vcl.getCredentialTypesUIFormSchema(
-        credentialTypesUIFormSchemaDescriptor: readableMapToCredentialTypesUIFormSchemaDescriptor(credentialTypesUIFormSchemaDescriptorDictionary),
-        successHandler: {
-          resolve(credentialTypesFormSchemaToDictionary($0))
-        },
-        errorHandler: {
-            reject(nil, $0.toDictionary().toJsonString(), $0)
-        }
-      )
+        vcl.getCredentialTypesUIFormSchema(
+            credentialTypesUIFormSchemaDescriptor: readableMapToCredentialTypesUIFormSchemaDescriptor(credentialTypesUIFormSchemaDescriptorDictionary),
+            successHandler: {
+                resolve(credentialTypesFormSchemaToDictionary($0))
+            },
+            errorHandler: {
+                reject(nil, $0.toDictionary().toJsonString(), $0)
+            }
+        )
     }
     
     @objc(getVerifiedProfile:withResolver:withRejecter:)
@@ -233,15 +241,15 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(verifyJwt:withJwkPublicDictionary:withResolver:withRejecter:)
+    @objc(verifyJwt:withPublicJwkDictionary:withResolver:withRejecter:)
     func verifyJwt(
         jwtDictionary: [String: Any],
-        jwkPublicDictionary: [String: Any],
+        publicJwkDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.verifyJwt(
             jwt: dictionaryToJwt(jwtDictionary),
-            jwkPublic: dictionaryToPJwkPublic(jwkPublicDictionary),
+            publicJwk: dictionaryToPublicJwk(publicJwkDictionary),
             successHandler: {
                 resolve($0)
             },

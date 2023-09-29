@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export enum VCLErrorCode {
-  NetworkError = 1,
-  VerificationError = 403,
+export interface VCLKeyServiceUrls {
+  createDidKeyServiceUrl: string;
 }

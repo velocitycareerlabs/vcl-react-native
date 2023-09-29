@@ -5,39 +5,70 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
- package io.velocitycareerlabs.reactnative.utlis
+package io.velocitycareerlabs.reactnative.utlis
 
 import com.facebook.react.bridge.*
 import io.velocitycareerlabs.api.*
 import io.velocitycareerlabs.api.entities.*
+import io.velocitycareerlabs.api.entities.initialization.VCLCryptoServicesDescriptor
+import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
+import io.velocitycareerlabs.api.entities.initialization.VCLJwtServiceUrls
+import io.velocitycareerlabs.api.entities.initialization.VCLKeyServiceUrls
+import io.velocitycareerlabs.api.entities.initialization.VCLRemoteCryptoServicesUrlsDescriptor
 import io.velocitycareerlabs.reactnative.extensions.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
 
 object Converter {
 
   fun mapToInitializationDescriptor(
-    reactContext: ReactApplicationContext,
     initializationDescriptorMap: ReadableMap
-  ) =
-    VCLInitializationDescriptor(
-      context = reactContext,
-      environment = mapToEnvironment(
-        initializationDescriptorMap.getMapOpt("environment")
-          ?: mapOf(Pair("value", VCLEnvironment.PROD.value)).toReadableMap()
-      ),
-      cacheSequence = initializationDescriptorMap.getIntOpt("cacheSequence") ?: 0,
-      isDebugOn = initializationDescriptorMap.getBooleanOpt("isDebugOn") ?: false
+  ) = VCLInitializationDescriptor(
+    environment = mapToEnvironment(
+      initializationDescriptorMap.getStringOpt("environment")
+    ),
+    xVnfProtocolVersion = mapToXVnfProtocolVersion(
+      (initializationDescriptorMap.getStringOpt("xVnfProtocolVersion"))
+    ),
+    cacheSequence = initializationDescriptorMap.getIntOpt("cacheSequence") ?: 0,
+    isDebugOn = initializationDescriptorMap.getBooleanOpt("isDebugOn") ?: false,
+    cryptoServicesDescriptor = mapToCryptoServicesDescriptor(
+      initializationDescriptorMap.getMapOpt("cryptoServicesDescriptor")
     )
+  )
 
-  fun mapToEnvironment(environmentMap: ReadableMap) =
-    when (environmentMap.getStringOpt("value")) {
-      VCLEnvironment.DEV.value -> VCLEnvironment.DEV
-      VCLEnvironment.QA.value -> VCLEnvironment.QA
-      VCLEnvironment.STAGING.value -> VCLEnvironment.STAGING
-      VCLEnvironment.PROD.value -> VCLEnvironment.PROD
-      else -> VCLEnvironment.PROD
-    }
+  private fun mapToEnvironment(environment: String?) =
+    VCLEnvironment.fromString(environment ?: "")
+
+  private fun mapToCryptoServicesDescriptor(
+    cryptoServicesDescriptorMap: ReadableMap?
+  ): VCLCryptoServicesDescriptor {
+    val cryptoServiceType =
+      VCLCryptoServiceType.fromString(
+        cryptoServicesDescriptorMap?.getStringOpt("cryptoServiceType") ?: ""
+      )
+    val remoteCryptoServicesUrlsDescriptorMap =
+      cryptoServicesDescriptorMap?.getMap("remoteCryptoServicesUrlsDescriptor")
+    val keyServiceUrls = remoteCryptoServicesUrlsDescriptorMap?.getMapOpt("keyServiceUrls")
+    val jwtServiceUrls = remoteCryptoServicesUrlsDescriptorMap?.getMapOpt("jwtServiceUrls")
+    val remoteCryptoServicesUrlsDescriptor = VCLRemoteCryptoServicesUrlsDescriptor(
+      keyServiceUrls = VCLKeyServiceUrls(
+        createDidKeyServiceUrl = keyServiceUrls?.getStringOpt("createDidKeyServiceUrl") ?: ""
+      ),
+      jwtServiceUrls = VCLJwtServiceUrls(
+        jwtSignServiceUrl = jwtServiceUrls?.getStringOpt("jwtSignServiceUrl") ?: "",
+        jwtVerifyServiceUrl = jwtServiceUrls?.getStringOpt("jwtVerifyServiceUrl") ?: ""
+      )
+    )
+    return VCLCryptoServicesDescriptor(
+      cryptoServiceType = cryptoServiceType,
+      remoteCryptoServicesUrlsDescriptor = remoteCryptoServicesUrlsDescriptor
+    )
+  }
+
+  private fun mapToXVnfProtocolVersion(xVnfProtocolVersion: String?) =
+    VCLXVnfProtocolVersion.fromString(xVnfProtocolVersion ?: "")
 
   fun regionToMap(
     region: VCLRegion
@@ -126,6 +157,8 @@ object Converter {
       credentialType.putString("schemaName", it.schemaName)
       credentialType.putString("credentialType", it.credentialType)
       credentialType.putBoolean("recommended", it.recommended)
+      credentialType.putArray("jsonldContext", it.jsonldContext?.toReadableArray())
+      credentialType.putString("issuerCategory", it.issuerCategory)
       credentialTypesArray.pushMap(credentialType)
     }
     return credentialTypesArray
@@ -167,7 +200,7 @@ object Converter {
     presentationRequestMap: ReadableMap?
   ) = VCLPresentationRequest(
     mapToJwt(presentationRequestMap?.getMapOpt("jwt")),
-    mapToJwkPublic(presentationRequestMap?.getMapOpt("jwkPublic")),
+    mapToPublicJwk(presentationRequestMap?.getMapOpt("publicJwk")),
     mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink"))
   )
 
@@ -176,11 +209,11 @@ object Converter {
   ): ReadableMap {
     val presentationRequestMap = Arguments.createMap()
     val jwtMap = Arguments.createMap()
-    jwtMap.putString("encodedJwt", presentationRequest.jwt.signedJwt.serialize())
+    jwtMap.putString("encodedJwt", presentationRequest.jwt.encodedJwt)
     presentationRequestMap.putMap("jwt", jwtMap)
     val jwkMap = Arguments.createMap()
-    jwkMap.putString("valueStr", presentationRequest.jwkPublic.valueStr)
-    presentationRequestMap.putMap("jwkPublic", jwkMap)
+    jwkMap.putString("valueStr", presentationRequest.publicJwk.valueStr)
+    presentationRequestMap.putMap("publicJwk", jwkMap)
     presentationRequestMap.putString("iss", presentationRequest.iss)
     presentationRequestMap.putString("exchangeId", presentationRequest.exchangeId)
     presentationRequestMap.putString(
@@ -442,12 +475,16 @@ object Converter {
   ): ReadableMap {
     val credentialManifestMap = Arguments.createMap()
     val jwtMap = Arguments.createMap()
-    jwtMap.putString("encodedJwt", credentialManifest.jwt.signedJwt.serialize())
+    jwtMap.putString("encodedJwt", credentialManifest.jwt.encodedJwt)
     credentialManifestMap.putMap("jwt", jwtMap)
     credentialManifestMap.putString("did", credentialManifest.did)
     credentialManifestMap.putString("iss", credentialManifest.iss)
     credentialManifestMap.putString("exchangeId", credentialManifest.exchangeId)
     credentialManifestMap.putString("vendorOriginContext", credentialManifest.vendorOriginContext)
+    credentialManifestMap.putMap(
+      "verifiedProfile",
+      credentialManifest.verifiedProfile.payload.toReadableMap()
+    )
     return credentialManifestMap
   }
 
@@ -457,7 +494,14 @@ object Converter {
     val jwt =
       VCLJwt(encodedJwt = credentialManifestMap?.getMapOpt("jwt")?.getStringOpt("encodedJwt") ?: "")
     val vendorOriginContext: String? = credentialManifestMap?.getStringOpt("vendorOriginContext")
-    return VCLCredentialManifest(jwt = jwt, vendorOriginContext = vendorOriginContext)
+    val verifiedProfileMap: ReadableMap? = credentialManifestMap?.getMapOpt("verifiedProfile")
+    return VCLCredentialManifest(
+      jwt = jwt,
+      vendorOriginContext = vendorOriginContext,
+      verifiedProfile = VCLVerifiedProfile(
+        payload = verifiedProfileMap?.toJsonObject() ?: JSONObject()
+      )
+    )
   }
 
   fun mapToGenerateOffersDescriptor(
@@ -488,14 +532,26 @@ object Converter {
     )
   }
 
-  fun generatedOffersToMap(
+  fun offersToMap(
     offers: VCLOffers
   ): ReadableMap {
     val generatedOffersMap = Arguments.createMap()
+    generatedOffersMap.putMap("payload", offers.payload.toReadableMap())
     generatedOffersMap.putArray("all", offers.all.toReadableArray())
     generatedOffersMap.putInt("responseCode", offers.responseCode)
     generatedOffersMap.putMap("token", tokenToMap(offers.token))
+    generatedOffersMap.putString("challenge", offers.challenge)
     return generatedOffersMap
+  }
+
+  fun mapToOffers(offersMap: ReadableMap?): VCLOffers {
+    return VCLOffers(
+      payload = offersMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject(),
+      all = offersMap?.getArrayOpt("all")?.toJsonArray() ?: JSONArray(),
+      responseCode = offersMap?.getIntOpt("responseCode") ?: -1,
+      token = mapToToken(offersMap?.getMapOpt("token")),
+      challenge = offersMap?.getStringOpt("challenge") ?: ""
+    )
   }
 
   fun credentialTypesFormSchemaToMap(
@@ -512,13 +568,14 @@ object Converter {
   fun mapToJwt(jwtMap: ReadableMap?) =
     VCLJwt(encodedJwt = jwtMap?.getStringOpt("encodedJwt") ?: "")
 
-  fun mapToJwkPublic(jwkPublicMap: ReadableMap?) =
-    VCLJwkPublic(valueStr = jwkPublicMap?.getStringOpt("valueStr") ?: "")
+  fun mapToPublicJwk(publicJwkMap: ReadableMap?) =
+    VCLPublicJwk(valueStr = publicJwkMap?.getStringOpt("valueStr") ?: "")
 
   fun mapToFinalizedOffersDescriptor(
     finalizedOffersDescriptorMap: ReadableMap
   ) = VCLFinalizeOffersDescriptor(
     credentialManifest = mapToCredentialManifest(finalizedOffersDescriptorMap.getMapOpt("credentialManifest")),
+    offers = mapToOffers(finalizedOffersDescriptorMap.getMapOpt("offers")),
     approvedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("approvedOfferIds")?.toArrayList()
       ?.toList() as? List<String>) ?: listOf(),
     rejectedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("rejectedOfferIds")?.toArrayList()
@@ -532,10 +589,10 @@ object Converter {
     val passedCredentials = Arguments.createArray()
     val failedCredentials = Arguments.createArray()
     jwtVerifiableCredentials.passedCredentials.forEach {
-      passedCredentials.pushString(it.signedJwt.serialize())
+      passedCredentials.pushString(it.encodedJwt)
     }
     jwtVerifiableCredentials.failedCredentials.forEach {
-      failedCredentials.pushString(it.signedJwt.serialize())
+      failedCredentials.pushString(it.encodedJwt)
     }
     jwtVerifiableCredentialsMap.putArray("passedCredentials", passedCredentials)
     jwtVerifiableCredentialsMap.putArray("failedCredentials", failedCredentials)
@@ -544,7 +601,7 @@ object Converter {
 
   fun jwtToMap(jwt: VCLJwt): ReadableMap {
     val jwtReadableMap = Arguments.createMap()
-    jwtReadableMap.putString("encodedJwt", jwt.signedJwt.serialize())
+    jwtReadableMap.putString("encodedJwt", jwt.encodedJwt)
     return jwtReadableMap
   }
 
@@ -579,12 +636,28 @@ object Converter {
     jti = jwtDescriptorDictionary.getStringOpt("jti") ?: ""
   )
 
-  fun didJwkToMap(
-    didJwk: VCLDidJwk
-  ): ReadableMap {
-    val didJwkMap = Arguments.createMap()
-    didJwkMap.putString("value", didJwk.value)
-    return didJwkMap
+  fun didJwkToMap(didJwk: VCLDidJwk?): ReadableMap? {
+    didJwk?.let {
+      val didJwkMap = Arguments.createMap()
+      didJwkMap.putString("did", it.did)
+      didJwkMap.putMap("publicJwk", it.publicJwk.valueJson.toReadableMap())
+      didJwkMap.putString("kid", it.kid)
+      didJwkMap.putString("keyId", it.keyId)
+      return didJwkMap
+    }
+    return null
+  }
+
+  fun mapToDidJwk(didJwkMap: ReadableMap?): VCLDidJwk? {
+    didJwkMap?.let {
+      return VCLDidJwk(
+        did = it.getStringOpt("did") ?: "",
+        publicJwk = mapToPublicJwk(it.getMap("publicJwk")),
+        kid = it.getStringOpt("kid") ?: "",
+        keyId = it.getStringOpt("keyId") ?: ""
+      )
+    }
+    return null
   }
 }
 

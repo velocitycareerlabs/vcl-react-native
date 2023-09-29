@@ -8,7 +8,24 @@
 import type { Dictionary } from '../Dictionary';
 
 export interface VCLJwtDescriptor {
+  /**
+   * The Id of the existing private key to sign with
+   */
+  keyId?: string;
+  /**
+   * Json formatted payload
+   */
   payload: Dictionary<any>;
-  iss: string;
+  /**
+   * JWT ID
+   */
   jti: string;
+  /**
+   * The did of the wallet owner
+   */
+  iss: string;
+  /**
+   * The issuer DID
+   */
+  aud?: String;
 }

@@ -9,19 +9,19 @@ import type { VCLPublicJwk } from './VCLPublicJwk';
 
 export interface VCLDidJwk {
   /**
-   * The did:jwk
+   * The did in jwk format encoded to Base64 format
    */
   did: string;
   /**
-   * public JWK
+   * The public JWK
    */
   publicJwk: VCLPublicJwk;
   /**
-   * kid of jwt - did:jwk suffixed with #0
+   * The kid of jwt - did:jwk suffixed with #0
    */
   kid: string;
   /**
-   * The id of private key save in secure enclave
+   * The id of private key save in the key store or secure inclave
    */
   keyId: string;
 }

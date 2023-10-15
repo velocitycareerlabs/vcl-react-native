@@ -122,15 +122,17 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun getPresentationRequest(
     presentationRequestDescriptorMap: ReadableMap,
+    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.getPresentationRequest(
-        mapTopPresentationRequestDescriptor(presentationRequestDescriptorMap),
-        {
+        presentationRequestDescriptor = mapTopPresentationRequestDescriptor(presentationRequestDescriptorMap),
+        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
+        successHandler = {
           promise.resolve(presentationRequestToMap(it))
         },
-        {
+        errorHandler = {
           promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
@@ -142,16 +144,18 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   fun submitPresentation(
     presentationSubmissionMap: ReadableMap,
     didJwkMap: ReadableMap? = null,
+    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.submitPresentation(
-        mapToPresentationSubmission(presentationSubmissionMap),
-        mapToDidJwk(didJwkMap),
-        {
+        presentationSubmission = mapToPresentationSubmission(presentationSubmissionMap),
+        didJwk = mapToDidJwk(didJwkMap),
+        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
+        successHandler = {
           promise.resolve(presentationSubmissionResultToMap(it))
         },
-        {
+        errorHandler = {
           promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
@@ -199,21 +203,28 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun getCredentialManifest(
     credentialManifestDescriptorMap: ReadableMap,
+    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       VCLLog.d(TAG, "credentialManifestDescriptorMap map: $credentialManifestDescriptorMap")
       mapToCredentialManifestDescriptor(credentialManifestDescriptorMap)?.let { credentialManifestDescriptor ->
-        VCLLog.d(TAG, "credentialManifestDescriptor VCL entity: ${credentialManifestDescriptor.toPropsString()}")
-        vcl.getCredentialManifest(credentialManifestDescriptor,
-          {
+        VCLLog.d(
+          TAG,
+          "credentialManifestDescriptor VCL entity: ${credentialManifestDescriptor.toPropsString()}"
+        )
+        vcl.getCredentialManifest(
+          credentialManifestDescriptor,
+          mapToToken(remoteCryptoServicesTokenMap),
+          successHandler = {
             promise.resolve(credentialManifestToMap(it))
           },
-          {
+          errorHandler = {
             promise.reject(it.toThrowable())
           })
+      } ?: run {
+        promise.reject(VCLError("Unexpected Credential Credential Manifest Descriptor: $credentialManifestDescriptorMap").toThrowable())
       }
-        ?: promise.reject(VCLError("Unexpected Credential Credential Manifest Descriptor: $credentialManifestDescriptorMap").toThrowable())
     } catch (ex: Exception) {
       promise.reject(VCLError(ex).toThrowable())
     }
@@ -223,16 +234,18 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   fun generateOffers(
     generateOffersDescriptorMap: ReadableMap,
     didJwkMap: ReadableMap? = null,
+    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.generateOffers(
-        mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
-        mapToDidJwk(didJwkMap),
-        {
+        generateOffersDescriptor = mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
+        didJwk = mapToDidJwk(didJwkMap),
+        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
+        successHandler = {
           promise.resolve(offersToMap(it))
         },
-        {
+        errorHandler = {
           promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
@@ -243,13 +256,13 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun checkForOffers(
     generateOffersDescriptorMap: ReadableMap,
-    tokenMap: ReadableMap,
+    exchangeTokenMap: ReadableMap,
     promise: Promise
   ) {
     try {
       vcl.checkForOffers(
         mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
-        mapToToken(tokenMap),
+        mapToToken(exchangeTokenMap),
         {
           promise.resolve(offersToMap(it))
         },
@@ -265,18 +278,20 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   fun finalizeOffers(
     finalizeOffersDescriptorMap: ReadableMap,
     didJwkMap: ReadableMap? = null,
-    tokenMap: ReadableMap,
+    exchangeTokenMap: ReadableMap,
+    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.finalizeOffers(
-        mapToFinalizedOffersDescriptor(finalizeOffersDescriptorMap),
-        mapToDidJwk(didJwkMap),
-        mapToToken(tokenMap),
-        {
+        finalizeOffersDescriptor = mapToFinalizedOffersDescriptor(finalizeOffersDescriptorMap),
+        didJwk = mapToDidJwk(didJwkMap),
+        exchangeToken = mapToToken(exchangeTokenMap),
+        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
+        successHandler = {
           promise.resolve(jwtVerifiableCredentialsToMap(it))
         },
-        {
+        errorHandler = {
           promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
@@ -326,14 +341,18 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   fun verifyJwt(
     jwtMap: ReadableMap,
     publicJwkMap: ReadableMap,
+    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
-      vcl.verifyJwt(mapToJwt(jwtMap), mapToPublicJwk(publicJwkMap),
-        {
+      vcl.verifyJwt(
+        jwt = mapToJwt(jwtMap),
+        publicJwk = mapToPublicJwk(publicJwkMap),
+        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
+        successHandler = {
           promise.resolve(it)
         },
-        {
+        errorHandler = {
           promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
@@ -344,14 +363,17 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun generateSignedJwt(
     jwtDescriptorMap: ReadableMap,
+    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
-      vcl.generateSignedJwt(mapToJwtDescriptor(jwtDescriptorMap),
-        {
+      vcl.generateSignedJwt(
+        jwtDescriptor = mapToJwtDescriptor(jwtDescriptorMap),
+        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
+        successHandler = {
           promise.resolve(Converter.jwtToMap(it))
         },
-        {
+        errorHandler = {
           promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {
@@ -361,14 +383,16 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
 
   @ReactMethod
   fun generateDidJwk(
+    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.generateDidJwk(
-        {
+        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
+        successHandler = {
           promise.resolve(didJwkToMap(it))
         },
-        {
+        errorHandler = {
           promise.reject(it.toThrowable())
         })
     } catch (ex: Exception) {

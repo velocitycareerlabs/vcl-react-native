@@ -71,13 +71,15 @@ class VclReactNative: NSObject {
         }
     }
     
-    @objc(getPresentationRequest:withResolver:withRejecter:)
+    @objc(getPresentationRequest:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
     func getPresentationRequest(
         presentationRequestDescriptorDictionary: [String: Any],
+        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.getPresentationRequest(
             presentationRequestDescriptor: dictionaryTopPresentationRequestDescriptor(presentationRequestDescriptorDictionary),
+            remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
             successHandler: {
                 resolve(presentationRequestToDictionary($0))
             },
@@ -87,10 +89,11 @@ class VclReactNative: NSObject {
         )
     }
     
-    @objc(submitPresentation:withDidJwkDictionary:withResolver:withRejecter:)
+    @objc(submitPresentation:withDidJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
     func submitPresentation(
         presentationSubmissionDictionary: [String: Any],
         didJwkDictionary: [String: Any]? = nil,
+        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.submitPresentation(
@@ -98,6 +101,7 @@ class VclReactNative: NSObject {
                 presentationSubmissionDictionary
             ),
             didJwk: dictionaryToJwk(didJwkDictionary),
+            remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
             successHandler: {
                 resolve(presentationSubmissionResultToDictionary($0))
             },
@@ -136,9 +140,10 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(getCredentialManifest:withResolver:withRejecter:)
+    @objc(getCredentialManifest:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
     func getCredentialManifest(
         credentialManifestDescriptorDictionary: [String: Any],
+        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         VCLLog.d("credentialManifestDescriptorDictionary dictionary: \(credentialManifestDescriptorDictionary)")
@@ -146,6 +151,7 @@ class VclReactNative: NSObject {
             VCLLog.d("credentialManifestDescriptor VCL entity: \(credentialManifestDescriptor.toPropsString())")
             vcl.getCredentialManifest(
                 credentialManifestDescriptor: credentialManifestDescriptor,
+                remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
                 successHandler: {
                     resolve(credentialManifestToDictionary($0))
                 },
@@ -157,15 +163,17 @@ class VclReactNative: NSObject {
         }
     }
     
-    @objc(generateOffers:withDidJwkDictionary:withResolver:withRejecter:)
+    @objc(generateOffers:withDidJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
     func generateOffers(
         generateOffersDescriptorDictionary: [String: Any],
         didJwkDictionary: [String: Any]? = nil,
+        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.generateOffers(
             generateOffersDescriptor: dictionaryToGenerateOffersDescriptor(generateOffersDescriptorDictionary),
             didJwk: dictionaryToJwk(didJwkDictionary),
+            remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
             successHandler: {
                 resolve(offersToDictionary($0))
             },
@@ -174,15 +182,15 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(checkForOffers:withTokenDictionary:withResolver:withRejecter:)
+    @objc(checkForOffers:withtExchangeTokenDictionary:withResolver:withRejecter:)
     func checkForOffers(
         generateOffersDescriptorDictionary: [String: Any],
-        tokenDictionary: [String: Any],
+        exchangeTokenDictionary: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.checkForOffers(
             generateOffersDescriptor: dictionaryToGenerateOffersDescriptor(generateOffersDescriptorDictionary),
-            token: dictionaryToToken(tokenDictionary),
+            exchangeToken: dictionaryToToken(exchangeTokenDictionary),
             successHandler: {
                 resolve(offersToDictionary($0))
             },
@@ -191,17 +199,19 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(finalizeOffers:withDidJwkDictionary:withTokenDictionary:withResolver:withRejecter:)
+    @objc(finalizeOffers:withDidJwkDictionary:withExchangeTokenDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
     func finalizeOffers(
         finalizeOffersDescriptorDictionary: [String: Any],
         didJwkDictionary: [String: Any]? = nil,
-        tokenDictionary: [String: Any],
+        exchangeTokenDictionary: [String: Any],
+        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.finalizeOffers(
             finalizeOffersDescriptor: dictionaryToFinalizedOffersDescriptor(finalizeOffersDescriptorDictionary),
             didJwk: dictionaryToJwk(didJwkDictionary),
-            token: dictionaryToToken(tokenDictionary),
+            exchangeToken: dictionaryToToken(exchangeTokenDictionary),
+            remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
             successHandler: {
                 resolve(jwtVerifiableCredentialsToDictionary($0))
             },
@@ -241,15 +251,17 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(verifyJwt:withPublicJwkDictionary:withResolver:withRejecter:)
+    @objc(verifyJwt:withPublicJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
     func verifyJwt(
         jwtDictionary: [String: Any],
         publicJwkDictionary: [String: Any],
+        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.verifyJwt(
             jwt: dictionaryToJwt(jwtDictionary),
             publicJwk: dictionaryToPublicJwk(publicJwkDictionary),
+            remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
             successHandler: {
                 resolve($0)
             },
@@ -258,13 +270,15 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(generateSignedJwt:withResolver:withRejecter:)
+    @objc(generateSignedJwt:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
     func generateSignedJwt(
         jwtDescriptorDictionary: [String: Any],
+        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.generateSignedJwt(
             jwtDescriptor: dictionaryToJwtDescriptor(jwtDescriptorDictionary),
+            remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
             successHandler: {
                 resolve(jwtToReadableMap($0))
             },
@@ -273,11 +287,13 @@ class VclReactNative: NSObject {
             })
     }
     
-    @objc(generateDidJwk:withRejecter:)
+    @objc(generateDidJwk:withResolver:withRejecter:)
     func generateDidJwk(
+        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.generateDidJwk(
+            remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
             successHandler: {
                 resolve(didJwkToDictionary($0))
             },

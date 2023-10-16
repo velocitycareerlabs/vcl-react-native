@@ -243,7 +243,7 @@ func presentationSubmissionResultToDictionary(
     _ presentationSubmissionResult: VCLSubmissionResult
 ) -> [String: Any] {
     var presentationSubmissionResulDictionary = [String: Any]()
-    presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeyToken] = tokenToDictionary(presentationSubmissionResult.exchangeToken)
+    presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeyToken] = tokenToDictionary(presentationSubmissionResult.sessionToken)
     presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeyExchange] = exchangeToDictionary(presentationSubmissionResult.exchange)
     presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeyJti] = presentationSubmissionResult.jti
     presentationSubmissionResulDictionary[VCLSubmissionResult.CodingKeys.KeySubmissionId] = presentationSubmissionResult.submissionId
@@ -263,7 +263,7 @@ func exchangeToDictionary(
 
 func dictionaryToSubmissionResult(_ submissionResultDictionary: [String: Any]?) -> VCLSubmissionResult {
     return VCLSubmissionResult(
-        exchangeToken: dictionaryToToken(submissionResultDictionary?[VCLSubmissionResult.CodingKeys.KeyToken] as? [String: Any]),
+        sessionToken: dictionaryToToken(submissionResultDictionary?[VCLSubmissionResult.CodingKeys.KeyToken] as? [String: Any]),
         exchange: dictionaryToExchange(submissionResultDictionary?[VCLSubmissionResult.CodingKeys.KeyExchange] as? [String: Any]),
         jti: submissionResultDictionary?[VCLSubmissionResult.CodingKeys.KeyJti] as? String ?? "",
         submissionId: submissionResultDictionary?[VCLSubmissionResult.CodingKeys.KeySubmissionId] as? String ?? ""
@@ -490,7 +490,7 @@ func offersToDictionary(_ offers: VCLOffers) -> [String: Any] {
     offersDictionary["payload"] = offers.payload
     offersDictionary["all"] = offers.all
     offersDictionary["responseCode"] = offers.responseCode
-    offersDictionary["exchangeToken"] = tokenToDictionary(offers.exchangeToken)
+    offersDictionary["sessionToken"] = tokenToDictionary(offers.sessionToken)
     offersDictionary["challenge"] = offers.challenge
     return offersDictionary
 }
@@ -500,7 +500,7 @@ func dictionaryToOffers(_ offersDictionary: [String : Any]?) -> VCLOffers {
         payload: offersDictionary?["payload"] as? [String: Any] ?? [String: Any](),
         all: offersDictionary?["all"] as? [[String: Any]] ?? [[String: Any]](),
         responseCode: offersDictionary?["responseCode"] as? Int ?? 0,
-        exchangeToken: dictionaryToToken(offersDictionary?["exchangeToken"] as? [String: Any]),
+        sessionToken: dictionaryToToken(offersDictionary?["sessionToken"] as? [String: Any]),
         challenge: offersDictionary?["challenge"] as? String ?? ""
     )
 }

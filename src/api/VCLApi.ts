@@ -156,12 +156,12 @@ export const VclApi = {
 
   checkForOffers: async (
     generateOffersDescriptor: VCLGenerateOffersDescriptor,
-    exchangeToken: VCLToken
+    sessionToken: VCLToken
   ): Promise<VCLOffers> => {
     try {
       return await VclReactNative.checkForOffers(
         generateOffersDescriptor,
-        exchangeToken
+        sessionToken
       );
     } catch (e) {
       throw new VCLError(e);
@@ -170,7 +170,7 @@ export const VclApi = {
 
   finalizeOffers: async (
     finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-    exchangeToken: VCLToken,
+    sessionToken: VCLToken,
     didJwk?: VCLDidJwk,
     remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLJwtVerifiableCredentials> => {
@@ -178,7 +178,7 @@ export const VclApi = {
       return await VclReactNative.finalizeOffers(
         finalizeOffersDescriptor,
         didJwk,
-        exchangeToken,
+        sessionToken,
         remoteCryptoServicesToken
       );
     } catch (e) {

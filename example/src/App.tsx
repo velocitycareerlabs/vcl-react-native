@@ -330,14 +330,14 @@ export default function App() {
           `VCL Generated Offers Response Code: ${offers.responseCode}`
         );
         console.log(
-          `VCL Generated Offers Exchange Token: ${offers.exchangeToken}`
+          `VCL Generated Offers Session Token: ${offers.sessionToken}`
         );
 
         // Check offers invoked after the push notification is notified the app that offers are ready:
         checkForOffers(
           credentialManifest,
           generateOffersDescriptor,
-          offers.exchangeToken
+          offers.sessionToken
         );
       },
       (err: VCLError) => {
@@ -349,13 +349,13 @@ export default function App() {
   const checkForOffers = (
     credentialManifest: VCLCredentialManifest,
     generateOffersDescriptor: VCLGenerateOffersDescriptor,
-    exchangeToken: VCLToken
+    sessionToken: VCLToken
   ) => {
-    vcl.checkForOffers(generateOffersDescriptor, exchangeToken).then(
+    vcl.checkForOffers(generateOffersDescriptor, sessionToken).then(
       (offers: VCLOffers) => {
         console.log(`VCL Checked Offers: ${offers.all}`);
         console.log(`VCL Checked Offers Response Code: ${offers.responseCode}`);
-        console.log(`VCL Checked Offers Exchange Token: ${offers.exchangeToken}`);
+        console.log(`VCL Checked Offers Session Token: ${offers.sessionToken}`);
         if (offers.responseCode === 200) {
           finalizeOffers(credentialManifest, offers);
         }
@@ -381,7 +381,7 @@ export default function App() {
     vcl
       .finalizeOffers(
         finalizeOffersDescriptor,
-        generatedOffers.exchangeToken,
+        generatedOffers.sessionToken,
         didJwkRef.current
       )
       .then(

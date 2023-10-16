@@ -252,7 +252,7 @@ object Converter {
   ): ReadableMap {
     val presentationSubmissionResultMap = Arguments.createMap()
     presentationSubmissionResultMap.putMap(
-      VCLSubmissionResult.KeyToken, tokenToMap(presentationSubmissionResult.exchangeToken)
+      VCLSubmissionResult.KeyToken, tokenToMap(presentationSubmissionResult.sessionToken)
     )
     presentationSubmissionResultMap.putMap(
       VCLSubmissionResult.KeyExchange,
@@ -281,7 +281,7 @@ object Converter {
   fun mapToSubmissionResult(
     submissionResultMap: ReadableMap?
   ) = VCLSubmissionResult(
-    exchangeToken = mapToToken(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyToken)),
+    sessionToken = mapToToken(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyToken)),
     exchange = mapToExchange(submissionResultMap?.getMapOpt(VCLSubmissionResult.KeyExchange)),
     jti = submissionResultMap?.getStringOpt(VCLSubmissionResult.KeyJti) ?: "",
     submissionId = submissionResultMap?.getStringOpt(VCLSubmissionResult.KeySubmissionId) ?: "",
@@ -539,7 +539,7 @@ object Converter {
     generatedOffersMap.putMap("payload", offers.payload.toReadableMap())
     generatedOffersMap.putArray("all", offers.all.toReadableArray())
     generatedOffersMap.putInt("responseCode", offers.responseCode)
-    generatedOffersMap.putMap("exchangeToken", tokenToMap(offers.exchangeToken))
+    generatedOffersMap.putMap("sessionToken", tokenToMap(offers.sessionToken))
     generatedOffersMap.putString("challenge", offers.challenge)
     return generatedOffersMap
   }
@@ -549,7 +549,7 @@ object Converter {
       payload = offersMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject(),
       all = offersMap?.getArrayOpt("all")?.toJsonArray() ?: JSONArray(),
       responseCode = offersMap?.getIntOpt("responseCode") ?: -1,
-      exchangeToken = mapToToken(offersMap?.getMapOpt("exchangeToken")),
+      sessionToken = mapToToken(offersMap?.getMapOpt("sessionToken")),
       challenge = offersMap?.getStringOpt("challenge") ?: ""
     )
   }

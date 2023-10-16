@@ -256,13 +256,13 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun checkForOffers(
     generateOffersDescriptorMap: ReadableMap,
-    exchangeTokenMap: ReadableMap,
+    sessionTokenMap: ReadableMap,
     promise: Promise
   ) {
     try {
       vcl.checkForOffers(
         mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
-        mapToToken(exchangeTokenMap),
+        mapToToken(sessionTokenMap),
         {
           promise.resolve(offersToMap(it))
         },
@@ -278,7 +278,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   fun finalizeOffers(
     finalizeOffersDescriptorMap: ReadableMap,
     didJwkMap: ReadableMap? = null,
-    exchangeTokenMap: ReadableMap,
+    sessionTokenMap: ReadableMap,
     remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
@@ -286,7 +286,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
       vcl.finalizeOffers(
         finalizeOffersDescriptor = mapToFinalizedOffersDescriptor(finalizeOffersDescriptorMap),
         didJwk = mapToDidJwk(didJwkMap),
-        exchangeToken = mapToToken(exchangeTokenMap),
+        sessionToken = mapToToken(sessionTokenMap),
         remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
         successHandler = {
           promise.resolve(jwtVerifiableCredentialsToMap(it))

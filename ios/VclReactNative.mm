@@ -52,13 +52,13 @@ RCT_EXTERN_METHOD(generateOffers:(NSDictionary*)generateOffersDescriptorDictiona
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(checkForOffers:(NSDictionary*)generateOffersDescriptorDictionary
-                  withtExchangeTokenDictionary:(NSDictionary*)exchangeTokenDictionary
+                  withtSessionTokenDictionary:(NSDictionary*)sessionTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(finalizeOffers:(NSDictionary*)finalizeOffersDescriptorDictionary
                   withDidJwkDictionary:(NSDictionary*)didJwkDictionary
-                  withExchangeTokenDictionary:(NSDictionary*)exchangeTokenDictionary
+                  withSessionTokenDictionary:(NSDictionary*)sessionTokenDictionary
                   withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)

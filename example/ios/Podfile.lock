@@ -486,11 +486,11 @@ PODS:
     - React-logger (= 0.72.4)
     - React-perflogger (= 0.72.4)
   - SocketRocket (0.6.1)
-  - VCL (1.17.4)
-  - velocitycareerlabs-vcl-react-native (1.17.4):
+  - VCL (1.18.0)
+  - velocitycareerlabs-vcl-react-native (1.18.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-    - VCL (= 1.17.4)
+    - VCL (= 1.18.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -715,8 +715,8 @@ SPEC CHECKSUMS:
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  VCL: 451f9ac6d37c90cba1003ed28835ffe93eb8bbf3
-  velocitycareerlabs-vcl-react-native: e25cbdb1f631376967722ee1074dec08aa7816dd
+  VCL: 0bb952423f32227d7091a254b1ca767037688c8e
+  velocitycareerlabs-vcl-react-native: b9661e356fb41e57c8859159b40dad3adff6e431
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

@@ -8,8 +8,13 @@
 export enum VCLServiceType {
   Inspector = 'Inspector',
   Issuer = 'Issuer',
-  IdentityIssuer = 'IdentityIssuer',
   NotaryIssuer = 'NotaryIssuer',
   CareerIssuer = 'CareerIssuer',
+  //    Identity issuer types:
+  IdentityIssuer = 'IdentityIssuer',
+  IdDocumentIssuer = 'IdDocumentIssuer',
+  NotaryIdDocumentIssuer = 'NotaryIdDocumentIssuer',
+  ContactIssuer = 'ContactIssuer',
+  NotaryContactIssuer = 'NotaryContactIssuer',
   Undefined = 'Undefined',
 }

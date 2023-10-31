@@ -7,5 +7,5 @@
 
 export interface VCLJwtServiceUrls {
   jwtSignServiceUrl: string;
-  jwtVerifyServiceUrl: string;
+  jwtVerifyServiceUrl?: string;
 }

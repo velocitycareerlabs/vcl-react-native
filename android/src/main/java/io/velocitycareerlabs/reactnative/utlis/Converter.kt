@@ -58,7 +58,7 @@ object Converter {
       ),
       jwtServiceUrls = VCLJwtServiceUrls(
         jwtSignServiceUrl = jwtServiceUrls?.getStringOpt("jwtSignServiceUrl") ?: "",
-        jwtVerifyServiceUrl = jwtServiceUrls?.getStringOpt("jwtVerifyServiceUrl") ?: ""
+        jwtVerifyServiceUrl = jwtServiceUrls?.getStringOpt("jwtVerifyServiceUrl")
       )
     )
     return VCLCryptoServicesDescriptor(

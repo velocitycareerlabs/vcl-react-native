@@ -51,7 +51,7 @@ private func dictionaryToCryptoServicesDescriptor(
         ),
         jwtServiceUrls:  VCLJwtServiceUrls(
             jwtSignServiceUrl: jwtServiceUrls?["jwtSignServiceUrl"] as? String ?? "",
-            jwtVerifyServiceUrl: jwtServiceUrls?["jwtVerifyServiceUrl"] as? String ?? ""
+            jwtVerifyServiceUrl: jwtServiceUrls?["jwtVerifyServiceUrl"] as? String
         )
     )
     return VCLCryptoServicesDescriptor(

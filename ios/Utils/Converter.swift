@@ -25,7 +25,8 @@ func dictionaryToInitializationDescriptor(
         isDebugOn: initializationDescriptorDictionary["isDebugOn"] as? Bool ?? false,
         cryptoServicesDescriptor: dictionaryToCryptoServicesDescriptor(
             initializationDescriptorDictionary["cryptoServicesDescriptor"] as? [String : Any]
-        )
+        ),
+        isDirectIssuerCheckOn: initializationDescriptorDictionary["isDirectIssuerCheckOn"] as? Bool ?? true
     )
 }
 

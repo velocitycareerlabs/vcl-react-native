@@ -15,4 +15,5 @@ export interface VCLInitializationDescriptor {
   cacheSequence?: number;
   isDebugOn?: boolean;
   cryptoServicesDescriptor?: VCLCryptoServicesDescriptor;
+  isDirectIssuerCheckOn?: boolean;
 }

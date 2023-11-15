@@ -35,7 +35,8 @@ object Converter {
     isDebugOn = initializationDescriptorMap.getBooleanOpt("isDebugOn") ?: false,
     cryptoServicesDescriptor = mapToCryptoServicesDescriptor(
       initializationDescriptorMap.getMapOpt("cryptoServicesDescriptor")
-    )
+    ),
+    isDirectIssuerCheckOn = initializationDescriptorMap.getBooleanOpt("isDirectIssuerCheckOn") ?: true
   )
 
   private fun mapToEnvironment(environment: String?) =

@@ -73,11 +73,13 @@ export const VclApi = {
   },
 
   getPresentationRequest: async (
-    presentationRequestDescriptor: VCLPresentationRequestDescriptor
+    presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+    remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLPresentationRequest> => {
     try {
       return await VclReactNative.getPresentationRequest(
-        presentationRequestDescriptor
+        presentationRequestDescriptor,
+        remoteCryptoServicesToken
       );
     } catch (e) {
       throw new VCLError(e);
@@ -86,12 +88,14 @@ export const VclApi = {
 
   submitPresentation: async (
     presentationSubmission: VCLPresentationSubmission,
-    didJwk?: VCLDidJwk
+    didJwk?: VCLDidJwk,
+    remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLSubmissionResult> => {
     try {
       return await VclReactNative.submitPresentation(
         presentationSubmission,
-        didJwk
+        didJwk,
+        remoteCryptoServicesToken
       );
     } catch (e) {
       throw new VCLError(e);
@@ -121,11 +125,13 @@ export const VclApi = {
   },
 
   getCredentialManifest: async (
-    credentialManifestDescriptor: VCLCredentialManifestDescriptor
+    credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+    remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLCredentialManifest> => {
     try {
       return await VclReactNative.getCredentialManifest(
-        credentialManifestDescriptor
+        credentialManifestDescriptor,
+        remoteCryptoServicesToken
       );
     } catch (e) {
       throw new VCLError(e);
@@ -134,12 +140,14 @@ export const VclApi = {
 
   generateOffers: async (
     generateOffersDescriptor: VCLGenerateOffersDescriptor,
-    didJwk?: VCLDidJwk
+    didJwk?: VCLDidJwk,
+    remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLOffers> => {
     try {
       return await VclReactNative.generateOffers(
         generateOffersDescriptor,
-        didJwk
+        didJwk,
+        remoteCryptoServicesToken
       );
     } catch (e) {
       throw new VCLError(e);
@@ -148,12 +156,12 @@ export const VclApi = {
 
   checkForOffers: async (
     generateOffersDescriptor: VCLGenerateOffersDescriptor,
-    token: VCLToken
+    sessionToken: VCLToken
   ): Promise<VCLOffers> => {
     try {
       return await VclReactNative.checkForOffers(
         generateOffersDescriptor,
-        token
+        sessionToken
       );
     } catch (e) {
       throw new VCLError(e);
@@ -162,14 +170,16 @@ export const VclApi = {
 
   finalizeOffers: async (
     finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-    token: VCLToken,
-    didJwk?: VCLDidJwk
+    sessionToken: VCLToken,
+    didJwk?: VCLDidJwk,
+    remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLJwtVerifiableCredentials> => {
     try {
       return await VclReactNative.finalizeOffers(
         finalizeOffersDescriptor,
         didJwk,
-        token
+        sessionToken,
+        remoteCryptoServicesToken
       );
     } catch (e) {
       throw new VCLError(e);
@@ -198,27 +208,41 @@ export const VclApi = {
     }
   },
 
-  verifyJwt: async (jwt: VCLJwt, jwkPublic: VCLPublicJwk): Promise<boolean> => {
+  verifyJwt: async (
+    jwt: VCLJwt,
+    jwkPublic: VCLPublicJwk,
+    remoteCryptoServicesToken?: VCLToken
+  ): Promise<boolean> => {
     try {
-      return await VclReactNative.verifyJwt(jwt, jwkPublic);
+      return await VclReactNative.verifyJwt(
+        jwt,
+        jwkPublic,
+        remoteCryptoServicesToken
+      );
     } catch (e) {
       throw new VCLError(e);
     }
   },
 
   generateSignedJwt: async (
-    jwtDescriptor: VCLJwtDescriptor
+    jwtDescriptor: VCLJwtDescriptor,
+    remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLJwt> => {
     try {
-      return await VclReactNative.generateSignedJwt(jwtDescriptor);
+      return await VclReactNative.generateSignedJwt(
+        jwtDescriptor,
+        remoteCryptoServicesToken
+      );
     } catch (e) {
       throw new VCLError(e);
     }
   },
 
-  generateDidJwk: async (): Promise<VCLDidJwk> => {
+  generateDidJwk: async (
+    remoteCryptoServicesToken?: VCLToken
+  ): Promise<VCLDidJwk> => {
     try {
-      return await VclReactNative.generateDidJwk();
+      return await VclReactNative.generateDidJwk(remoteCryptoServicesToken);
     } catch (e) {
       throw new VCLError(e);
     }

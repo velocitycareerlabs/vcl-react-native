@@ -12,6 +12,6 @@ export interface VCLOffers {
   payload: Dictionary<any>;
   all: Dictionary<any>[];
   responseCode: number;
-  token: VCLToken;
+  sessionToken: VCLToken;
   challenge: string;
 }

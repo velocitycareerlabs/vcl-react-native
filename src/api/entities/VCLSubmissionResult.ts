@@ -9,7 +9,7 @@ import type { VCLExchange } from './VCLExchange';
 import type { VCLToken } from './VCLToken';
 
 export interface VCLSubmissionResult {
-  token: VCLToken;
+  sessionToken: VCLToken;
   exchange: VCLExchange;
   jti: string;
   submissionId: string;

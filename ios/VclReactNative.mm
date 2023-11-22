@@ -8,7 +8,7 @@
 
 @interface RCT_EXTERN_MODULE(VclReactNative, NSObject)
 
-RCT_EXTERN_METHOD(initialize:(NSDictionary*)environmentDictionary
+RCT_EXTERN_METHOD(initialize:(NSDictionary*)initializationDescriptorDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
@@ -22,11 +22,13 @@ RCT_EXTERN_METHOD(getCredentialTypes:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(getPresentationRequest:(NSDictionary*)presentationRequestDescriptorDictionary
+                  withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(submitPresentation:(NSDictionary*)presentationSubmissionDictionary
                   withDidJwkDictionary:(NSDictionary*)didJwkDictionary
+                  withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
@@ -39,22 +41,25 @@ RCT_EXTERN_METHOD(searchForOrganizations:(NSDictionary*)organizationsSearchDescr
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(getCredentialManifest:(NSDictionary*)credentialManifestDescriptorDictionary
+                  withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(generateOffers:(NSDictionary*)generateOffersDescriptorDictionary
                   withDidJwkDictionary:(NSDictionary*)didJwkDictionary
+                  withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(checkForOffers:(NSDictionary*)generateOffersDescriptorDictionary
-                  withTokenDictionary:(NSDictionary*)tokenDictionary
+                  withtSessionTokenDictionary:(NSDictionary*)sessionTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(finalizeOffers:(NSDictionary*)finalizeOffersDescriptorDictionary
                   withDidJwkDictionary:(NSDictionary*)didJwkDictionary
-                  withTokenDictionary:(NSDictionary*)tokenDictionary
+                  withSessionTokenDictionary:(NSDictionary*)sessionTokenDictionary
+                  withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
@@ -68,14 +73,17 @@ RCT_EXTERN_METHOD(getVerifiedProfile:(NSDictionary*)verifiedProfileDescriptorDic
 
 RCT_EXTERN_METHOD(verifyJwt:(NSDictionary*)jwtDictionary
                   withPublicJwkDictionary:(NSDictionary*)publicJwkDictionary
+                  withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(generateSignedJwt:(NSDictionary*)jwtDescriptorDictionary
+                  withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(generateDidJwk:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(generateDidJwk:(NSDictionary*)remoteCryptoServicesTokenDictionary
+                  withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
 

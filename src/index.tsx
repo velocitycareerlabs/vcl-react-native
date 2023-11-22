@@ -68,6 +68,7 @@ import { VCLErrorCode } from './api/entities/error/VCLErrorCode';
 export default VclApi;
 export {
   VCLEnvironment,
+  VCLCryptoServiceType,
   VCLXVnfProtocolVersion,
   VCLCountryCodes,
   VCLServiceType,
@@ -122,7 +123,6 @@ export type {
   VCLPresentationRequestDescriptor,
   VCLJwtDescriptor,
   VCLDidJwk,
-  VCLCryptoServiceType,
   VCLCryptoServicesDescriptor,
   VCLJwtServiceUrls,
   VCLKeyServiceUrls,

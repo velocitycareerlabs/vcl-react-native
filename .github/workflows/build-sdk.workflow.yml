@@ -69,6 +69,7 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: yarn --frozen-lockfile --pure-lockfile
+        working-directory: example/android
       # Setup java
       - uses: actions/setup-java@v3
         with:

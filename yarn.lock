@@ -3661,6 +3661,11 @@ core-util-is@~1.0.0:
   resolved "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.3.tgz#a6042d3634c2b27e9328f837b965fac83808db85"
   integrity sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==
 
+corepack@^0.23.0:
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/corepack/-/corepack-0.23.0.tgz#1e146a11e99e06008a327fc091c1c2f3de4a100a"
+  integrity sha512-0+f/lrSsFPwa9Ec7xvVOutLjcOX6wzhzcvbBM9G6mI+0WKuB4SD8BGLqqNw2FwlLS1zTHoOw0hUPoMh68kyICQ==
+
 cosmiconfig-typescript-loader@^4.0.0:
   version "4.4.0"
   resolved "https://registry.npmjs.org/cosmiconfig-typescript-loader/-/cosmiconfig-typescript-loader-4.4.0.tgz#f3feae459ea090f131df5474ce4b1222912319f9"

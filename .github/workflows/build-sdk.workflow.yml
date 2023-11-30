@@ -113,7 +113,9 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
       # Build Android SDK
       - name: Build Android SDK
-        run: yarn build:ios
+        run: |
+            yarn bootstrap 
+            yarn build:ios
 
 #       # Pack SDK
 #       - name: Pack SDK

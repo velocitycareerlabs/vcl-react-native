@@ -12,6 +12,7 @@ concurrency:
   cancel-in-progress: true
 env:
   NODE_VERSION: '20'
+  JAVA_VERSION: "11"
 jobs:
   test-react-sdk:
     runs-on: ubuntu-latest

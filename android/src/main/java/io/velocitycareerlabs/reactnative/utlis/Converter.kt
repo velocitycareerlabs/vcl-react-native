@@ -4,7 +4,6 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 package io.velocitycareerlabs.reactnative.utlis
 
 import com.facebook.react.bridge.*
@@ -16,9 +15,7 @@ import io.velocitycareerlabs.api.entities.initialization.VCLJwtServiceUrls
 import io.velocitycareerlabs.api.entities.initialization.VCLKeyServiceUrls
 import io.velocitycareerlabs.api.entities.initialization.VCLRemoteCryptoServicesUrlsDescriptor
 import io.velocitycareerlabs.reactnative.extensions.*
-import org.json.JSONArray
 import org.json.JSONObject
-import java.lang.Exception
 
 object Converter {
 
@@ -167,17 +164,25 @@ object Converter {
 
   fun mapTopPresentationRequestDescriptor(presentationRequestDescriptorLinkMap: ReadableMap) =
     VCLPresentationRequestDescriptor(
-      deepLink = mapToDeepLink(presentationRequestDescriptorLinkMap.getMapOpt("deepLink")),
+      deepLink = mapToDeepLink(presentationRequestDescriptorLinkMap.getMapOpt("deepLink"))
+        ?: VCLDeepLink(""),
       pushDelegate = mapToPushDelegate(presentationRequestDescriptorLinkMap.getMapOpt("pushDelegate"))
     )
 
-  fun mapToDeepLink(deepLinkMap: ReadableMap?) =
-    VCLDeepLink(deepLinkMap?.getStringOpt("value") ?: "")
+  fun mapToDeepLink(deepLinkMap: ReadableMap?): VCLDeepLink? {
+    deepLinkMap?.getStringOpt("value")?.let {
+      return VCLDeepLink(it)
+    }
+    return null
+  }
 
-  fun deepLinkToMap(deepLink: VCLDeepLink): ReadableMap {
-    val retVal = Arguments.createMap()
-    retVal.putString("value", deepLink.value)
-    return retVal
+  fun deepLinkToMap(deepLink: VCLDeepLink?): ReadableMap? {
+    deepLink?.value?.let {
+      val retVal = Arguments.createMap()
+      retVal.putString("value", deepLink?.value)
+      return retVal
+    }
+    return null
   }
 
   fun mapToIssuingType(
@@ -202,7 +207,7 @@ object Converter {
   ) = VCLPresentationRequest(
     mapToJwt(presentationRequestMap?.getMapOpt("jwt")),
     mapToPublicJwk(presentationRequestMap?.getMapOpt("publicJwk")),
-    mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink"))
+    mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink")) ?: VCLDeepLink("")
   )
 
   fun presentationRequestToMap(
@@ -419,7 +424,8 @@ object Converter {
     credentialManifestDescriptorByDeepLinkMap: ReadableMap
   ): VCLCredentialManifestDescriptorByDeepLink {
     return VCLCredentialManifestDescriptorByDeepLink(
-      mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink")),
+      mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink"))
+        ?: VCLDeepLink(""),
       mapToIssuingType(
         credentialManifestDescriptorByDeepLinkMap,
         VCLIssuingType.Career
@@ -461,15 +467,10 @@ object Converter {
 
   fun mapToServiceCredentialAgentIssuer(
     serviceMap: ReadableMap?
-  ): VCLServiceCredentialAgentIssuer {
-    var payload = JSONObject()
-    try {
+  ): VCLServiceCredentialAgentIssuer =
+    VCLServiceCredentialAgentIssuer(
       payload = serviceMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject()
-    } catch (ex: Exception) {
-      ex.printStackTrace()
-    }
-    return VCLServiceCredentialAgentIssuer(payload = payload)
-  }
+    )
 
   fun credentialManifestToMap(
     credentialManifest: VCLCredentialManifest
@@ -486,6 +487,7 @@ object Converter {
       "verifiedProfile",
       credentialManifest.verifiedProfile.payload.toReadableMap()
     )
+    credentialManifestMap.putMap("deepLink", deepLinkToMap(credentialManifest.deepLink))
     return credentialManifestMap
   }
 
@@ -496,12 +498,14 @@ object Converter {
       VCLJwt(encodedJwt = credentialManifestMap?.getMapOpt("jwt")?.getStringOpt("encodedJwt") ?: "")
     val vendorOriginContext: String? = credentialManifestMap?.getStringOpt("vendorOriginContext")
     val verifiedProfileMap: ReadableMap? = credentialManifestMap?.getMapOpt("verifiedProfile")
+    val deepLinkMap: ReadableMap? = credentialManifestMap?.getMapOpt("deepLink")
     return VCLCredentialManifest(
       jwt = jwt,
       vendorOriginContext = vendorOriginContext,
       verifiedProfile = VCLVerifiedProfile(
         payload = verifiedProfileMap?.toJsonObject() ?: JSONObject()
-      )
+      ),
+      deepLink = mapToDeepLink(deepLinkMap)
     )
   }
 
@@ -538,7 +542,7 @@ object Converter {
   ): ReadableMap {
     val generatedOffersMap = Arguments.createMap()
     generatedOffersMap.putMap("payload", offers.payload.toReadableMap())
-    generatedOffersMap.putArray("all", offers.all.toReadableArray())
+    generatedOffersMap.putArray("all", allOffersToArray(offers.all))
     generatedOffersMap.putInt("responseCode", offers.responseCode)
     generatedOffersMap.putMap("sessionToken", tokenToMap(offers.sessionToken))
     generatedOffersMap.putString("challenge", offers.challenge)
@@ -548,11 +552,30 @@ object Converter {
   fun mapToOffers(offersMap: ReadableMap?): VCLOffers {
     return VCLOffers(
       payload = offersMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject(),
-      all = offersMap?.getArrayOpt("all")?.toJsonArray() ?: JSONArray(),
+      all = arrayToAllOffers(offersMap?.getArrayOpt("all")),
       responseCode = offersMap?.getIntOpt("responseCode") ?: -1,
       sessionToken = mapToToken(offersMap?.getMapOpt("sessionToken")),
       challenge = offersMap?.getStringOpt("challenge") ?: ""
     )
+  }
+
+  fun arrayToAllOffers(allOffersArray: ReadableArray?): List<VCLOffer> {
+    val allOffers = mutableListOf<VCLOffer>()
+    for (i in 0 until (allOffersArray?.size() ?: 0)) {
+      allOffers.add(VCLOffer(allOffersArray?.getMapOpt(i)?.toJsonObject() ?: JSONObject()))
+    }
+    return allOffers
+  }
+
+  fun allOffersToArray(allOffers: List<VCLOffer>?): ReadableArray {
+    val allOffersArr = Arguments.createArray()
+    for (i in 0 until (allOffers?.size ?: 0)) {
+      val offerMap = Arguments.createMap()
+      offerMap.putMap("payload", allOffers?.get(i)?.payload?.toReadableMap())
+      offerMap.putString("id", allOffers?.get(i)?.id)
+      allOffersArr.pushMap(offerMap)
+    }
+    return allOffersArr
   }
 
   fun credentialTypesFormSchemaToMap(

@@ -522,8 +522,12 @@ func arrayToAllOffers(_ allOffersArray: [[String : Any]]?) -> [VCLOffer] {
 }
 
 func allOffersToArray(_ allOffers: [VCLOffer]?) -> [[String : Any]]? {
-    return allOffers?.map { ["payload": $0.payload, "id": $0.id] }
-  }
+    return allOffers?.map { [
+        "payload": $0.payload,
+        "issuerId": $0.issuerId,
+        "id": $0.id
+    ] }
+}
 
 func credentialTypesFormSchemaToDictionary(
     _ credentialTypesFormSchema: VCLCredentialTypesUIFormSchema

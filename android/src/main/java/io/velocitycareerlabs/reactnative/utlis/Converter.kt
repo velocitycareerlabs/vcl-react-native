@@ -572,6 +572,7 @@ object Converter {
     for (i in 0 until (allOffers?.size ?: 0)) {
       val offerMap = Arguments.createMap()
       offerMap.putMap("payload", allOffers?.get(i)?.payload?.toReadableMap())
+      offerMap.putString("issuerId", allOffers?.get(i)?.issuerId)
       offerMap.putString("id", allOffers?.get(i)?.id)
       allOffersArr.pushMap(offerMap)
     }

@@ -9,5 +9,6 @@ import type { Dictionary } from '../Dictionary';
 
 export interface VCLOffer {
   payload: Dictionary<any>;
+  issuerId: string;
   id: string;
 }

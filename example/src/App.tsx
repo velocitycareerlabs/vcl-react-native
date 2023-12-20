@@ -353,7 +353,7 @@ export default function App() {
   ) => {
     vcl.checkForOffers(generateOffersDescriptor, sessionToken).then(
       (offers: VCLOffers) => {
-        console.log(`VCL Checked Offers: ${offers.all}`);
+        console.log(`VCL Checked Offers: ${offers.all.map((o) => o.payload)}`);
         console.log(`VCL Checked Offers Response Code: ${offers.responseCode}`);
         console.log(`VCL Checked Offers Session Token: ${offers.sessionToken}`);
         if (offers.responseCode === 200) {

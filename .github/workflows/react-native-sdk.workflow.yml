@@ -14,7 +14,7 @@ env:
   RC_SUFFIX: 'rc'
 jobs:
   test-react-sdk:
-    runs-on: ubuntu-latest
+    runs-on: macos-13
     steps:
       # Git clone repository
       - name: Git clone repository
@@ -26,7 +26,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       # Install dependencies
       - name: Install dependencies
-        run: yarn --frozen-lockfile --pure-lockfile
+        run: yarn
       # Run test 
       - name: Run Test
         run: yarn test

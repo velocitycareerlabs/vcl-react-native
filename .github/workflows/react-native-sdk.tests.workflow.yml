@@ -1,0 +1,33 @@
+name: ReactNative-SDK
+
+on:
+  pull_request:
+    branches:
+      - main
+      - rc
+      - dev
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+env:
+  NODE_VERSION: '20'
+  RC_SUFFIX: 'rc'
+jobs:
+  test-react-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      # Git clone repository
+      - name: Git clone repository
+        uses: actions/checkout@v4
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # Install dependencies
+      - name: Install dependencies
+        run: yarn
+      # Run test 
+      - name: Run Test
+        run: yarn test
+        continue-on-error: true

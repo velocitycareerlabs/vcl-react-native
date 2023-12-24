@@ -32,7 +32,7 @@ jobs:
         run: yarn test
         continue-on-error: true
         
-  build-react-android-sdk:
+  build-react-native-sdk:
     runs-on: macos-13
     needs: 
       - test-react-sdk

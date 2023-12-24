@@ -6,11 +6,12 @@
  */
 
 import type { Dictionary } from '../Dictionary';
+import type { VCLOffer } from './VCLOffer';
 import type { VCLToken } from './VCLToken';
 
 export interface VCLOffers {
   payload: Dictionary<any>;
-  all: Dictionary<any>[];
+  all: [VCLOffer];
   responseCode: number;
   sessionToken: VCLToken;
   challenge: string;

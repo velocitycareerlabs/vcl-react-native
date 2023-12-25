@@ -188,7 +188,12 @@ func dictionaryToToken(_ tokenDictionary: [String: Any]?) -> VCLToken {
 }
 
 func tokenToDictionary(_ token: VCLToken) -> [String: Any] {
-    return ["value": token.value]
+    var retVal = [String: Any]()
+    retVal["value"] = token.value
+    if let expiresIn = token.expiresIn {
+        retVal["expiresIn"] = expiresIn
+    }
+    return retVal
 }
 
 func dictionaryToIssuingType(

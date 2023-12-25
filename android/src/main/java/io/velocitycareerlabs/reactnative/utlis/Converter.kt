@@ -199,6 +199,9 @@ object Converter {
   fun tokenToMap(token: VCLToken): ReadableMap {
     val retVal = Arguments.createMap()
     retVal.putString("value", token.value)
+    token.expiresIn?.toDouble()?.let {
+      retVal.putDouble("expiresIn", it)
+    }
     return retVal
   }
 

@@ -334,7 +334,8 @@ export default function App() {
           `VCL Generated Offers Response Code: ${offers.responseCode}`
         );
         console.log(
-          `VCL Generated Offers Session Token: ${offers.sessionToken.value}`
+          `VCL Generated Offers Session Token value: ${offers.sessionToken.value}`,
+          `VCL Generated Offers Session Token expires in: ${offers.sessionToken.expiresIn}`
         );
 
         // Check offers invoked after the push notification is notified the app that offers are ready:
@@ -364,7 +365,8 @@ export default function App() {
         );
         console.log(`VCL Checked Offers Response Code: ${offers.responseCode}`);
         console.log(
-          `VCL Checked Offers Session Token: ${offers.sessionToken.value}`
+          `VCL Checked Offers Session Token value: ${offers.sessionToken.value}`,
+          `VCL Checked Offers Session Token expires in: ${offers.sessionToken.expiresIn}`
         );
         if (offers.responseCode === 200) {
           finalizeOffers(credentialManifest, offers);

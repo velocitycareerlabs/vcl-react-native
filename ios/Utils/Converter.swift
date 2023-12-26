@@ -407,7 +407,8 @@ func dictionaryToCredentialManifestDescriptorByDeepLink(
         issuingType: dictionaryToIssuingType(
             issuingTypeDictionary: credentialManifestDescriptorByDeepLinkDictionary,
             defaultIssuingType: VCLIssuingType.Career
-        )
+        ),
+        pushDelegate: dictionaryToPushDelegate(credentialManifestDescriptorByDeepLinkDictionary["pushDelegate"] as? [String: Any])
     )
 }
 

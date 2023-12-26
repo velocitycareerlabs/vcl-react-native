@@ -429,10 +429,8 @@ object Converter {
     return VCLCredentialManifestDescriptorByDeepLink(
       mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink"))
         ?: VCLDeepLink(""),
-      mapToIssuingType(
-        credentialManifestDescriptorByDeepLinkMap,
-        VCLIssuingType.Career
-      )
+      mapToIssuingType(credentialManifestDescriptorByDeepLinkMap, VCLIssuingType.Career),
+      mapToPushDelegate(credentialManifestDescriptorByDeepLinkMap.getMapOpt("pushDelegate"))
     )
   }
 

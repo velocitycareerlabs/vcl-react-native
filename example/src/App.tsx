@@ -370,6 +370,10 @@ export default function App() {
         );
         if (offers.responseCode === 200) {
           finalizeOffers(credentialManifest, offers);
+        } else {
+          console.log(
+            `VCL Failed to Check Offers with response code: ${offers.responseCode}`
+          );
         }
       },
       (err: VCLError) => {

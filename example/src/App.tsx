@@ -325,12 +325,17 @@ export default function App() {
 
     vcl.generateOffers(generateOffersDescriptor, didJwkRef.current).then(
       (offers: VCLOffers) => {
-        console.log(`VCL Generated Offers: ${offers.all}`);
+        console.log(
+          `VCL Generated Offers: ${offers.all.map((o) =>
+            JSON.stringify(o.payload)
+          )}`
+        );
         console.log(
           `VCL Generated Offers Response Code: ${offers.responseCode}`
         );
         console.log(
-          `VCL Generated Offers Session Token: ${offers.sessionToken}`
+          `VCL Generated Offers Session Token value: ${offers.sessionToken.value}`,
+          `VCL Generated Offers Session Token expires in: ${offers.sessionToken.expiresIn}`
         );
 
         // Check offers invoked after the push notification is notified the app that offers are ready:
@@ -353,11 +358,22 @@ export default function App() {
   ) => {
     vcl.checkForOffers(generateOffersDescriptor, sessionToken).then(
       (offers: VCLOffers) => {
-        console.log(`VCL Checked Offers: ${offers.all}`);
+        console.log(
+          `VCL Checked Offers: ${offers.all.map((o) =>
+            JSON.stringify(o.payload)
+          )}`
+        );
         console.log(`VCL Checked Offers Response Code: ${offers.responseCode}`);
-        console.log(`VCL Checked Offers Session Token: ${offers.sessionToken}`);
+        console.log(
+          `VCL Checked Offers Session Token value: ${offers.sessionToken.value}`,
+          `VCL Checked Offers Session Token expires in: ${offers.sessionToken.expiresIn}`
+        );
         if (offers.responseCode === 200) {
           finalizeOffers(credentialManifest, offers);
+        } else {
+          console.log(
+            `VCL Failed to Check Offers with response code: ${offers.responseCode}`
+          );
         }
       },
       (err: VCLError) => {

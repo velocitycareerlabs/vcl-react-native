@@ -34,6 +34,7 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToToken
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToVerifiedProfileDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
+import io.velocitycareerlabs.api.entities.VCLDidJwk
 import io.velocitycareerlabs.api.entities.error.VCLError
 import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
 import io.velocitycareerlabs.reactnative.extensions.toThrowable
@@ -42,7 +43,7 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDidJwk
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
 import io.velocitycareerlabs.reactnative.utlis.VCLLog
-import java.lang.Exception
+import kotlin.Exception
 
 class VclReactNativeModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 

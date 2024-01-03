@@ -1,0 +1,66 @@
+name: ReactNative-SDK
+
+on:
+  push:
+    branches:
+      - main
+      - rc
+      - dev
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+env:
+  NODE_VERSION: '20'
+  RC_SUFFIX: 'rc'
+jobs:
+  test-react-sdk:
+    runs-on: macos-13
+    steps:
+      # Git clone repository
+      - name: Git clone repository
+        uses: actions/checkout@v4
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # Install dependencies
+      - name: Install dependencies
+        run: yarn
+      # Run test 
+      - name: Run Test
+        run: yarn test
+        continue-on-error: true
+        
+  build-react-native-sdk:
+    runs-on: macos-13
+    needs: 
+      - test-react-sdk
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v4
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # Publish to npm
+      - name: Set NPM Packages Config
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+      # Git Set Identity
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      # Commit Version Locally for Github npm
+      - name: Commit Version Locally for Github npm
+        run: git add .npmrc && git commit -am "Prepare to release"
+      # Install dependencies
+      - name: Install dependencies
+        run: yarn
+      # Build and Publish SDK
+      - name: Build and Publish SDK
+        if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/rc' }}
+        run: npm publish --tag ${{ env.RELEASE_TAG }} --access public --userconfig ./.npmrc
+        env: 
+          RELEASE_TAG: ${{ github.ref == 'refs/heads/main' && format('{0}', 'latest' ) || env.RC_SUFFIX }}

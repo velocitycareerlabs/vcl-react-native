@@ -38,6 +38,7 @@ import type { VCLGenerateOffersDescriptor } from './api/entities/VCLGenerateOffe
 import type { VCLJwt } from './api/entities/VCLJwt';
 import type { VCLJwtVerifiableCredentials } from './api/entities/VCLJwtVerifiableCredentials';
 import type { VCLOffers } from './api/entities/VCLOffers';
+import type { VCLOffer } from './api/entities/VCLOffer';
 import type { VCLOrganization } from './api/entities/VCLOrganization';
 import type { VCLOrganizations } from './api/entities/VCLOrganizations';
 import type { VCLOrganizationsSearchDescriptor } from './api/entities/VCLOrganizationsSearchDescriptor';
@@ -103,6 +104,7 @@ export type {
   VCLJwt,
   VCLJwtVerifiableCredentials,
   VCLOffers,
+  VCLOffer,
   VCLOrganization,
   VCLOrganizations,
   VCLOrganizationsSearchDescriptor,

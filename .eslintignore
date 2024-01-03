@@ -1,0 +1,17 @@
+node_modules/**
+example/node_modules/**
+example/react-native.config.js
+example/index.js
+android/**
+ios/**
+lib/**
+scripts/**
+jest.config.js
+__tests__/**
+
+babel.config.js
+metro.config.js
+setupJestAfterEnv.js
+secrets.js
+app/api/linkedin-config.js
+.eslintrc.js

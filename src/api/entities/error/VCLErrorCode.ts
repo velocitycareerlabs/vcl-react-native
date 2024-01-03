@@ -19,4 +19,6 @@ export enum VCLErrorCode {
   MismatchedOfferIssuerDid = 'mismatched_offer_issuer_did',
   MismatchedCredentialIssuerDid = 'mismatched_credential_issuer_did',
   MismatchedPresentationRequestInspectorDid = 'mismatched_presentation_request_inspector_did',
+  // General error
+  SdkError = 'sdk_error',
 }

@@ -4,14 +4,24 @@ on:
   push:
     branches:
       - main
-      - rc
-      - dev
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Configuration environment
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - rc
+          - main
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 env:
   NODE_VERSION: '20'
   RC_SUFFIX: 'rc'
+  GLOBAL_ENV: ${{ github.event_name == 'push' && format('{0}', 'dev') || inputs.environment }}
 jobs:
   test-react-sdk:
     runs-on: macos-13
@@ -60,7 +70,7 @@ jobs:
         run: yarn
       # Build and Publish SDK
       - name: Build and Publish SDK
-        if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/rc' }}
+        if: ${{ env.GLOBAL_ENV == 'main' || env.GLOBAL_ENV == 'rc' }}
         run: npm publish --tag ${{ env.RELEASE_TAG }} --access public --userconfig ./.npmrc
         env: 
-          RELEASE_TAG: ${{ github.ref == 'refs/heads/main' && format('{0}', 'latest' ) || env.RC_SUFFIX }}
+          RELEASE_TAG: ${{ env.GLOBAL_ENV == 'main' && format('{0}', 'latest' ) || env.RC_SUFFIX }}

@@ -14,7 +14,7 @@ on:
         options:
           - dev
           - rc
-          - main
+          - prod
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
@@ -70,7 +70,7 @@ jobs:
         run: yarn
       # Build and Publish SDK
       - name: Build and Publish SDK
-        if: ${{ env.GLOBAL_ENV == 'main' || env.GLOBAL_ENV == 'rc' }}
+        if: ${{ env.GLOBAL_ENV == 'prod' || env.GLOBAL_ENV == 'rc' }}
         run: npm publish --tag ${{ env.RELEASE_TAG }} --access public --userconfig ./.npmrc
         env: 
-          RELEASE_TAG: ${{ env.GLOBAL_ENV == 'main' && format('{0}', 'latest' ) || env.RC_SUFFIX }}
+          RELEASE_TAG: ${{ env.GLOBAL_ENV == 'prod' && format('{0}', 'latest' ) || env.RC_SUFFIX }}

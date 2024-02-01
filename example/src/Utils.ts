@@ -11,20 +11,14 @@ export class Utils {
   static readonly getApprovedRejectedOfferIdsMock = (
     offers: VCLOffers
   ): string[][] => {
-    var offerId1 = '';
-    var offerId2 = '';
+    var approvedOfferIds: string[] = [];
+    var rejectedOfferIds: string[] = [];
     if (offers.all.length > 0) {
-      offerId1 = offers.all[0]?.id ?? '';
-      offerId2 = offers.all[offers.all.length - 1]?.id ?? '';
+      approvedOfferIds.push(offers.all[0].id);
     }
-    let approvedOfferIds: string[] = [offerId1].filter(
-      (offer) => offer.length > 0
-    );
-    let rejectedOfferIds: string[] = [offerId2].filter(
-      (offer) => offer.length > 0
-    );
-    console.log(approvedOfferIds, rejectedOfferIds);
-
+    if (offers.all.length > 1) {
+      rejectedOfferIds.push(offers.all[1]?.id);
+    }
     return [approvedOfferIds, rejectedOfferIds];
   };
 }

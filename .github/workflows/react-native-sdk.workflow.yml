@@ -22,30 +22,9 @@ env:
   NODE_VERSION: '20'
   RC_SUFFIX: 'rc'
   GLOBAL_ENV: ${{ github.event_name == 'push' && format('{0}', 'dev') || inputs.environment }}
-jobs:
-  test-react-sdk:
-    runs-on: macos-13
-    steps:
-      # Git clone repository
-      - name: Git clone repository
-        uses: actions/checkout@v4
-      # Setup Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      # Install dependencies
-      - name: Install dependencies
-        run: yarn
-      # Run test 
-      - name: Run Test
-        run: yarn test
-        continue-on-error: true
-        
+jobs:        
   build-react-native-sdk:
     runs-on: macos-13
-    needs: 
-      - test-react-sdk
     steps:
       - name: Git clone repository
         uses: actions/checkout@v4

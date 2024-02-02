@@ -1,4 +1,4 @@
-name: ReactNative-SDK
+name: ReactNative-SDK Tests
 
 on:
   pull_request:
@@ -26,6 +26,10 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: yarn
+      # Run lint 
+      - name: Run lint
+        run: yarn lint
+        continue-on-error: false
       # Run test 
       - name: Run Test
         run: yarn test

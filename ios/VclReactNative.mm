@@ -77,7 +77,8 @@ RCT_EXTERN_METHOD(verifyJwt:(NSDictionary*)jwtDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(generateSignedJwt:(NSDictionary*)jwtDescriptorDictionary
+RCT_EXTERN_METHOD(generateSignedJwt:(NSDictionary*)didJwkDictionary
+                  withJwtDescriptorDictionary:(NSDictionary*)jwtDescriptorDictionary
                   withRemoteCryptoServicesTokenDictionary:(NSDictionary*)remoteCryptoServicesTokenDictionary
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)

@@ -11,6 +11,7 @@ import {
   type VCLVerifiedProfileDescriptor,
   VCLServiceType,
   type VCLPublicJwk,
+  VCLEnvironment,
   // VCLEnvironment,
 } from '@velocitycareerlabs/vcl-react-native';
 
@@ -129,32 +130,38 @@ export abstract class Constants {
   };
   static readonly SomePayload = JSON.parse('{"p1":"v1", "p2":"v12"}');
 
-  // private static readonly BaseUrl = 'mockvendor.velocitycareerlabs.io';
+  private static readonly BaseUrl = 'mockvendor.velocitycareerlabs.io';
 
-  // private static getServiceBaseUrl(environment: VCLEnvironment): string {
-  //   switch (environment) {
-  //     case VCLEnvironment.Dev:
-  //       return `https://${VCLEnvironment.Dev}${this.BaseUrl}`;
-  //     case VCLEnvironment.Qa: // not available yet
-  //       return `https://${VCLEnvironment.Qa}${this.BaseUrl}`;
-  //     case VCLEnvironment.Staging: // not available yet
-  //       return `https://${VCLEnvironment.Staging}${this.BaseUrl}`;
-  //     default: // prod not available yet
-  //       return `https://${this.BaseUrl}`;
-  //   }
-  // }
+  private static readonly getServiceBaseUrl = (
+    environment: VCLEnvironment
+  ): string => {
+    switch (environment) {
+      case VCLEnvironment.Dev:
+        return `https://${VCLEnvironment.Dev}${this.BaseUrl}`;
+      case VCLEnvironment.Qa: // not available yet
+        return `https://${VCLEnvironment.Qa}${this.BaseUrl}`;
+      case VCLEnvironment.Staging: // not available yet
+        return `https://${VCLEnvironment.Staging}${this.BaseUrl}`;
+      default: // prod not available yet
+        return `https://${this.BaseUrl}`;
+    }
+  };
 
-  // private static getJwtSignServiceUrl(environment: VCLEnvironment): string {
-  //   return `${Constants.getServiceBaseUrl(environment)}/api/jwt/sign`;
-  // }
+  public static readonly getJwtSignServiceUrl = (
+    environment: VCLEnvironment
+  ): string => {
+    return `${Constants.getServiceBaseUrl(environment)}/api/jwt/sign`;
+  };
 
-  // private static getJwtVerifyServiceUrl(environment: VCLEnvironment): string {
-  //   return `${Constants.getServiceBaseUrl(environment)}/api/jwt/verify`;
-  // }
+  public static readonly getJwtVerifyServiceUrl = (
+    environment: VCLEnvironment
+  ): string => {
+    return `${Constants.getServiceBaseUrl(environment)}/api/jwt/verify`;
+  };
 
-  // private static getCreateDidKeyServiceUrl(
-  //   environment: VCLEnvironment
-  // ): string {
-  //   return `${Constants.getServiceBaseUrl(environment)}/api/create_did_key`;
-  // }
+  public static readonly getCreateDidKeyServiceUrl = (
+    environment: VCLEnvironment
+  ): string => {
+    return `${Constants.getServiceBaseUrl(environment)}/api/create_did_key`;
+  };
 }

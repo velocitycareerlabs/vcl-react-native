@@ -662,28 +662,22 @@ object Converter {
     jti = jwtDescriptorDictionary.getStringOpt("jti") ?: ""
   )
 
-  fun didJwkToMap(didJwk: VCLDidJwk?): ReadableMap? {
-    didJwk?.let {
+  fun didJwkToMap(didJwk: VCLDidJwk): ReadableMap {
       val didJwkMap = Arguments.createMap()
-      didJwkMap.putString("did", it.did)
-      didJwkMap.putMap("publicJwk", it.publicJwk.valueJson.toReadableMap())
-      didJwkMap.putString("kid", it.kid)
-      didJwkMap.putString("keyId", it.keyId)
+      didJwkMap.putString("did", didJwk.did)
+      didJwkMap.putMap("publicJwk", didJwk.publicJwk.valueJson.toReadableMap())
+      didJwkMap.putString("kid", didJwk.kid)
+      didJwkMap.putString("keyId", didJwk.keyId)
       return didJwkMap
-    }
-    return null
   }
 
-  fun mapToDidJwk(didJwkMap: ReadableMap?): VCLDidJwk? {
-    didJwkMap?.let {
+  fun mapToDidJwk(didJwkMap: ReadableMap): VCLDidJwk {
       return VCLDidJwk(
-        did = it.getStringOpt("did") ?: "",
-        publicJwk = mapToPublicJwk(it.getMap("publicJwk")),
-        kid = it.getStringOpt("kid") ?: "",
-        keyId = it.getStringOpt("keyId") ?: ""
+        did = didJwkMap.getStringOpt("did") ?: "",
+        publicJwk = mapToPublicJwk(didJwkMap.getMap("publicJwk")),
+        kid = didJwkMap.getStringOpt("kid") ?: "",
+        keyId = didJwkMap.getStringOpt("keyId") ?: ""
       )
-    }
-    return null
   }
 }
 

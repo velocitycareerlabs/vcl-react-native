@@ -144,7 +144,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun submitPresentation(
     presentationSubmissionMap: ReadableMap,
-    didJwkMap: ReadableMap? = null,
+    didJwkMap: ReadableMap,
     remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
@@ -234,7 +234,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun generateOffers(
     generateOffersDescriptorMap: ReadableMap,
-    didJwkMap: ReadableMap? = null,
+    didJwkMap: ReadableMap,
     remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
@@ -278,7 +278,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun finalizeOffers(
     finalizeOffersDescriptorMap: ReadableMap,
-    didJwkMap: ReadableMap? = null,
+    didJwkMap: ReadableMap,
     sessionTokenMap: ReadableMap,
     remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
@@ -363,12 +363,14 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
 
   @ReactMethod
   fun generateSignedJwt(
+    didJwkMap: ReadableMap,
     jwtDescriptorMap: ReadableMap,
     remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.generateSignedJwt(
+        didJwk = mapToDidJwk(didJwkMap),
         jwtDescriptor = mapToJwtDescriptor(jwtDescriptorMap),
         remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
         successHandler = {

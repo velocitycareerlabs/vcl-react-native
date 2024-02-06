@@ -88,7 +88,7 @@ export const VclApi = {
 
   submitPresentation: async (
     presentationSubmission: VCLPresentationSubmission,
-    didJwk?: VCLDidJwk,
+    didJwk: VCLDidJwk,
     remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLSubmissionResult> => {
     try {
@@ -140,7 +140,7 @@ export const VclApi = {
 
   generateOffers: async (
     generateOffersDescriptor: VCLGenerateOffersDescriptor,
-    didJwk?: VCLDidJwk,
+    didJwk: VCLDidJwk,
     remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLOffers> => {
     try {
@@ -171,7 +171,7 @@ export const VclApi = {
   finalizeOffers: async (
     finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
     sessionToken: VCLToken,
-    didJwk?: VCLDidJwk,
+    didJwk: VCLDidJwk,
     remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLJwtVerifiableCredentials> => {
     try {
@@ -225,11 +225,13 @@ export const VclApi = {
   },
 
   generateSignedJwt: async (
+    didJwk: VCLDidJwk,
     jwtDescriptor: VCLJwtDescriptor,
     remoteCryptoServicesToken?: VCLToken
   ): Promise<VCLJwt> => {
     try {
       return await VclReactNative.generateSignedJwt(
+        didJwk,
         jwtDescriptor,
         remoteCryptoServicesToken
       );

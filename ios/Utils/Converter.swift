@@ -621,26 +621,20 @@ func dictionaryToJwtDescriptor(
     )
 }
 
-func didJwkToDictionary(_ didJwk: VCLDidJwk?) -> [String: Any]? {
-    if let didJwk = didJwk {
-        return [
-            "did": didJwk.did,
-            "publicJwk": didJwk.publicJwk.valueDict,
-            "kid": didJwk.kid,
-            "keyId": didJwk.keyId
-        ]
-    }
-    return nil
+func didJwkToDictionary(_ didJwk: VCLDidJwk) -> [String: Any] {
+    return [
+        "did": didJwk.did,
+        "publicJwk": didJwk.publicJwk.valueDict,
+        "kid": didJwk.kid,
+        "keyId": didJwk.keyId
+    ]
 }
 
-func dictionaryToJwk(_ didJwkDictionary: [String: Any]?) -> VCLDidJwk? {
-    if let didJwkDictionary = didJwkDictionary {
-        return VCLDidJwk(
-            did: didJwkDictionary["did"] as? String ?? "",
-            publicJwk: dictionaryToPublicJwk(didJwkDictionary["publicJwk"] as? [String: Any]),
-            kid: didJwkDictionary["kid"] as? String ?? "",
-            keyId: didJwkDictionary["keyId"] as? String ?? ""
-        )
-    }
-    return nil
+func dictionaryToJwk(_ didJwkDictionary: [String: Any]) -> VCLDidJwk {
+    return VCLDidJwk(
+        did: didJwkDictionary["did"] as? String ?? "",
+        publicJwk: dictionaryToPublicJwk(didJwkDictionary["publicJwk"] as? [String: Any]),
+        kid: didJwkDictionary["kid"] as? String ?? "",
+        keyId: didJwkDictionary["keyId"] as? String ?? ""
+    )
 }

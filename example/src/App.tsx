@@ -45,6 +45,7 @@ import vcl, {
   type VCLCredentialTypes,
   VCLStatusCode,
   VCLXVnfProtocolVersion,
+  VCLCryptoServiceType,
 } from '@velocitycareerlabs/vcl-react-native';
 import { useRef } from 'react';
 
@@ -71,6 +72,19 @@ export default function App() {
       environment: environment,
       xVnfProtocolVersion: VCLXVnfProtocolVersion.XVnfProtocolVersion2,
       cacheSequence: 0,
+      // cryptoServicesDescriptor: {
+      //   cryptoServiceType: VCLCryptoServiceType.Remote,
+      //   remoteCryptoServicesUrlsDescriptor: {
+      //     keyServiceUrls: {
+      //       createDidKeyServiceUrl:
+      //         Constants.getCreateDidKeyServiceUrl(environment),
+      //     },
+      //     jwtServiceUrls: {
+      //       jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment),
+      //       jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment),
+      //     },
+      //   },
+      // },
     };
     vcl.initialize(initializationDescriptor).then(
       () => {
@@ -476,8 +490,7 @@ export default function App() {
 
   const generateSignedJwt = () => {
     vcl
-      .generateSignedJwt({
-        keyId: didJwkRef.current?.keyId,
+      .generateSignedJwt(didJwkRef.current, {
         payload: Constants.SomePayload,
         iss: 'iss123',
         jti: 'jti123',

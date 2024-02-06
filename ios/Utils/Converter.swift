@@ -555,6 +555,12 @@ func dictionaryToPublicJwk(
     return VCLPublicJwk(valueStr: (publicJwkDictionary?["valueStr"] as? String ?? ""))
 }
 
+func publicJwkToDictionary(
+    _ publicJwk: VCLPublicJwk?
+) -> [String: Any] {
+    return ["valueStr": publicJwk?.valueStr ?? ""]
+}
+
 func dictionaryToFinalizedOffersDescriptor(
     _ finalizedOffersDescriptorDictionary: [String: Any]
 ) -> VCLFinalizeOffersDescriptor {
@@ -624,7 +630,7 @@ func dictionaryToJwtDescriptor(
 func didJwkToDictionary(_ didJwk: VCLDidJwk) -> [String: Any] {
     return [
         "did": didJwk.did,
-        "publicJwk": didJwk.publicJwk.valueDict,
+        "publicJwk": publicJwkToDictionary(didJwk.publicJwk),
         "kid": didJwk.kid,
         "keyId": didJwk.keyId
     ]
@@ -633,7 +639,7 @@ func didJwkToDictionary(_ didJwk: VCLDidJwk) -> [String: Any] {
 func dictionaryToJwk(_ didJwkDictionary: [String: Any]) -> VCLDidJwk {
     return VCLDidJwk(
         did: didJwkDictionary["did"] as? String ?? "",
-        publicJwk: dictionaryToPublicJwk(didJwkDictionary["publicJwk"] as? [String: Any]),
+        publicJwk: dictionaryToPublicJwk(didJwkDictionary["publicJwk"] as? [String : Any]),
         kid: didJwkDictionary["kid"] as? String ?? "",
         keyId: didJwkDictionary["keyId"] as? String ?? ""
     )

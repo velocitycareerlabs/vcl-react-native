@@ -597,6 +597,12 @@ object Converter {
   fun mapToPublicJwk(publicJwkMap: ReadableMap?) =
     VCLPublicJwk(valueStr = publicJwkMap?.getStringOpt("valueStr") ?: "")
 
+  fun publicJwkToMap(publicJwk: VCLPublicJwk?): ReadableMap {
+    val publicJwkMap = Arguments.createMap()
+    publicJwkMap.putString("valueStr", publicJwk?.valueStr)
+    return publicJwkMap
+  }
+
   fun mapToFinalizedOffersDescriptor(
     finalizedOffersDescriptorMap: ReadableMap
   ) = VCLFinalizeOffersDescriptor(
@@ -665,7 +671,7 @@ object Converter {
   fun didJwkToMap(didJwk: VCLDidJwk): ReadableMap {
       val didJwkMap = Arguments.createMap()
       didJwkMap.putString("did", didJwk.did)
-      didJwkMap.putMap("publicJwk", didJwk.publicJwk.valueJson.toReadableMap())
+      didJwkMap.putMap("publicJwk", publicJwkToMap(didJwk.publicJwk))
       didJwkMap.putString("kid", didJwk.kid)
       didJwkMap.putString("keyId", didJwk.keyId)
       return didJwkMap

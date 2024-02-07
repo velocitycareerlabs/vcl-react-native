@@ -6,7 +6,9 @@
  */
 
 import type { VCLDeepLink } from './VCLDeepLink';
+import type { VCLDidJwk } from './VCLDidJwk';
 import type { VCLJwt } from './VCLJwt';
+import type { VCLToken } from './VCLToken';
 import type { VCLVerifiedProfile } from './VCLVerifiedProfile';
 
 export interface VCLCredentialManifest {
@@ -18,4 +20,6 @@ export interface VCLCredentialManifest {
   did: string;
   exchangeId: string;
   presentationDefinitionId: string;
+  didJwk: VCLDidJwk;
+  remoteCryptoServicesToken?: VCLToken;
 }

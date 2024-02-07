@@ -162,6 +162,7 @@ export default function App() {
         pushToken: 'push_token',
         pushUrl: 'push_delegate',
       },
+      didJwk: didJwkRef.current,
     };
     vcl.getPresentationRequest(pesentationRequestDescriptor).then(
       (presentationRequest: VCLPresentationRequest) => {
@@ -186,7 +187,7 @@ export default function App() {
       presentationRequest: presentationRequest,
       verifiableCredentials: Constants.PresentationSelectionsList,
     };
-    vcl.submitPresentation(presentationSubmission, didJwkRef.current).then(
+    vcl.submitPresentation(presentationSubmission).then(
       (presentationSubmissionResult: VCLSubmissionResult) => {
         console.log(
           'VCL Presentation submission result:',
@@ -252,6 +253,7 @@ export default function App() {
           'EducationDegreeStudyV1.0',
           'EducationDegreeRegistrationV1.0',
         ],
+        didJwk: didJwkRef.current,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorByOrganization).then(
       (credentialManifest: VCLCredentialManifest) => {
@@ -283,6 +285,7 @@ export default function App() {
     let credentialManifestDescriptorByDeepLink: VCLCredentialManifestDescriptorByDeepLink =
       {
         deepLink: deepLink,
+        didJwk: didJwkRef.current,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorByDeepLink).then(
       (credentialManifest: VCLCredentialManifest) => {
@@ -310,6 +313,7 @@ export default function App() {
       {
         service: service,
         credentialIds: Constants.CredentialIdsToRefresh,
+        didJwk: didJwkRef.current,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorRefresh).then(
       (credentialManifest: VCLCredentialManifest) => {
@@ -337,7 +341,7 @@ export default function App() {
       identificationVerifiableCredentials: Constants.IdentificationList,
     };
 
-    vcl.generateOffers(generateOffersDescriptor, didJwkRef.current).then(
+    vcl.generateOffers(generateOffersDescriptor).then(
       (offers: VCLOffers) => {
         console.log(
           `VCL Generated Offers: ${offers.all.map((o) =>
@@ -409,11 +413,7 @@ export default function App() {
       rejectedOfferIds: approvedRejectedOfferIds[1] as string[],
     };
     vcl
-      .finalizeOffers(
-        finalizeOffersDescriptor,
-        generatedOffers.sessionToken,
-        didJwkRef.current
-      )
+      .finalizeOffers(finalizeOffersDescriptor, generatedOffers.sessionToken)
       .then(
         (jwtVerifiableCredentials: VCLJwtVerifiableCredentials) => {
           console.log(
@@ -490,11 +490,14 @@ export default function App() {
 
   const generateSignedJwt = () => {
     vcl
-      .generateSignedJwt(didJwkRef.current, {
-        payload: Constants.SomePayload,
-        iss: 'iss123',
-        jti: 'jti123',
-      })
+      .generateSignedJwt(
+        {
+          payload: Constants.SomePayload,
+          iss: 'iss123',
+          jti: 'jti123',
+        },
+        didJwkRef.current
+      )
       .then(
         (jwt: VCLJwt) => {
           console.log('VCL generated signed jwt:', jwt);

@@ -165,7 +165,11 @@ func dictionaryTopPresentationRequestDescriptor(
 ) -> VCLPresentationRequestDescriptor {
     return VCLPresentationRequestDescriptor(
         deepLink: dictionaryToDeepLink(presentationRequestDescriptorLinkDictionary["deepLink"] as? [String: Any]) ?? VCLDeepLink(value: ""),
-        pushDelegate: dictionaryToPushDelegate(presentationRequestDescriptorLinkDictionary["pushDelegate"] as? [String: Any])
+        pushDelegate: dictionaryToPushDelegate(presentationRequestDescriptorLinkDictionary["pushDelegate"] as? [String: Any]),
+        didJwk: dictionaryToDidJwk(presentationRequestDescriptorLinkDictionary["didJwk"] as? [String: Any]),
+        remoteCryptoServicesToken: dictionaryToToken(
+            presentationRequestDescriptorLinkDictionary["remoteCryptoServicesToken"] as? [String: Any]
+        )
     )
 }
 
@@ -187,10 +191,10 @@ func dictionaryToToken(_ tokenDictionary: [String: Any]?) -> VCLToken {
     return VCLToken(value: tokenDictionary?["value"] as? String ?? "")
 }
 
-func tokenToDictionary(_ token: VCLToken) -> [String: Any] {
+func tokenToDictionary(_ token: VCLToken?) -> [String: Any] {
     var retVal = [String: Any]()
-    retVal["value"] = token.value
-    if let expiresIn = token.expiresIn {
+    retVal["value"] = token?.value
+    if let expiresIn = token?.expiresIn {
         retVal["expiresIn"] = expiresIn
     }
     return retVal
@@ -212,7 +216,10 @@ func dictionaryToPresentationRequest(
     return VCLPresentationRequest(
         jwt: dictionaryToJwt(presentationRequestDictionary?["jwt"] as? [String : Any]),
         publicJwk: dictionaryToPublicJwk(presentationRequestDictionary?["publicJwk"] as? [String: Any]),
-        deepLink: dictionaryToDeepLink(presentationRequestDictionary?["deepLink"] as? [String : Any]) ?? VCLDeepLink(value: "")
+        deepLink: dictionaryToDeepLink(presentationRequestDictionary?["deepLink"] as? [String : Any]) ?? VCLDeepLink(value: ""),
+        pushDelegate: dictionaryToPushDelegate(presentationRequestDictionary?["pushDelegate"] as? [String : Any]),
+        didJwk: dictionaryToDidJwk(presentationRequestDictionary?["didJwk"] as? [String : Any]),
+        remoteCryptoServicesToken: dictionaryToToken(presentationRequestDictionary?["remoteCryptoServicesToken"] as? [String : Any])
     )
 }
 
@@ -228,6 +235,8 @@ func presentationRequestToDictionary(
     presentationRequestDictionary["exchangeId"] = presentationRequest.exchangeId
     presentationRequestDictionary["presentationDefinitionId"] = presentationRequest.presentationDefinitionId
     presentationRequestDictionary["deepLink"] = deepLinkToDictionary(presentationRequest.deepLink)
+    presentationRequestDictionary["didJwk"] = didJwkToDictionary(presentationRequest.didJwk)
+    presentationRequestDictionary["remoteCryptoServicesToken"] = tokenToDictionary(presentationRequest.remoteCryptoServicesToken)
     return presentationRequestDictionary
 }
 
@@ -408,15 +417,17 @@ func dictionaryToCredentialManifestDescriptorByDeepLink(
             issuingTypeDictionary: credentialManifestDescriptorByDeepLinkDictionary,
             defaultIssuingType: VCLIssuingType.Career
         ),
-        pushDelegate: dictionaryToPushDelegate(credentialManifestDescriptorByDeepLinkDictionary["pushDelegate"] as? [String: Any])
+        pushDelegate: dictionaryToPushDelegate(credentialManifestDescriptorByDeepLinkDictionary["pushDelegate"] as? [String: Any]),
+        didJwk: dictionaryToDidJwk(credentialManifestDescriptorByDeepLinkDictionary["didJwk"] as? [String: Any]),
+        remoteCryptoServicesToken: dictionaryToToken(
+            credentialManifestDescriptorByDeepLinkDictionary["remoteCryptoServicesToken"] as? [String: Any]
+        )
     )
 }
 
 func dictionaryToCredentialManifestDescriptorByService(
     _ credentialManifestDescriptorByServiceDictionary: [String: Any]
 ) -> VCLCredentialManifestDescriptorByService {
-    let pushDelegateDictionary = credentialManifestDescriptorByServiceDictionary["pushDelegate"] as? [String: Any]
-    let pushDelegate = dictionaryToPushDelegate(pushDelegateDictionary)
     return VCLCredentialManifestDescriptorByService(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorByServiceDictionary["service"] as? [String : Any]
@@ -426,7 +437,13 @@ func dictionaryToCredentialManifestDescriptorByService(
             defaultIssuingType: VCLIssuingType.Career
         ),
         credentialTypes: credentialManifestDescriptorByServiceDictionary["credentialTypes"] as? [String],
-        pushDelegate: pushDelegate
+        pushDelegate: dictionaryToPushDelegate(
+            credentialManifestDescriptorByServiceDictionary["pushDelegate"] as? [String: Any]
+        ),
+        didJwk: dictionaryToDidJwk(credentialManifestDescriptorByServiceDictionary["didJwk"] as? [String: Any]),
+        remoteCryptoServicesToken: dictionaryToToken(
+            credentialManifestDescriptorByServiceDictionary["remoteCryptoServicesToken"] as? [String: Any]
+        )
     )
 }
 
@@ -437,14 +454,18 @@ func dictionaryToCredentialManifestDescriptorRefresh(
         service: dictionaryToServiceCredentialAgentIssuer(
             credentialManifestDescriptorRefreshDictionary["service"] as? [String : Any]
         ),
-        credentialIds: credentialManifestDescriptorRefreshDictionary["credentialIds"] as? [String] ?? [String]()
+        credentialIds: credentialManifestDescriptorRefreshDictionary["credentialIds"] as? [String] ?? [],
+        didJwk: dictionaryToDidJwk(credentialManifestDescriptorRefreshDictionary["didJwk"] as? [String: Any]),
+        remoteCryptoServicesToken: dictionaryToToken(
+            credentialManifestDescriptorRefreshDictionary["remoteCryptoServicesToken"] as? [String: Any]
+        )
     )
 }
 
 func dictionaryToServiceCredentialAgentIssuer(
     _ serviceDictionary: [String: Any]?
 ) -> VCLServiceCredentialAgentIssuer {
-    return VCLServiceCredentialAgentIssuer(payload: serviceDictionary?["payload"] as? [String : Any] ?? [String: Any]())
+    return VCLServiceCredentialAgentIssuer(payload: serviceDictionary?["payload"] as? [String : Any] ?? [:])
 }
 
 func credentialManifestToDictionary(
@@ -458,21 +479,28 @@ func credentialManifestToDictionary(
     credentialManifestDictinary["vendorOriginContext"] = credentialManifest.vendorOriginContext
     credentialManifestDictinary["verifiedProfile"] = credentialManifest.verifiedProfile.payload
     credentialManifestDictinary["deepLink"] = deepLinkToDictionary(credentialManifest.deepLink)
+    credentialManifestDictinary["didJwk"] = didJwkToDictionary(credentialManifest.didJwk)
+    credentialManifestDictinary["remoteCryptoServicesToken"] = tokenToDictionary(credentialManifest.remoteCryptoServicesToken)
     return credentialManifestDictinary
 }
 
 func dictionaryToCredentialManifest(
     _ credentialManifestDictionary: [String: Any]?
 ) -> VCLCredentialManifest {
-    let jwt: VCLJwt = VCLJwt(encodedJwt: (credentialManifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
-    let vendorOriginContext: String? = credentialManifestDictionary?["vendorOriginContext"] as? String
-    let verifiedProfileDictionary: [String: Any]? = credentialManifestDictionary?["verifiedProfile"] as? [String: Any]
-    let deepLink: VCLDeepLink? = dictionaryToDeepLink(credentialManifestDictionary?["deepLink"] as? [String: Any])
+    let jwt = VCLJwt(encodedJwt: (credentialManifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
+    let vendorOriginContext = credentialManifestDictionary?["vendorOriginContext"] as? String
+    let verifiedProfileDictionary = credentialManifestDictionary?["verifiedProfile"] as? [String: Any]
+    let deepLink = dictionaryToDeepLink(credentialManifestDictionary?["deepLink"] as? [String: Any])
+    let didJwk = dictionaryToDidJwk(credentialManifestDictionary?["didJwk"] as? [String: Any])
+    let remoteCryptoServicesToken = dictionaryToToken(credentialManifestDictionary?["remoteCryptoServicesToken"] as? [String: Any])
+    
     return VCLCredentialManifest(
         jwt: jwt,
         vendorOriginContext: vendorOriginContext,
         verifiedProfile: VCLVerifiedProfile(payload: verifiedProfileDictionary ?? [:]),
-        deepLink: deepLink
+        deepLink: deepLink,
+        didJwk: didJwk,
+        remoteCryptoServicesToken: remoteCryptoServicesToken
     )
 }
 
@@ -636,11 +664,11 @@ func didJwkToDictionary(_ didJwk: VCLDidJwk) -> [String: Any] {
     ]
 }
 
-func dictionaryToJwk(_ didJwkDictionary: [String: Any]) -> VCLDidJwk {
+func dictionaryToDidJwk(_ didJwkDictionary: [String: Any]?) -> VCLDidJwk {
     return VCLDidJwk(
-        did: didJwkDictionary["did"] as? String ?? "",
-        publicJwk: dictionaryToPublicJwk(didJwkDictionary["publicJwk"] as? [String : Any]),
-        kid: didJwkDictionary["kid"] as? String ?? "",
-        keyId: didJwkDictionary["keyId"] as? String ?? ""
+        did: didJwkDictionary?["did"] as? String ?? "",
+        publicJwk: dictionaryToPublicJwk(didJwkDictionary?["publicJwk"] as? [String : Any]),
+        kid: didJwkDictionary?["kid"] as? String ?? "",
+        keyId: didJwkDictionary?["keyId"] as? String ?? ""
     )
 }

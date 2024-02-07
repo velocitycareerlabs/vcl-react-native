@@ -123,13 +123,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun getPresentationRequest(
     presentationRequestDescriptorMap: ReadableMap,
-    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.getPresentationRequest(
         presentationRequestDescriptor = mapTopPresentationRequestDescriptor(presentationRequestDescriptorMap),
-        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
         successHandler = {
           promise.resolve(presentationRequestToMap(it))
         },
@@ -144,15 +142,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun submitPresentation(
     presentationSubmissionMap: ReadableMap,
-    didJwkMap: ReadableMap,
-    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.submitPresentation(
         presentationSubmission = mapToPresentationSubmission(presentationSubmissionMap),
-        didJwk = mapToDidJwk(didJwkMap),
-        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
         successHandler = {
           promise.resolve(presentationSubmissionResultToMap(it))
         },
@@ -204,7 +198,6 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun getCredentialManifest(
     credentialManifestDescriptorMap: ReadableMap,
-    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
@@ -216,7 +209,6 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
         )
         vcl.getCredentialManifest(
           credentialManifestDescriptor,
-          mapToToken(remoteCryptoServicesTokenMap),
           successHandler = {
             promise.resolve(credentialManifestToMap(it))
           },
@@ -234,15 +226,11 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun generateOffers(
     generateOffersDescriptorMap: ReadableMap,
-    didJwkMap: ReadableMap,
-    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.generateOffers(
         generateOffersDescriptor = mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
-        didJwk = mapToDidJwk(didJwkMap),
-        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
         successHandler = {
           promise.resolve(offersToMap(it))
         },
@@ -278,17 +266,13 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   @ReactMethod
   fun finalizeOffers(
     finalizeOffersDescriptorMap: ReadableMap,
-    didJwkMap: ReadableMap,
     sessionTokenMap: ReadableMap,
-    remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.finalizeOffers(
         finalizeOffersDescriptor = mapToFinalizedOffersDescriptor(finalizeOffersDescriptorMap),
-        didJwk = mapToDidJwk(didJwkMap),
         sessionToken = mapToToken(sessionTokenMap),
-        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
         successHandler = {
           promise.resolve(jwtVerifiableCredentialsToMap(it))
         },
@@ -363,15 +347,15 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
 
   @ReactMethod
   fun generateSignedJwt(
-    didJwkMap: ReadableMap,
     jwtDescriptorMap: ReadableMap,
+    didJwkMap: ReadableMap,
     remoteCryptoServicesTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.generateSignedJwt(
-        didJwk = mapToDidJwk(didJwkMap),
         jwtDescriptor = mapToJwtDescriptor(jwtDescriptorMap),
+        didJwk = mapToDidJwk(didJwkMap),
         remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
         successHandler = {
           promise.resolve(Converter.jwtToMap(it))

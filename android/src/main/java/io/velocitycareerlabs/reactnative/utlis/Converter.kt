@@ -166,7 +166,13 @@ object Converter {
     VCLPresentationRequestDescriptor(
       deepLink = mapToDeepLink(presentationRequestDescriptorLinkMap.getMapOpt("deepLink"))
         ?: VCLDeepLink(""),
-      pushDelegate = mapToPushDelegate(presentationRequestDescriptorLinkMap.getMapOpt("pushDelegate"))
+      pushDelegate = mapToPushDelegate(
+        presentationRequestDescriptorLinkMap.getMapOpt("pushDelegate")
+      ),
+      didJwk = mapToDidJwk(presentationRequestDescriptorLinkMap.getMapOpt("didJwk")),
+      remoteCryptoServicesToken = mapToToken(
+        presentationRequestDescriptorLinkMap.getMapOpt("remoteCryptoServicesToken")
+      )
     )
 
   fun mapToDeepLink(deepLinkMap: ReadableMap?): VCLDeepLink? {
@@ -196,10 +202,10 @@ object Converter {
   fun mapToToken(tokenMap: ReadableMap?) =
     VCLToken(tokenMap?.getStringOpt("value") ?: "")
 
-  fun tokenToMap(token: VCLToken): ReadableMap {
+  fun tokenToMap(token: VCLToken?): ReadableMap {
     val retVal = Arguments.createMap()
-    retVal.putString("value", token.value)
-    token.expiresIn?.toDouble()?.let {
+    retVal.putString("value", token?.value)
+    token?.expiresIn?.toDouble()?.let {
       retVal.putDouble("expiresIn", it)
     }
     return retVal
@@ -208,9 +214,12 @@ object Converter {
   fun mapToPresentationRequest(
     presentationRequestMap: ReadableMap?
   ) = VCLPresentationRequest(
-    mapToJwt(presentationRequestMap?.getMapOpt("jwt")),
-    mapToPublicJwk(presentationRequestMap?.getMapOpt("publicJwk")),
-    mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink")) ?: VCLDeepLink("")
+    jwt = mapToJwt(presentationRequestMap?.getMapOpt("jwt")),
+    publicJwk = mapToPublicJwk(presentationRequestMap?.getMapOpt("publicJwk")),
+    deepLink = mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink")) ?: VCLDeepLink(""),
+    pushDelegate = mapToPushDelegate(presentationRequestMap?.getMapOpt("pushDelegate")),
+    didJwk = mapToDidJwk(presentationRequestMap?.getMapOpt("didJwk")),
+    remoteCryptoServicesToken = mapToToken(presentationRequestMap?.getMapOpt("remoteCryptoServicesToken"))
   )
 
   fun presentationRequestToMap(
@@ -230,6 +239,8 @@ object Converter {
       presentationRequest.presentationDefinitionId
     )
     presentationRequestMap.putMap("deepLink", deepLinkToMap(presentationRequest.deepLink))
+    presentationRequestMap.putMap("didJwk", didJwkToMap(presentationRequest.didJwk))
+    presentationRequestMap.putMap("remoteCryptoServicesToken", tokenToMap(presentationRequest.remoteCryptoServicesToken))
     return presentationRequestMap
   }
 
@@ -427,18 +438,22 @@ object Converter {
     credentialManifestDescriptorByDeepLinkMap: ReadableMap
   ): VCLCredentialManifestDescriptorByDeepLink {
     return VCLCredentialManifestDescriptorByDeepLink(
-      mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink"))
+      deepLink = mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink"))
         ?: VCLDeepLink(""),
-      mapToIssuingType(credentialManifestDescriptorByDeepLinkMap, VCLIssuingType.Career),
-      mapToPushDelegate(credentialManifestDescriptorByDeepLinkMap.getMapOpt("pushDelegate"))
+      issuingType = mapToIssuingType(credentialManifestDescriptorByDeepLinkMap, VCLIssuingType.Career),
+      pushDelegate = mapToPushDelegate(
+        credentialManifestDescriptorByDeepLinkMap.getMapOpt("pushDelegate")
+      ),
+      didJwk = mapToDidJwk(credentialManifestDescriptorByDeepLinkMap.getMapOpt("didJwk")),
+      remoteCryptoServicesToken = mapToToken(
+        credentialManifestDescriptorByDeepLinkMap.getMapOpt("remoteCryptoServicesToken")
+      )
     )
   }
 
   fun mapToCredentialManifestDescriptorByService(
     credentialManifestDescriptorByServiceMap: ReadableMap
   ): VCLCredentialManifestDescriptorByService {
-    val pushDelegate =
-      mapToPushDelegate(credentialManifestDescriptorByServiceMap.getMapOpt("pushDelegate"))
     return VCLCredentialManifestDescriptorByService(
       service = mapToServiceCredentialAgentIssuer(
         credentialManifestDescriptorByServiceMap.getMapOpt("service")
@@ -450,7 +465,13 @@ object Converter {
       credentialTypes =
       (credentialManifestDescriptorByServiceMap.getArrayOpt("credentialTypes")?.toArrayList()
         ?.toList() as? List<String>),
-      pushDelegate = pushDelegate
+      pushDelegate = mapToPushDelegate(
+        credentialManifestDescriptorByServiceMap.getMapOpt("pushDelegate")
+      ),
+      didJwk = mapToDidJwk(credentialManifestDescriptorByServiceMap.getMapOpt("didJwk")),
+      remoteCryptoServicesToken = mapToToken(
+        credentialManifestDescriptorByServiceMap.getMapOpt("remoteCryptoServicesToken")
+      )
     )
   }
 
@@ -462,7 +483,11 @@ object Converter {
         credentialManifestDescriptorRefreshMap.getMapOpt("service")
       ),
       credentialIds = credentialManifestDescriptorRefreshMap.getArrayOpt("credentialIds")
-        ?.toArrayList()?.toList() as? List<String> ?: listOf()
+        ?.toArrayList()?.toList() as? List<String> ?: listOf(),
+      didJwk = mapToDidJwk(credentialManifestDescriptorRefreshMap.getMapOpt("didJwk")),
+      remoteCryptoServicesToken = mapToToken(
+        credentialManifestDescriptorRefreshMap.getMapOpt("remoteCryptoServicesToken")
+      )
     )
   }
 
@@ -489,6 +514,8 @@ object Converter {
       credentialManifest.verifiedProfile.payload.toReadableMap()
     )
     credentialManifestMap.putMap("deepLink", deepLinkToMap(credentialManifest.deepLink))
+    credentialManifestMap.putMap("didJwk", didJwkToMap(credentialManifest.didJwk))
+    credentialManifestMap.putMap("remoteCryptoServicesToken", tokenToMap(credentialManifest.remoteCryptoServicesToken))
     return credentialManifestMap
   }
 
@@ -500,13 +527,18 @@ object Converter {
     val vendorOriginContext: String? = credentialManifestMap?.getStringOpt("vendorOriginContext")
     val verifiedProfileMap: ReadableMap? = credentialManifestMap?.getMapOpt("verifiedProfile")
     val deepLinkMap: ReadableMap? = credentialManifestMap?.getMapOpt("deepLink")
+    val didJwkMap: ReadableMap? = credentialManifestMap?.getMapOpt("didJwk")
+    val remoteCryptoServicesTokenMap = credentialManifestMap?.getMapOpt("remoteCryptoServicesToken")
+
     return VCLCredentialManifest(
       jwt = jwt,
       vendorOriginContext = vendorOriginContext,
       verifiedProfile = VCLVerifiedProfile(
         payload = verifiedProfileMap?.toJsonObject() ?: JSONObject()
       ),
-      deepLink = mapToDeepLink(deepLinkMap)
+      deepLink = mapToDeepLink(deepLinkMap),
+      didJwk = mapToDidJwk(didJwkMap),
+      remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap)
     )
   }
 
@@ -677,12 +709,12 @@ object Converter {
       return didJwkMap
   }
 
-  fun mapToDidJwk(didJwkMap: ReadableMap): VCLDidJwk {
+  fun mapToDidJwk(didJwkMap: ReadableMap?): VCLDidJwk {
       return VCLDidJwk(
-        did = didJwkMap.getStringOpt("did") ?: "",
-        publicJwk = mapToPublicJwk(didJwkMap.getMap("publicJwk")),
-        kid = didJwkMap.getStringOpt("kid") ?: "",
-        keyId = didJwkMap.getStringOpt("keyId") ?: ""
+        did = didJwkMap?.getStringOpt("did") ?: "",
+        publicJwk = mapToPublicJwk(didJwkMap?.getMap("publicJwk")),
+        kid = didJwkMap?.getStringOpt("kid") ?: "",
+        keyId = didJwkMap?.getStringOpt("keyId") ?: ""
       )
   }
 }

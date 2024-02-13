@@ -9,6 +9,7 @@ import { VclApi } from './api/VCLApi';
 import { VCLEnvironment } from './api/VCLEnvironment';
 import { VCLXVnfProtocolVersion } from './api/VCLXVnfProtocolVersion';
 import { VCLCryptoServiceType } from './api/VCLCryptoServiceType';
+import { VCLSignatureAlgorithm } from './api/VCLSignatureAlgorithm';
 import type { VCLCryptoServicesDescriptor } from './api/entities/initialization/VCLCryptoServicesDescriptor';
 import type { VCLJwtServiceUrls } from './api/entities/initialization/VCLJwtServiceUrls';
 import type { VCLKeyServiceUrls } from './api/entities/initialization/VCLKeyServiceUrls';
@@ -70,6 +71,7 @@ export default VclApi;
 export {
   VCLEnvironment,
   VCLCryptoServiceType,
+  VCLSignatureAlgorithm,
   VCLXVnfProtocolVersion,
   VCLCountryCodes,
   VCLServiceType,

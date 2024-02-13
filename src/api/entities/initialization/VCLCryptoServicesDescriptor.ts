@@ -6,9 +6,11 @@
  */
 
 import type { VCLCryptoServiceType } from '../../VCLCryptoServiceType';
+import type { VCLSignatureAlgorithm } from '../../VCLSignatureAlgorithm';
 import type { VCLRemoteCryptoServicesUrlsDescriptor } from './VCLRemoteCryptoServicesUrlsDescriptor';
 
 export interface VCLCryptoServicesDescriptor {
   cryptoServiceType?: VCLCryptoServiceType;
+  signatureAlgorithm?: VCLSignatureAlgorithm;
   remoteCryptoServicesUrlsDescriptor?: VCLRemoteCryptoServicesUrlsDescriptor;
 }

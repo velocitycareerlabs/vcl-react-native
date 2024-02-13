@@ -46,6 +46,10 @@ object Converter {
       VCLCryptoServiceType.fromString(
         cryptoServicesDescriptorMap?.getStringOpt("cryptoServiceType") ?: ""
       )
+    val signatureAlgorithm =
+      VCLSignatureAlgorithm.fromString(
+        cryptoServicesDescriptorMap?.getStringOpt("signatureAlgorithm") ?: ""
+      )
     val remoteCryptoServicesUrlsDescriptorMap =
       cryptoServicesDescriptorMap?.getMap("remoteCryptoServicesUrlsDescriptor")
     val keyServiceUrls = remoteCryptoServicesUrlsDescriptorMap?.getMapOpt("keyServiceUrls")
@@ -61,6 +65,7 @@ object Converter {
     )
     return VCLCryptoServicesDescriptor(
       cryptoServiceType = cryptoServiceType,
+      signatureAlgorithm = signatureAlgorithm,
       remoteCryptoServicesUrlsDescriptor = remoteCryptoServicesUrlsDescriptor
     )
   }

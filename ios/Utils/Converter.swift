@@ -43,6 +43,9 @@ private func dictionaryToCryptoServicesDescriptor(
     VCLCryptoServiceType.fromString(
         value: cryptoServicesDescriptorDictionary?["cryptoServiceType"] as? String ?? ""
     )
+    let signatureAlgorithm = VCLSignatureAlgorithm.fromString(
+        value: cryptoServicesDescriptorDictionary?["signatureAlgorithm"] as? String ?? ""
+    )
     let remoteCryptoServicesUrlsDescriptorDictionary = cryptoServicesDescriptorDictionary?["remoteCryptoServicesUrlsDescriptor"] as? [String: Any]
     let keyServiceUrls = remoteCryptoServicesUrlsDescriptorDictionary?["keyServiceUrls"] as? [String: Any]
     let jwtServiceUrls = remoteCryptoServicesUrlsDescriptorDictionary?["jwtServiceUrls"] as? [String: Any]
@@ -57,6 +60,7 @@ private func dictionaryToCryptoServicesDescriptor(
     )
     return VCLCryptoServicesDescriptor(
         cryptoServiceType: cryptoServiceType,
+        signatureAlgorithm: signatureAlgorithm,
         remoteCryptoServicesUrlsDescriptor: remoteCryptoServicesUrlsDescriptor
     )
 }

@@ -33,7 +33,8 @@ object Converter {
     cryptoServicesDescriptor = mapToCryptoServicesDescriptor(
       initializationDescriptorMap.getMapOpt("cryptoServicesDescriptor")
     ),
-    isDirectIssuerCheckOn = initializationDescriptorMap.getBooleanOpt("isDirectIssuerCheckOn") ?: true
+    isDirectIssuerCheckOn = initializationDescriptorMap.getBooleanOpt("isDirectIssuerCheckOn")
+      ?: true
   )
 
   private fun mapToEnvironment(environment: String?) =
@@ -45,10 +46,6 @@ object Converter {
     val cryptoServiceType =
       VCLCryptoServiceType.fromString(
         cryptoServicesDescriptorMap?.getStringOpt("cryptoServiceType") ?: ""
-      )
-    val signatureAlgorithm =
-      VCLSignatureAlgorithm.fromString(
-        cryptoServicesDescriptorMap?.getStringOpt("signatureAlgorithm") ?: ""
       )
     val remoteCryptoServicesUrlsDescriptorMap =
       cryptoServicesDescriptorMap?.getMap("remoteCryptoServicesUrlsDescriptor")
@@ -65,7 +62,6 @@ object Converter {
     )
     return VCLCryptoServicesDescriptor(
       cryptoServiceType = cryptoServiceType,
-      signatureAlgorithm = signatureAlgorithm,
       remoteCryptoServicesUrlsDescriptor = remoteCryptoServicesUrlsDescriptor
     )
   }
@@ -245,7 +241,10 @@ object Converter {
     )
     presentationRequestMap.putMap("deepLink", deepLinkToMap(presentationRequest.deepLink))
     presentationRequestMap.putMap("didJwk", didJwkToMap(presentationRequest.didJwk))
-    presentationRequestMap.putMap("remoteCryptoServicesToken", tokenToMap(presentationRequest.remoteCryptoServicesToken))
+    presentationRequestMap.putMap(
+      "remoteCryptoServicesToken",
+      tokenToMap(presentationRequest.remoteCryptoServicesToken)
+    )
     return presentationRequestMap
   }
 
@@ -445,7 +444,10 @@ object Converter {
     return VCLCredentialManifestDescriptorByDeepLink(
       deepLink = mapToDeepLink(credentialManifestDescriptorByDeepLinkMap.getMapOpt("deepLink"))
         ?: VCLDeepLink(""),
-      issuingType = mapToIssuingType(credentialManifestDescriptorByDeepLinkMap, VCLIssuingType.Career),
+      issuingType = mapToIssuingType(
+        credentialManifestDescriptorByDeepLinkMap,
+        VCLIssuingType.Career
+      ),
       pushDelegate = mapToPushDelegate(
         credentialManifestDescriptorByDeepLinkMap.getMapOpt("pushDelegate")
       ),
@@ -520,7 +522,10 @@ object Converter {
     )
     credentialManifestMap.putMap("deepLink", deepLinkToMap(credentialManifest.deepLink))
     credentialManifestMap.putMap("didJwk", didJwkToMap(credentialManifest.didJwk))
-    credentialManifestMap.putMap("remoteCryptoServicesToken", tokenToMap(credentialManifest.remoteCryptoServicesToken))
+    credentialManifestMap.putMap(
+      "remoteCryptoServicesToken",
+      tokenToMap(credentialManifest.remoteCryptoServicesToken)
+    )
     return credentialManifestMap
   }
 
@@ -706,21 +711,30 @@ object Converter {
   )
 
   fun didJwkToMap(didJwk: VCLDidJwk): ReadableMap {
-      val didJwkMap = Arguments.createMap()
-      didJwkMap.putString("did", didJwk.did)
-      didJwkMap.putMap("publicJwk", publicJwkToMap(didJwk.publicJwk))
-      didJwkMap.putString("kid", didJwk.kid)
-      didJwkMap.putString("keyId", didJwk.keyId)
-      return didJwkMap
+    val didJwkMap = Arguments.createMap()
+    didJwkMap.putString("did", didJwk.did)
+    didJwkMap.putMap("publicJwk", publicJwkToMap(didJwk.publicJwk))
+    didJwkMap.putString("kid", didJwk.kid)
+    didJwkMap.putString("keyId", didJwk.keyId)
+    return didJwkMap
   }
 
   fun mapToDidJwk(didJwkMap: ReadableMap?): VCLDidJwk {
-      return VCLDidJwk(
-        did = didJwkMap?.getStringOpt("did") ?: "",
-        publicJwk = mapToPublicJwk(didJwkMap?.getMap("publicJwk")),
-        kid = didJwkMap?.getStringOpt("kid") ?: "",
-        keyId = didJwkMap?.getStringOpt("keyId") ?: ""
-      )
+    return VCLDidJwk(
+      did = didJwkMap?.getStringOpt("did") ?: "",
+      publicJwk = mapToPublicJwk(didJwkMap?.getMap("publicJwk")),
+      kid = didJwkMap?.getStringOpt("kid") ?: "",
+      keyId = didJwkMap?.getStringOpt("keyId") ?: ""
+    )
+  }
+
+  fun mapToDidJwkDescriptor(didJwkDescriptorMap: ReadableMap?): VCLDidJwkDescriptor {
+    return VCLDidJwkDescriptor(
+      signatureAlgorithm = VCLSignatureAlgorithm.fromString(
+        value = didJwkDescriptorMap?.getStringOpt("signatureAlgorithm") ?: ""
+      ),
+      remoteCryptoServicesToken = mapToToken(didJwkDescriptorMap?.getMapOpt("remoteCryptoServicesToken"))
+    )
   }
 }
 

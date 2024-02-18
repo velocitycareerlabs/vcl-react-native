@@ -62,6 +62,7 @@ import type { Dictionary } from './api/Dictionary';
 import type { VCLInitializationDescriptor } from './api/entities/initialization/VCLInitializationDescriptor';
 import type { VCLPresentationRequestDescriptor } from './api/entities/VCLPresentationRequestDescriptor';
 import type { VCLJwtDescriptor } from './api/entities/VCLJwtDescriptor';
+import type { VCLDidJwkDescriptor } from './api/entities/VCLDidJwkDescriptor';
 import type { VCLDidJwk } from './api/entities/VCLDidJwk';
 import { VCLError } from './api/entities/error/VCLError';
 import { VCLStatusCode } from './api/entities/error/VCLStatusCode';
@@ -126,6 +127,7 @@ export type {
   VCLInitializationDescriptor,
   VCLPresentationRequestDescriptor,
   VCLJwtDescriptor,
+  VCLDidJwkDescriptor,
   VCLDidJwk,
   VCLCryptoServicesDescriptor,
   VCLJwtServiceUrls,

@@ -43,9 +43,6 @@ private func dictionaryToCryptoServicesDescriptor(
     VCLCryptoServiceType.fromString(
         value: cryptoServicesDescriptorDictionary?["cryptoServiceType"] as? String ?? ""
     )
-    let signatureAlgorithm = VCLSignatureAlgorithm.fromString(
-        value: cryptoServicesDescriptorDictionary?["signatureAlgorithm"] as? String ?? ""
-    )
     let remoteCryptoServicesUrlsDescriptorDictionary = cryptoServicesDescriptorDictionary?["remoteCryptoServicesUrlsDescriptor"] as? [String: Any]
     let keyServiceUrls = remoteCryptoServicesUrlsDescriptorDictionary?["keyServiceUrls"] as? [String: Any]
     let jwtServiceUrls = remoteCryptoServicesUrlsDescriptorDictionary?["jwtServiceUrls"] as? [String: Any]
@@ -60,7 +57,6 @@ private func dictionaryToCryptoServicesDescriptor(
     )
     return VCLCryptoServicesDescriptor(
         cryptoServiceType: cryptoServiceType,
-        signatureAlgorithm: signatureAlgorithm,
         remoteCryptoServicesUrlsDescriptor: remoteCryptoServicesUrlsDescriptor
     )
 }
@@ -674,5 +670,12 @@ func dictionaryToDidJwk(_ didJwkDictionary: [String: Any]?) -> VCLDidJwk {
         publicJwk: dictionaryToPublicJwk(didJwkDictionary?["publicJwk"] as? [String : Any]),
         kid: didJwkDictionary?["kid"] as? String ?? "",
         keyId: didJwkDictionary?["keyId"] as? String ?? ""
+    )
+}
+
+func dictionaryToDidJwkDescriptor(_ didJwkDescriptorDictionary: [String: Any]?) -> VCLDidJwkDescriptor {
+    return VCLDidJwkDescriptor(
+        signatureAlgorithm: VCLSignatureAlgorithm.fromString(value: didJwkDescriptorDictionary?["signatureAlgorithm"] as? String ?? ""),
+        remoteCryptoServicesToken: dictionaryToToken(didJwkDescriptorDictionary?["remoteCryptoServicesToken"] as? [String: Any])
     )
 }

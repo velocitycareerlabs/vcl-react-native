@@ -275,11 +275,11 @@ class VclReactNative: NSObject {
     
     @objc(generateDidJwk:withResolver:withRejecter:)
     func generateDidJwk(
-        remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
+        didJwkDescriptorDictionary: [String: Any]? = nil,
         resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
     ) {
         vcl.generateDidJwk(
-            remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
+            didJwkDescriptor: dictionaryToDidJwkDescriptor(didJwkDescriptorDictionary),
             successHandler: {
                 resolve(didJwkToDictionary($0))
             },

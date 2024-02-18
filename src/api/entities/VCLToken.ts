@@ -7,5 +7,5 @@
 
 export interface VCLToken {
   value: string;
-  expiresIn: BigInt;
+  expiresIn?: BigInt;
 }

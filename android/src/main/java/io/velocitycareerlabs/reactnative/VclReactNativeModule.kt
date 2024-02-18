@@ -40,6 +40,7 @@ import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescri
 import io.velocitycareerlabs.reactnative.extensions.toThrowable
 import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDidJwk
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDidJwkDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
 import io.velocitycareerlabs.reactnative.utlis.VCLLog
@@ -370,12 +371,12 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
 
   @ReactMethod
   fun generateDidJwk(
-    remoteCryptoServicesTokenMap: ReadableMap? = null,
+    didJwkDescriptorMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.generateDidJwk(
-        remoteCryptoServicesToken = mapToToken(remoteCryptoServicesTokenMap),
+        didJwkDescriptor = mapToDidJwkDescriptor(didJwkDescriptorMap),
         successHandler = {
           promise.resolve(didJwkToMap(it))
         },

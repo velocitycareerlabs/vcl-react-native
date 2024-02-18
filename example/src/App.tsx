@@ -47,6 +47,7 @@ import vcl, {
   VCLXVnfProtocolVersion,
   VCLCryptoServiceType,
   VCLSignatureAlgorithm,
+  type VCLDidJwkDescriptor,
 } from '@velocitycareerlabs/vcl-react-native';
 import { useRef } from 'react';
 
@@ -57,6 +58,10 @@ export const enum InitState {
 }
 
 const environment = VCLEnvironment.Dev;
+
+const didJwkDescriptor: VCLDidJwkDescriptor = {
+  signatureAlgorithm: VCLSignatureAlgorithm.ES256,
+};
 
 export default function App() {
   const didJwkRef = useRef(null as unknown as VCLDidJwk);
@@ -75,7 +80,6 @@ export default function App() {
       cacheSequence: 0,
       cryptoServicesDescriptor: {
         cryptoServiceType: VCLCryptoServiceType.Remote,
-        signatureAlgorithm: VCLSignatureAlgorithm.ES256,
         remoteCryptoServicesUrlsDescriptor: {
           keyServiceUrls: {
             createDidKeyServiceUrl:
@@ -92,7 +96,7 @@ export default function App() {
       () => {
         console.log('VCL initialization succeed!');
 
-        vcl.generateDidJwk().then(
+        vcl.generateDidJwk(didJwkDescriptor).then(
           (resDidJwk: VCLDidJwk) => {
             didJwkRef.current = resDidJwk;
             console.log(`VCL did:jwk is ${JSON.stringify(didJwkRef.current)}`);
@@ -511,7 +515,7 @@ export default function App() {
   };
 
   const generateDidJwk = () => {
-    vcl.generateDidJwk().then(
+    vcl.generateDidJwk(didJwkDescriptor).then(
       (resDidJwk: VCLDidJwk) => {
         didJwkRef.current = resDidJwk;
         console.log('VCL did:jwk generated: ', resDidJwk);

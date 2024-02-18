@@ -32,9 +32,11 @@ import type { VCLPresentationRequestDescriptor } from './entities/VCLPresentatio
 import type { VCLJwtDescriptor } from './entities/VCLJwtDescriptor';
 import type { VCLDidJwk } from './entities/VCLDidJwk';
 import type { VCLCredentialTypes } from './entities/VCLCredentialTypes';
+import type { VCLDidJwkDescriptor } from './entities/VCLDidJwkDescriptor';
 
 import { NativeModules } from 'react-native';
 import { VCLError } from './entities/error/VCLError';
+
 const { VclReactNative } = NativeModules;
 
 export const VclApi = {
@@ -221,10 +223,10 @@ export const VclApi = {
   },
 
   generateDidJwk: async (
-    remoteCryptoServicesToken?: VCLToken
+    didJwkDescriptor: VCLDidJwkDescriptor
   ): Promise<VCLDidJwk> => {
     try {
-      return await VclReactNative.generateDidJwk(remoteCryptoServicesToken);
+      return await VclReactNative.generateDidJwk(didJwkDescriptor);
     } catch (e) {
       throw new VCLError(e);
     }

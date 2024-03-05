@@ -100,7 +100,7 @@ dependencies {
 
   // VCL:
   implementation "com.nimbusds:nimbus-jose-jwt:9.37"
-  implementation "io.velocitycareerlabs:vcl:2.3.2"
+  implementation "io.velocitycareerlabs:vcl:2.3.3"
 }
 
 if (isNewArchitectureEnabled()) {

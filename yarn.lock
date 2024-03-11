@@ -3459,7 +3459,7 @@ __metadata:
     jest: ^29.7.0
     prettier: ^3.0.3
     react: 18.2.0
-    react-native: 0.73.5
+    react-native: 0.73.6
     react-native-builder-bob: ^0.20.0
     release-it: ^15.0.0
     turbo: ^1.10.7
@@ -3494,7 +3494,7 @@ __metadata:
     "@react-native/typescript-config": 0.73.1
     babel-plugin-module-resolver: ^5.0.0
     react: 18.2.0
-    react-native: 0.73.5
+    react-native: 0.73.6
   languageName: unknown
   linkType: soft
 
@@ -3930,7 +3930,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"available-typed-arrays@npm:^1.0.6, available-typed-arrays@npm:^1.0.7":
+"available-typed-arrays@npm:^1.0.7":
   version: 1.0.7
   resolution: "available-typed-arrays@npm:1.0.7"
   dependencies:
@@ -4390,9 +4390,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001587":
-  version: 1.0.30001596
-  resolution: "caniuse-lite@npm:1.0.30001596"
-  checksum: 699b61ceba91a5f2830a49385b282707c4292b61799664d8d2f7893e1f89aef6597b4d547f1ce49ec2f5b2752f467fcf7b1a02ca56fb7dc103e423afcb808fd6
+  version: 1.0.30001597
+  resolution: "caniuse-lite@npm:1.0.30001597"
+  checksum: ec6a2cf0fd49f37d16732e6595939fc80a125dcd188a950bc936c61b4ad53becc0fe51bf2d9a625415de7b1cb23bd835f220e8b68d8ab951a940edeea65476fd
   languageName: node
   linkType: hard
 
@@ -7075,7 +7075,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"has-tostringtag@npm:^1.0.0, has-tostringtag@npm:^1.0.1, has-tostringtag@npm:^1.0.2":
+"has-tostringtag@npm:^1.0.0, has-tostringtag@npm:^1.0.2":
   version: 1.0.2
   resolution: "has-tostringtag@npm:1.0.2"
   dependencies:
@@ -7092,11 +7092,11 @@ __metadata:
   linkType: hard
 
 "hasown@npm:^2.0.0, hasown@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "hasown@npm:2.0.1"
+  version: 2.0.2
+  resolution: "hasown@npm:2.0.2"
   dependencies:
     function-bind: ^1.1.2
-  checksum: 9081c382a4fe8a62639a8da5c7d3322b203c319147e48783763dd741863d9f2dcaa743574fe2a1283871c445d8ba99ea45d5fff384e5ad27ca9dd7a367d79de0
+  checksum: e8516f776a15149ca6c6ed2ae3110c417a00b62260e222590e54aa367cbcd6ed99122020b37b7fbdf05748df57b265e70095d7bf35a47660587619b15ffb93db
   languageName: node
   linkType: hard
 
@@ -10863,9 +10863,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@npm:0.73.5":
-  version: 0.73.5
-  resolution: "react-native@npm:0.73.5"
+"react-native@npm:0.73.6":
+  version: 0.73.6
+  resolution: "react-native@npm:0.73.6"
   dependencies:
     "@jest/create-cache-key-function": ^29.6.3
     "@react-native-community/cli": 12.3.6
@@ -10909,7 +10909,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: 107037a28b37e5d8883e8d7553d48e15d802ecf2b3ecee834f79c5dd653761ac23506a08c3a48f357bf872fb0857078ae31d226623a8742e530b065fed5d9d47
+  checksum: 20e71c902f165c15add9f841bbc555c7b8495235122ccc42f5f1c5c0189c453651a450e59b6541188d8edb829a2aac524a1762501fb6ecebc4c89e9aa6667682
   languageName: node
   linkType: hard
 
@@ -13049,15 +13049,15 @@ __metadata:
   linkType: hard
 
 "which-typed-array@npm:^1.1.14, which-typed-array@npm:^1.1.9":
-  version: 1.1.14
-  resolution: "which-typed-array@npm:1.1.14"
+  version: 1.1.15
+  resolution: "which-typed-array@npm:1.1.15"
   dependencies:
-    available-typed-arrays: ^1.0.6
-    call-bind: ^1.0.5
+    available-typed-arrays: ^1.0.7
+    call-bind: ^1.0.7
     for-each: ^0.3.3
     gopd: ^1.0.1
-    has-tostringtag: ^1.0.1
-  checksum: efe30c143c58630dde8ab96f9330e20165bacd77ca843c602b510120a415415573bcdef3ccbc30a0e5aaf20f257360cfe24712aea0008f149ce5bb99834c0c0b
+    has-tostringtag: ^1.0.2
+  checksum: 65227dcbfadf5677aacc43ec84356d17b5500cb8b8753059bb4397de5cd0c2de681d24e1a7bd575633f976a95f88233abfd6549c2105ef4ebd58af8aa1807c75
   languageName: node
   linkType: hard
 

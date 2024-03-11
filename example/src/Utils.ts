@@ -14,10 +14,10 @@ export class Utils {
     var approvedOfferIds: string[] = [];
     var rejectedOfferIds: string[] = [];
     if (offers.all.length > 0) {
-      approvedOfferIds.push(offers.all[0].id);
+      approvedOfferIds.push(offers.all[0]?.id || '');
     }
     if (offers.all.length > 1) {
-      rejectedOfferIds.push(offers.all[1]?.id);
+      rejectedOfferIds.push(offers.all[1]?.id || '');
     }
     return [approvedOfferIds, rejectedOfferIds];
   };

@@ -62,6 +62,4 @@ ios/Pods/*
 *.hprof
 example/android/app/src/main/assets/index.android.bundle
 example/ios/.xcode.env
-/.yarn
-.yarnrc
-.yarnrc.yml
+/.yarn/cache

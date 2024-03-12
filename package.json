@@ -81,13 +81,10 @@
     "react": "*",
     "react-native": "*"
   },
-  "workspaces": [
-    "example"
-  ],
   "engines": {
     "node": ">= 18.0.0"
   },
-  "packageManager": "yarn@3.6.1",
+  "packageManager": "yarn@1.22.22",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [

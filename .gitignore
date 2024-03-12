@@ -62,5 +62,5 @@ ios/Pods/*
 *.hprof
 example/android/app/src/main/assets/index.android.bundle
 example/ios/.xcode.env
-/.yarn/cache
-.yarn/install-state.gz
+.pnp.loader.mjs
+.pnp.cjs

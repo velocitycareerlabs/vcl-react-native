@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "rootDir": ".",
     "paths": {
       "@velocitycareerlabs/vcl-react-native": ["./src/index"]

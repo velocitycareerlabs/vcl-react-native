@@ -33,7 +33,7 @@
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "release": "release-it",
-    "postinstall": "cd example/ios && pod install --repo-update && cd .."
+    "postinstall": "cd example && yarn && cd ios && pod install && cd .."
   },
   "keywords": [
     "react-native",
@@ -80,9 +80,6 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
-  },
-  "engines": {
-    "node": ">= 18.0.0"
   },
   "packageManager": "yarn@1.22.22",
   "jest": {

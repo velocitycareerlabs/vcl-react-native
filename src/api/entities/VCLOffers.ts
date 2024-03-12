@@ -11,7 +11,7 @@ import type { VCLToken } from './VCLToken';
 
 export interface VCLOffers {
   payload: Dictionary<any>;
-  all: [VCLOffer];
+  all: VCLOffer[];
   responseCode: number;
   sessionToken: VCLToken;
   challenge: string;

@@ -92,3 +92,4 @@ example/ios/.xcode.env
 example/ios/.xcode.env.local
 /example/android/.idea
 /android/.idea
+/example/android/.idea

@@ -26,14 +26,13 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace @velocitycareerlabs/vcl-react-native-example",
+    "example": "yarn workspace VclReactNativeExample",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
-    "release": "release-it",
-    "postinstall": "cd example && yarn && cd ios && pod install && cd .."
+    "release": "release-it"
   },
   "keywords": [
     "react-native",
@@ -69,7 +68,7 @@
     "prettier": "^3.0.3",
     "react": "18.2.0",
     "react-native": "0.73.6",
-    "react-native-builder-bob": "^0.20.0",
+    "react-native-builder-bob": "^0.23.2",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2"
@@ -81,7 +80,10 @@
     "react": "*",
     "react-native": "*"
   },
-  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "example"
+  ],
+  "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [

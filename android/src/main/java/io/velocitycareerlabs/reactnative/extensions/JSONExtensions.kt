@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
- package io.velocitycareerlabs.reactnative.extensions
+package io.velocitycareerlabs.reactnative.extensions
 
 import com.facebook.react.bridge.*
 import org.json.JSONArray

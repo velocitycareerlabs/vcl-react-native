@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      - VL-7326-sdk-configuration-fixes
       - release/**
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}

@@ -87,6 +87,7 @@ example/ios/.xcode.env
 .yarn/install-state.gz
 .yarn/plugins/@yarnpkg/plugin-interactive-tools.cjs
 .yarn/plugins/@yarnpkg/plugin-workspace-tools.cjs
+.yarn/releases
 example/ios/.xcode.env
 example/ios/.xcode.env.local
 /example/android/.idea

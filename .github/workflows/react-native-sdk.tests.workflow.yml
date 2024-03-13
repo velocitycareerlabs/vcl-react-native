@@ -26,7 +26,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       # Install dependencies
       - name: Install dependencies
-        run: yarn
+        run: yarn --pure-lockfile --frozen-lockfile
       # Run lint 
       - name: Run lint
         run: yarn lint

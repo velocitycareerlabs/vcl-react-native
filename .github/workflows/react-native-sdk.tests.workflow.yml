@@ -29,8 +29,7 @@ jobs:
       # Run lint 
       - name: Run lint
         run: yarn lint
-      # Temprorary will ignore linter errors:
-        continue-on-error: true
+        continue-on-error: false
       # Run test 
       - name: Run Test
         run: yarn test

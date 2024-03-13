@@ -34,7 +34,6 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToToken
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToVerifiedProfileDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
-import io.velocitycareerlabs.api.entities.VCLDidJwk
 import io.velocitycareerlabs.api.entities.error.VCLError
 import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
 import io.velocitycareerlabs.reactnative.extensions.toThrowable
@@ -46,19 +45,27 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
 import io.velocitycareerlabs.reactnative.utlis.VCLLog
 import kotlin.Exception
 
-class VclReactNativeModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class VclReactNativeModule(reactContext: ReactApplicationContext) :
+  ReactContextBaseJavaModule(reactContext) {
 
   val TAG = "VclReactNativeModule"
 
+  override fun getName(): String {
+    return NAME
+  }
+
+  // Example method
+  // See https://reactnative.dev/docs/native-modules-android
+  @ReactMethod
+  fun multiply(a: Double, b: Double, promise: Promise) {
+    promise.resolve(a * b)
+  }
+
   companion object {
-    const val ModuleName = "VclReactNative"
+    const val NAME = "VclReactNative"
   }
 
   private val vcl = VCLProvider.vclInstance()
-
-  override fun getName(): String {
-    return ModuleName
-  }
 
   private fun initGlobalConfigurations(
     initializationDescriptor: VCLInitializationDescriptor
@@ -78,7 +85,7 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
       )
       initGlobalConfigurations(initializationDescriptor)
       vcl.initialize(
-        context = reactContext.applicationContext,
+        context = reactApplicationContext.applicationContext,
         initializationDescriptor = initializationDescriptor,
         successHandler = {
           promise.resolve("VCL initialization succeed!")
@@ -128,7 +135,9 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
   ) {
     try {
       vcl.getPresentationRequest(
-        presentationRequestDescriptor = mapTopPresentationRequestDescriptor(presentationRequestDescriptorMap),
+        presentationRequestDescriptor = mapTopPresentationRequestDescriptor(
+          presentationRequestDescriptorMap
+        ),
         successHandler = {
           promise.resolve(presentationRequestToMap(it))
         },
@@ -388,4 +397,3 @@ class VclReactNativeModule(private val reactContext: ReactApplicationContext) : 
     }
   }
 }
-

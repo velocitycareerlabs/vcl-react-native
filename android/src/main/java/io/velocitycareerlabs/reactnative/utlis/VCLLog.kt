@@ -18,7 +18,7 @@ internal object VCLLog {
    * @param msg The message you would like logged.
    */
   fun v(tag: String?, msg: String): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.v(GlobalConfig.LogTagPrefix +tag, msg) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.v(GlobalConfig.LogTagPrefix + tag, msg) else -1
   }
 
   /**
@@ -29,7 +29,7 @@ internal object VCLLog {
    * @param tr An exception to log
    */
   fun v(tag: String?, msg: String?, tr: Throwable?): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.v(GlobalConfig.LogTagPrefix +tag, msg, tr) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.v(GlobalConfig.LogTagPrefix + tag, msg, tr) else -1
   }
 
   /**
@@ -39,7 +39,7 @@ internal object VCLLog {
    * @param msg The message you would like logged.
    */
   fun d(tag: String?, msg: String): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.d(GlobalConfig.LogTagPrefix +tag, msg) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.d(GlobalConfig.LogTagPrefix + tag, msg) else -1
   }
 
   /**
@@ -50,7 +50,7 @@ internal object VCLLog {
    * @param tr An exception to log
    */
   fun d(tag: String?, msg: String?, tr: Throwable?): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.d(GlobalConfig.LogTagPrefix +tag, msg, tr) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.d(GlobalConfig.LogTagPrefix + tag, msg, tr) else -1
   }
 
   /**
@@ -60,7 +60,7 @@ internal object VCLLog {
    * @param msg The message you would like logged.
    */
   fun i(tag: String?, msg: String): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.i(GlobalConfig.LogTagPrefix +tag, msg) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.i(GlobalConfig.LogTagPrefix + tag, msg) else -1
   }
 
   /**
@@ -71,7 +71,7 @@ internal object VCLLog {
    * @param tr An exception to log
    */
   fun i(tag: String?, msg: String?, tr: Throwable?): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.i(GlobalConfig.LogTagPrefix +tag, msg, tr) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.i(GlobalConfig.LogTagPrefix + tag, msg, tr) else -1
   }
 
   /**
@@ -81,7 +81,7 @@ internal object VCLLog {
    * @param msg The message you would like logged.
    */
   fun w(tag: String?, msg: String): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.w(GlobalConfig.LogTagPrefix +tag, msg) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.w(GlobalConfig.LogTagPrefix + tag, msg) else -1
   }
 
   /**
@@ -92,7 +92,7 @@ internal object VCLLog {
    * @param tr An exception to log
    */
   fun w(tag: String?, msg: String?, tr: Throwable?): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.w(GlobalConfig.LogTagPrefix +tag, msg, tr) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.w(GlobalConfig.LogTagPrefix + tag, msg, tr) else -1
   }
 
   /*
@@ -102,7 +102,7 @@ internal object VCLLog {
    * @param tr An exception to log
    */
   fun w(tag: String?, tr: Throwable?): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.w(GlobalConfig.LogTagPrefix +tag, tr) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.w(GlobalConfig.LogTagPrefix + tag, tr) else -1
   }
 
   /**
@@ -112,7 +112,7 @@ internal object VCLLog {
    * @param msg The message you would like logged.
    */
   fun e(tag: String?, msg: String): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.e(GlobalConfig.LogTagPrefix +tag, msg) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.e(GlobalConfig.LogTagPrefix + tag, msg) else -1
   }
 
   /**
@@ -123,6 +123,6 @@ internal object VCLLog {
    * @param tr An exception to log
    */
   fun e(tag: String?, msg: String?, tr: Throwable?): Int {
-    return if (GlobalConfig.IsLoggerOn) Log.e(GlobalConfig.LogTagPrefix +tag, msg, tr) else -1
+    return if (GlobalConfig.IsLoggerOn) Log.e(GlobalConfig.LogTagPrefix + tag, msg, tr) else -1
   }
 }

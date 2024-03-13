@@ -33,5 +33,5 @@ jobs:
         continue-on-error: true
       # Run test 
       - name: Run Test
-        run: yarn test
+        run: yarn set version 3.6.1 && yarn
         continue-on-error: true

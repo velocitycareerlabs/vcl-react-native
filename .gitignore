@@ -83,11 +83,7 @@ example/android/app/src/main/assets/index.android.bundle
 example/ios/.xcode.env
 .pnp.loader.mjs
 .pnp.cjs
-/.yarn/cache
-.yarn/install-state.gz
-.yarn/plugins/@yarnpkg/plugin-interactive-tools.cjs
-.yarn/plugins/@yarnpkg/plugin-workspace-tools.cjs
-.yarn/releases/yarn-3.6.1.cjs
+.yarn/*
 example/ios/.xcode.env
 example/ios/.xcode.env.local
 /example/android/.idea

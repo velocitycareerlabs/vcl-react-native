@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       # Install dependencies
       - name: Install dependencies
-        run: yarn
+        run: yarn set version 3.6.1 && yarn
       # Run lint 
       - name: Run lint
         run: yarn lint
@@ -33,5 +33,5 @@ jobs:
         continue-on-error: true
       # Run test 
       - name: Run Test
-        run: yarn set version 3.6.1 && yarn
+        run: yarn test
         continue-on-error: true

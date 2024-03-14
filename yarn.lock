@@ -1708,12 +1708,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/config-conventional@npm:^17.0.2":
-  version: 17.8.1
-  resolution: "@commitlint/config-conventional@npm:17.8.1"
+"@commitlint/config-conventional@npm:^19.1.0":
+  version: 19.1.0
+  resolution: "@commitlint/config-conventional@npm:19.1.0"
   dependencies:
-    conventional-changelog-conventionalcommits: ^6.1.0
-  checksum: ce8ace1a13f3a797ed699ffa13dc46273a27e1dc3ae8a9d01492c0637a8592e4ed24bb32d9a43f8745a8690a52d77ea4a950d039977b0dbcbf834f8cbacf5def
+    "@commitlint/types": ^19.0.3
+    conventional-changelog-conventionalcommits: ^7.0.2
+  checksum: 34c3e2f87ac4ed2e0be454bfb3b3e2a4614131186136c8d5d09fe4f24dd2898d053d5855e888a5bd80c92c8ead906ca3335e968b263da1dfc1c504d68662e27a
   languageName: node
   linkType: hard
 
@@ -1924,11 +1925,11 @@ __metadata:
   linkType: hard
 
 "@evilmartians/lefthook@npm:^1.5.0":
-  version: 1.6.5
-  resolution: "@evilmartians/lefthook@npm:1.6.5"
+  version: 1.6.6
+  resolution: "@evilmartians/lefthook@npm:1.6.6"
   bin:
     lefthook: bin/index.js
-  checksum: 51745444c8e279dd448565758fb829ee3c318e080c79c6a68b4b52560c417cba913c80db86b1b83d0a009e7a3a4af4327e77af12f9c440d7a4cd41679b0bef31
+  checksum: 0667ab0dc130419c530a0567a6471a01a295b41c768ef14e550c624f636768675774d4bec94fda79ddd4f12dbed54b3b8e413c492967438f881e69e454490825
   conditions: (os=darwin | os=linux | os=win32) & (cpu=x64 | cpu=arm64 | cpu=ia32)
   languageName: node
   linkType: hard
@@ -3393,7 +3394,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@velocitycareerlabs/vcl-react-native@workspace:."
   dependencies:
-    "@commitlint/config-conventional": ^17.0.2
+    "@commitlint/config-conventional": ^19.1.0
     "@evilmartians/lefthook": ^1.5.0
     "@react-native/eslint-config": ^0.73.1
     "@release-it/conventional-changelog": ^8.0.1
@@ -4730,15 +4731,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-conventionalcommits@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "conventional-changelog-conventionalcommits@npm:6.1.0"
-  dependencies:
-    compare-func: ^2.0.0
-  checksum: 4383a35cdf72f5964e194a1146e7f78276e301f73bd993b71627bb93586b6470d411b9613507ceb37e0fed0b023199c95e941541fa47172b4e6a7916fc3a53ff
-  languageName: node
-  linkType: hard
-
 "conventional-changelog-conventionalcommits@npm:^7.0.2":
   version: 7.0.2
   resolution: "conventional-changelog-conventionalcommits@npm:7.0.2"
@@ -5408,9 +5400,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.668":
-  version: 1.4.703
-  resolution: "electron-to-chromium@npm:1.4.703"
-  checksum: 53ea6d71a9a10c128573dc3178bd06c8b76c34477d3d5f750520c392a96a7ce16d242707da333d1b779a4ea4b27fc2a3a75de89a1f42dcd7b8a75acfea8ad34f
+  version: 1.4.704
+  resolution: "electron-to-chromium@npm:1.4.704"
+  checksum: 9a91e0b939577ff1c08f7b5d460686bbfd46a00e3dba4fd1766831bbaa1fae5fac8f94101b56684d6b6d09e587341f2d40febbb4e5bdd6465e86dfd667ee5598
   languageName: node
   linkType: hard
 
@@ -6379,9 +6371,9 @@ __metadata:
   linkType: hard
 
 "flow-parser@npm:0.*":
-  version: 0.230.0
-  resolution: "flow-parser@npm:0.230.0"
-  checksum: 7e3122f912d44b5c07ab32fd2a0c8a1d6ff0ecebd21fb317a5de46537df16da4573b8a8159a06dafab67a294488473cb7ba4fe31635abb638d23c40a04291cbe
+  version: 0.231.0
+  resolution: "flow-parser@npm:0.231.0"
+  checksum: 09b62423d9bca3b91a5cfd09c45cb1723156a2c4e78c017ae9d67e9c6a05f152e8fa084576508797bda68b6634fbe70b670e1c094e4e74a8d0362a3d7f19e73b
   languageName: node
   linkType: hard
 

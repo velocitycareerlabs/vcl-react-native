@@ -92,7 +92,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
   // VCL:
-  implementation "com.nimbusds:nimbus-jose-jwt:9.37"
-  implementation "io.velocitycareerlabs:vcl:2.3.4"
+  implementation "com.nimbusds:nimbus-jose-jwt:9.37.3"
+  implementation "io.velocitycareerlabs:vcl:2.4.1-rc.1"
 }
 

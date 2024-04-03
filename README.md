@@ -5,11 +5,13 @@ Velocity Career Labs React Native SDK
 
 Android:
 
-kotlin version: 1.7.21
+kotlin version: 1.8.0
 
-minSdkVersion 24
+minSdkVersion: 24
 
-targetSdkVersion 33
+compileSdkVersion: 34
+
+targetSdkVersion: 34
 
 
 iOS:
@@ -23,13 +25,13 @@ React Native:
 
 react version 18.2.0
 
-react native version 0.72.4
+react native version 0.73.6
 
 # React Native SDK
 
 The React Native SDK is a wrapper of iOS and Android SDKs.
-The minimum supported Android API is 21.
-The iOS target deployment API is 12.0.
+The minimum supported Android API is 24.
+The iOS target deployment API is 13.0.
 
 ## Installation
 - Add the path to the Velocity specs to the head of the Pod file in the iOS folder

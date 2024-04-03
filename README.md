@@ -63,3 +63,5 @@ vcl.initialize(initializationDescriptor).then(
   }
 );
 ```
+
+More details can be found [HERE](https://www.velocitynetwork.foundation/main/career-wallets-velocity-sdks#react-native)

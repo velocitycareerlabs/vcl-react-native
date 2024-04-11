@@ -215,7 +215,7 @@ func dictionaryToPresentationRequest(
 ) -> VCLPresentationRequest {
     return VCLPresentationRequest(
         jwt: dictionaryToJwt(presentationRequestDictionary?["jwt"] as? [String : Any]),
-        publicJwk: dictionaryToPublicJwk(presentationRequestDictionary?["publicJwk"] as? [String: Any]),
+        verifiedProfile: dictionaryToVerifiedProfile(presentationRequestDictionary?["verifiedProfile"] as? [String: Any]),
         deepLink: dictionaryToDeepLink(presentationRequestDictionary?["deepLink"] as? [String : Any]) ?? VCLDeepLink(value: ""),
         pushDelegate: dictionaryToPushDelegate(presentationRequestDictionary?["pushDelegate"] as? [String : Any]),
         didJwk: dictionaryToDidJwk(presentationRequestDictionary?["didJwk"] as? [String : Any]),
@@ -228,9 +228,7 @@ func presentationRequestToDictionary(
 ) -> [String: Any] {
     var presentationRequestDictionary = [String: Any]()
     presentationRequestDictionary["jwt"] = ["encodedJwt": presentationRequest.jwt.encodedJwt]
-    var publicJwkDictionary = [String: Any]()
-    publicJwkDictionary["valueStr"] = presentationRequest.publicJwk.valueStr
-    presentationRequestDictionary["publicJwk"] = publicJwkDictionary
+    presentationRequestDictionary["verifiedProfile"] = verifiedProfileToDictionary(presentationRequest.verifiedProfile)
     presentationRequestDictionary["iss"] = presentationRequest.iss
     presentationRequestDictionary["exchangeId"] = presentationRequest.exchangeId
     presentationRequestDictionary["presentationDefinitionId"] = presentationRequest.presentationDefinitionId
@@ -643,6 +641,12 @@ func verifiedProfileToDictionary(
     verifiedProfileDictionary["logo"] = verifiedProfile.logo
     verifiedProfileDictionary["name"] = verifiedProfile.name
     return verifiedProfileDictionary
+}
+
+func dictionaryToVerifiedProfile(
+    _ verifiedProfileDictionary: [String: Any]?
+) -> VCLVerifiedProfile {
+    return VCLVerifiedProfile(payload: verifiedProfileDictionary?["payload"] as? [String : Any] ?? [String : Any]())
 }
 
 func dictionaryToJwtDescriptor(

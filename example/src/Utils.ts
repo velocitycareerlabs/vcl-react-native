@@ -11,8 +11,8 @@ export class Utils {
   static readonly getApprovedRejectedOfferIdsMock = (
     offers: VCLOffers
   ): string[][] => {
-    var approvedOfferIds: string[] = [];
-    var rejectedOfferIds: string[] = [];
+    const approvedOfferIds: string[] = [];
+    const rejectedOfferIds: string[] = [];
     if (offers.all.length > 0) {
       approvedOfferIds.push(offers.all[0]?.id || '');
     }

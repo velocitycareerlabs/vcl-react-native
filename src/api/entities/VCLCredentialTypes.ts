@@ -8,6 +8,6 @@
 import type { Dictionary } from '../Dictionary';
 
 export interface VCLCredentialTypes {
-  all: Dictionary<string>[];
-  recommendedTypes: Dictionary<string>[];
+  all: Array<Dictionary<string>>;
+  recommendedTypes: Array<Dictionary<string>>;
 }

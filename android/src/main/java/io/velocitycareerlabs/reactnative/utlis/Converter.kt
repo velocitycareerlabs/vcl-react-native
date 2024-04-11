@@ -186,7 +186,7 @@ object Converter {
   fun deepLinkToMap(deepLink: VCLDeepLink?): ReadableMap? {
     deepLink?.value?.let {
       val retVal = Arguments.createMap()
-      retVal.putString("value", deepLink?.value)
+      retVal.putString("value", deepLink.value)
       return retVal
     }
     return null
@@ -216,7 +216,7 @@ object Converter {
     presentationRequestMap: ReadableMap?
   ) = VCLPresentationRequest(
     jwt = mapToJwt(presentationRequestMap?.getMapOpt("jwt")),
-    publicJwk = mapToPublicJwk(presentationRequestMap?.getMapOpt("publicJwk")),
+    verifiedProfile = mapToVerifiedProfile(presentationRequestMap?.getMapOpt("verifiedProfile")),
     deepLink = mapToDeepLink(presentationRequestMap?.getMapOpt("deepLink")) ?: VCLDeepLink(""),
     pushDelegate = mapToPushDelegate(presentationRequestMap?.getMapOpt("pushDelegate")),
     didJwk = mapToDidJwk(presentationRequestMap?.getMapOpt("didJwk")),
@@ -230,9 +230,7 @@ object Converter {
     val jwtMap = Arguments.createMap()
     jwtMap.putString("encodedJwt", presentationRequest.jwt.encodedJwt)
     presentationRequestMap.putMap("jwt", jwtMap)
-    val jwkMap = Arguments.createMap()
-    jwkMap.putString("valueStr", presentationRequest.publicJwk.valueStr)
-    presentationRequestMap.putMap("publicJwk", jwkMap)
+    presentationRequestMap.putMap("verifiedProfile", verifiedProfileToMap(presentationRequest.verifiedProfile))
     presentationRequestMap.putString("iss", presentationRequest.iss)
     presentationRequestMap.putString("exchangeId", presentationRequest.exchangeId)
     presentationRequestMap.putString(
@@ -700,6 +698,12 @@ object Converter {
     verifiedProfileMap.putString("logo", verifiedProfile.logo)
     verifiedProfileMap.putString("name", verifiedProfile.name)
     return verifiedProfileMap
+  }
+
+  fun mapToVerifiedProfile(
+    verifiedProfileMap: ReadableMap?
+  ): VCLVerifiedProfile {
+    return VCLVerifiedProfile(payload = verifiedProfileMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject("{}"))
   }
 
   fun mapToJwtDescriptor(

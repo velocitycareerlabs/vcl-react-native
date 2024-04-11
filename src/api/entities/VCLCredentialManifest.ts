@@ -13,7 +13,7 @@ import type { VCLVerifiedProfile } from './VCLVerifiedProfile';
 
 export interface VCLCredentialManifest {
   jwt: VCLJwt;
-  vendorOriginContext?: String;
+  vendorOriginContext?: string;
   verifiedProfile: VCLVerifiedProfile;
   deepLink?: VCLDeepLink;
   iss: string;

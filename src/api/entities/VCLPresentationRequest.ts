@@ -7,13 +7,13 @@
 
 import type { VCLDidJwk } from './VCLDidJwk';
 import type { VCLJwt } from './VCLJwt';
-import type { VCLPublicJwk } from './VCLPublicJwk';
 import type { VCLToken } from './VCLToken';
+import type { VCLVerifiedProfile } from './VCLVerifiedProfile';
 
 export interface VCLPresentationRequest {
   exchangeId: string;
   jwt: VCLJwt;
-  publicJwk: VCLPublicJwk;
+  verifiedProfile: VCLVerifiedProfile;
   keyID: string;
   presentationDefinitionId: string;
   iss: string;

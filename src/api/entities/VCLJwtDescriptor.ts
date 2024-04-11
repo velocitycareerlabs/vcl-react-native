@@ -27,5 +27,5 @@ export interface VCLJwtDescriptor {
   /**
    * The issuer DID
    */
-  aud?: String;
+  aud?: string;
 }

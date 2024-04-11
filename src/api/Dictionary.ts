@@ -5,6 +5,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export type Dictionary<T> = {
-  [key: string]: T;
-};
+export type Dictionary<T> = Record<string, T>;

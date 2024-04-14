@@ -9,8 +9,6 @@ import * as React from 'react';
 
 import { StyleSheet, View, Text, Button } from 'react-native';
 
-import { Utils } from './Utils';
-import { Constants } from './Constants';
 import vcl, {
   type VCLCountries,
   VCLCountryCodes,
@@ -50,6 +48,8 @@ import vcl, {
   type VCLDidJwkDescriptor,
 } from '@velocitycareerlabs/vcl-react-native';
 import { useRef } from 'react';
+import { Utils } from './Utils';
+import { Constants } from './Constants';
 
 export const enum InitState {
   Initializing,
@@ -63,7 +63,7 @@ const didJwkDescriptor: VCLDidJwkDescriptor = {
   signatureAlgorithm: VCLSignatureAlgorithm.ES256,
 };
 
-export default function App() {
+export default () => {
   const didJwkRef = useRef(null as unknown as VCLDidJwk);
 
   const [initState, setInitState] = React.useState<InitState>(
@@ -595,21 +595,21 @@ export default function App() {
         <Button title="Generate DID:JWK" onPress={generateDidJwk} />
       </View>
     );
-  } else if (initState === InitState.InitializationFailed) {
+  } if (initState === InitState.InitializationFailed) {
     return (
       <View style={styles.container}>
         <Text>Initialization Failed</Text>
         <Text>{JSON.stringify(error)}</Text>
       </View>
     );
-  } else {
+  } 
     return (
       <View style={styles.container}>
         <Text>Initializing...</Text>
       </View>
     );
-  }
-}
+  
+};
 
 const styles = StyleSheet.create({
   container: {

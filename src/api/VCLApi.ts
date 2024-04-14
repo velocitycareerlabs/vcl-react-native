@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NativeModules } from 'react-native';
 import type { VCLCredentialManifest } from './entities/VCLCredentialManifest';
 import type { VCLCredentialManifestDescriptor } from './entities/VCLCredentialManifestDescriptor';
 import type { VCLCredentialTypeSchemas } from './entities/VCLCredentialTypeSchemas';
@@ -34,7 +35,6 @@ import type { VCLDidJwk } from './entities/VCLDidJwk';
 import type { VCLCredentialTypes } from './entities/VCLCredentialTypes';
 import type { VCLDidJwkDescriptor } from './entities/VCLDidJwkDescriptor';
 
-import { NativeModules } from 'react-native';
 import { VCLError } from './entities/error/VCLError';
 
 const { VclReactNative } = NativeModules;

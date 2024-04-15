@@ -36,8 +36,6 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-useless-constructor": "off",
         "@typescript-eslint/no-throw-literal": "off",
-        '@typescript-eslint/no-unused-vars': 'off',
-        'unused-imports/no-unused-imports-ts': 'error',
         'unused-imports/no-unused-vars-ts': [
             'warn',
             {

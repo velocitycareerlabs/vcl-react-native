@@ -25,12 +25,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       # Install dependencies
       - name: Install dependencies
-        run: yarn set version 3.6.1 && yarn
-      # Run lint 
+        run: corepack enable && yarn set version 3.6.1 && yarn
+      # Run lint
       - name: Run lint
         run: yarn lint
         continue-on-error: false
-      # Run test 
+      # Run test
       - name: Run Test
         run: yarn test
         continue-on-error: true

@@ -22,7 +22,7 @@ env:
   NODE_VERSION: '20'
   RC_SUFFIX: 'rc'
   GLOBAL_ENV: ${{ github.event_name == 'push' && format('{0}', 'dev') || inputs.environment }}
-jobs:        
+jobs:
   build-react-native-sdk:
     runs-on: macos-14
     steps:
@@ -46,10 +46,10 @@ jobs:
         run: git add .npmrc && git commit -am "Prepare to release"
       # Install dependencies
       - name: Install dependencies
-        run: yarn set version 3.6.1 && yarn
+        run: corepack enable && yarn set version 3.6.1 && yarn
       # Build and Publish SDK
       - name: Build and Publish SDK
         if: ${{ env.GLOBAL_ENV == 'prod' || env.GLOBAL_ENV == 'rc' }}
         run: npm publish --tag ${{ env.RELEASE_TAG }} --access public --userconfig ./.npmrc
-        env: 
+        env:
           RELEASE_TAG: ${{ env.GLOBAL_ENV == 'prod' && format('{0}', 'latest' ) || env.RC_SUFFIX }}

@@ -37,11 +37,11 @@ The iOS target deployment API is 13.0.
 - Add the path to the Velocity specs to the head of the Pod file in the iOS folder
 `source 'https://github.com/velocitycareerlabs/Specs.git'`
 - SDK installation:
-```js 
-yarn add @velocitycareerlabs/vcl-react-native --save
+```js
+yarn add @velocitycareerlabs/vcl-react-native
 ```
   or
-```js 
+```js
 npm install @velocitycareerlabs/vcl-react-native --save
 ```
 
@@ -59,7 +59,7 @@ vcl.initialize(initializationDescriptor).then(
     // Do your magic
   },
   (err: VCLError) => {
-    // Handle initialization failure 
+    // Handle initialization failure
   }
 );
 ```

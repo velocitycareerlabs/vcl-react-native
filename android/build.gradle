@@ -8,7 +8,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:7.2.1"
+    classpath "com.android.tools.build:gradle:7.2.2"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -33,7 +33,7 @@ def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["VclReactNative_" + name]).toInteger()
 }
 
-def supportsNamespace() {
+static def supportsNamespace() {
   def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
   def major = parsed[0].toInteger()
   def minor = parsed[1].toInteger()
@@ -93,6 +93,6 @@ dependencies {
 
   // VCL:
   implementation "com.nimbusds:nimbus-jose-jwt:9.37.3"
-  implementation "io.velocitycareerlabs:vcl:2.4.5"
+  implementation "io.velocitycareerlabs:vcl:2.4.6"
 }
 

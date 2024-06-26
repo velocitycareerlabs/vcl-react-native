@@ -595,20 +595,21 @@ export default () => {
         <Button title="Generate DID:JWK" onPress={generateDidJwk} />
       </View>
     );
-  } if (initState === InitState.InitializationFailed) {
+  }
+  if (initState === InitState.InitializationFailed) {
     return (
       <View style={styles.container}>
         <Text>Initialization Failed</Text>
         <Text>{JSON.stringify(error)}</Text>
       </View>
     );
-  } 
-    return (
-      <View style={styles.container}>
-        <Text>Initializing...</Text>
-      </View>
-    );
-  
+  }
+  return (
+    <View style={styles.container}>
+      <Text>Initializing...</Text>
+    </View>
+  );
+
 };
 
 const styles = StyleSheet.create({

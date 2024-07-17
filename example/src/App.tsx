@@ -57,7 +57,7 @@ export const enum InitState {
   InitializationFailed,
 }
 
-const environment = VCLEnvironment.Dev;
+const environment = VCLEnvironment.Staging;
 
 const didJwkDescriptor: VCLDidJwkDescriptor = {
   signatureAlgorithm: VCLSignatureAlgorithm.ES256,
@@ -200,7 +200,7 @@ export default () => {
   const submitPresentation = (presentationRequest: VCLPresentationRequest) => {
     const presentationSubmission: VCLPresentationSubmission = {
       presentationRequest,
-      verifiableCredentials: Constants.PresentationSelectionsList,
+      verifiableCredentials: Constants.getIdentificationList(environment),
     };
     vcl.submitPresentation(presentationSubmission).then(
       (presentationSubmissionResult: VCLSubmissionResult) => {
@@ -240,12 +240,11 @@ export default () => {
   };
 
   const searchForOrganizations = () => {
-    let organizationDescriptor =
-      Constants.OrganizationsSearchDescriptorByDidDev;
-    if (environment === VCLEnvironment.Staging.valueOf()) {
-      organizationDescriptor =
-        Constants.OrganizationsSearchDescriptorByDidStaging;
-    }
+    const organizationDescriptor =
+    environment === VCLEnvironment.Dev.valueOf() ?
+      Constants.OrganizationsSearchDescriptorByDidDev :
+      Constants.OrganizationsSearchDescriptorByDidStaging;
+
     vcl.searchForOrganizations(organizationDescriptor).then(
       (organizations: VCLOrganizations) => {
         console.log(
@@ -342,7 +341,7 @@ export default () => {
     const credentialManifestDescriptorRefresh: VCLCredentialManifestDescriptorRefresh =
       {
         service,
-        credentialIds: Constants.CredentialIdsToRefresh,
+        credentialIds: Constants.getCredentialIdsToRefresh(environment),
         didJwk: didJwkRef.current,
       };
     vcl.getCredentialManifest(credentialManifestDescriptorRefresh).then(
@@ -368,7 +367,7 @@ export default () => {
     const generateOffersDescriptor: VCLGenerateOffersDescriptor = {
       credentialManifest,
       types: Constants.CredentialTypes,
-      identificationVerifiableCredentials: Constants.IdentificationList,
+      identificationVerifiableCredentials: Constants.getIdentificationList(environment),
     };
 
     vcl.generateOffers(generateOffersDescriptor).then(
@@ -491,7 +490,7 @@ export default () => {
   };
 
   const getVerifiedProfile = () => {
-    vcl.getVerifiedProfile(Constants.VerifiedProfileDescriptor).then(
+    vcl.getVerifiedProfile(Constants.getVerifiedProfileDescriptor(environment)).then(
       (verifiedProfile: VCLVerifiedProfile) => {
         console.log('VCL Verified Profile: ', JSON.stringify(verifiedProfile));
       },
@@ -584,7 +583,7 @@ export default () => {
           onPress={getCredentialTypesUIFormSchema}
         />
         <View style={styles.space} />
-        <Button title="Refresh Credentials" onPress={refreshCredentials} />
+        <Button title="Refresh Credentials" onPress={refreshCredentials} disabled />
         <View style={styles.space} />
         <Button title="Get Verified Profile" onPress={getVerifiedProfile} />
         <View style={styles.space} />

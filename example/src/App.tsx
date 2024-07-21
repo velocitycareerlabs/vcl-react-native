@@ -42,8 +42,6 @@ import vcl, {
   type VCLError,
   type VCLCredentialTypes,
   VCLStatusCode,
-  VCLXVnfProtocolVersion,
-  VCLCryptoServiceType,
   VCLSignatureAlgorithm,
   type VCLDidJwkDescriptor,
 } from '@velocitycareerlabs/vcl-react-native';
@@ -74,23 +72,26 @@ export default () => {
   React.useEffect(() => {
     setInitState(InitState.Initializing);
 
+    // const initializationDescriptor: VCLInitializationDescriptor = {
+    //   environment,
+    //   xVnfProtocolVersion: VCLXVnfProtocolVersion.XVnfProtocolVersion2,
+    //   cacheSequence: 0,
+    //   cryptoServicesDescriptor: {
+    //     cryptoServiceType: VCLCryptoServiceType.Remote,
+    //     remoteCryptoServicesUrlsDescriptor: {
+    //       keyServiceUrls: {
+    //         createDidKeyServiceUrl:
+    //           Constants.getCreateDidKeyServiceUrl(environment),
+    //       },
+    //       jwtServiceUrls: {
+    //         jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment),
+    //         jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment),
+    //       },
+    //     },
+    //   },
+    // };
     const initializationDescriptor: VCLInitializationDescriptor = {
       environment,
-      xVnfProtocolVersion: VCLXVnfProtocolVersion.XVnfProtocolVersion2,
-      cacheSequence: 0,
-      cryptoServicesDescriptor: {
-        cryptoServiceType: VCLCryptoServiceType.Remote,
-        remoteCryptoServicesUrlsDescriptor: {
-          keyServiceUrls: {
-            createDidKeyServiceUrl:
-              Constants.getCreateDidKeyServiceUrl(environment),
-          },
-          jwtServiceUrls: {
-            jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment),
-            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment),
-          },
-        },
-      },
     };
     vcl.initialize(initializationDescriptor).then(
       () => {

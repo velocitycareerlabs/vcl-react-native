@@ -592,7 +592,7 @@ func dictionaryToFinalizedOffersDescriptor(
 ) -> VCLFinalizeOffersDescriptor {
     return VCLFinalizeOffersDescriptor(
         credentialManifest: dictionaryToCredentialManifest(finalizedOffersDescriptorDictionary["credentialManifest"] as? [String : Any]),
-        offers: dictionaryToOffers(finalizedOffersDescriptorDictionary["offers"] as? [String : Any]),
+        challenge: finalizedOffersDescriptorDictionary["challenge"] as? String,
         approvedOfferIds: finalizedOffersDescriptorDictionary["approvedOfferIds"] as? [String] ?? [String](),
         rejectedOfferIds: finalizedOffersDescriptorDictionary["rejectedOfferIds"] as? [String] ?? [String]()
     )

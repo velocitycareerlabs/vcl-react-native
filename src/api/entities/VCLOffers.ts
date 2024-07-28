@@ -14,5 +14,5 @@ export interface VCLOffers {
   all: VCLOffer[];
   responseCode: number;
   sessionToken: VCLToken;
-  challenge: string;
+  challenge?: string;
 }

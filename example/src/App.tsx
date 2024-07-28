@@ -58,7 +58,7 @@ export const enum InitState {
 const environment = VCLEnvironment.Staging;
 
 const didJwkDescriptor: VCLDidJwkDescriptor = {
-  signatureAlgorithm: VCLSignatureAlgorithm.ES256,
+  signatureAlgorithm: VCLSignatureAlgorithm.SECP256k1,
 };
 
 export default () => {
@@ -432,18 +432,18 @@ export default () => {
 
   const finalizeOffers = (
     credentialManifest: VCLCredentialManifest,
-    generatedOffers: VCLOffers
+    offers: VCLOffers
   ) => {
     const approvedRejectedOfferIds =
-      Utils.getApprovedRejectedOfferIdsMock(generatedOffers);
+      Utils.getApprovedRejectedOfferIdsMock(offers);
     const finalizeOffersDescriptor: VCLFinalizeOffersDescriptor = {
       credentialManifest,
-      offers: generatedOffers,
+      challenge: offers.challenge,
       approvedOfferIds: approvedRejectedOfferIds[0]!,
       rejectedOfferIds: approvedRejectedOfferIds[1]!,
     };
     vcl
-      .finalizeOffers(finalizeOffersDescriptor, generatedOffers.sessionToken)
+      .finalizeOffers(finalizeOffersDescriptor, offers.sessionToken)
       .then(
         (jwtVerifiableCredentials: VCLJwtVerifiableCredentials) => {
           console.log(

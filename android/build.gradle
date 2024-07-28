@@ -91,8 +91,10 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-  // VCL:
-  implementation "com.nimbusds:nimbus-jose-jwt:9.37.3"
-  implementation "io.velocitycareerlabs:vcl:2.4.6"
+//--------- Must: be added:
+  implementation "io.velocitycareerlabs:vcl:2.5.4"
+  implementation 'com.nimbusds:nimbus-jose-jwt:9.40'
+  implementation "androidx.security:security-crypto:1.1.0-alpha06"
+//-------------------------
 }
 

@@ -647,7 +647,7 @@ object Converter {
     finalizedOffersDescriptorMap: ReadableMap
   ) = VCLFinalizeOffersDescriptor(
     credentialManifest = mapToCredentialManifest(finalizedOffersDescriptorMap.getMapOpt("credentialManifest")),
-    offers = mapToOffers(finalizedOffersDescriptorMap.getMapOpt("offers")),
+    challenge = finalizedOffersDescriptorMap.getString("challenge"),
     approvedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("approvedOfferIds")?.toArrayList()
       ?.toList() as? List<String>) ?: listOf(),
     rejectedOfferIds = (finalizedOffersDescriptorMap.getArrayOpt("rejectedOfferIds")?.toArrayList()

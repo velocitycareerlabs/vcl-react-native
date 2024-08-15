@@ -9,6 +9,7 @@ export class VCLError extends Error {
   payload?: string;
   error?: string;
   errorCode?: string;
+  requestId?: string;
   statusCode?: number;
 
   constructor(error: any) {
@@ -18,6 +19,7 @@ export class VCLError extends Error {
       this.payload = errorJson.payload;
       this.error = errorJson.error;
       this.errorCode = errorJson.errorCode;
+      this.requestId = errorJson.requestId;
       this.message = errorJson.message;
       this.statusCode = parseInt(errorJson.statusCode, 10);
     } catch (e) {

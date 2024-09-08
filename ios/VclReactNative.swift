@@ -266,7 +266,7 @@ class VclReactNative: NSObject {
             didJwk: dictionaryToDidJwk(didJwkDictionary),
             remoteCryptoServicesToken: dictionaryToToken(remoteCryptoServicesTokenDictionary),
             successHandler: {
-                resolve(jwtToReadableMap($0))
+                resolve(jwtToDictionary($0))
             },
             errorHandler: {
                 reject(nil, $0.toDictionary().toJsonString(), $0)

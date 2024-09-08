@@ -575,6 +575,15 @@ func dictionaryToJwt(
     return VCLJwt(encodedJwt: jwtDictionary?["encodedJwt"] as? String ?? "")
 }
 
+func jwtToDictionary(_ jwt: VCLJwt) -> [String: Any?] {
+    return [
+        "encodedJwt": jwt.encodedJwt,
+        "header": jwt.header,
+        "payload": jwt.payload,
+        "signature": jwt.signature
+    ]
+}
+
 func dictionaryToPublicJwk(
     _ publicJwkDictionary: [String: Any]?
 ) -> VCLPublicJwk {
@@ -611,10 +620,6 @@ func jwtVerifiableCredentialsToDictionary(
     jwtVerifiableCredentialsDictionary["passedCredentials"] = passedCredentials
     jwtVerifiableCredentialsDictionary["failedCredentials"] = failedCredentials
     return jwtVerifiableCredentialsDictionary
-}
-
-func jwtToReadableMap(_ jwt: VCLJwt) -> [String: Any] {
-    return ["encodedJwt": jwt.encodedJwt]
 }
 
 func readableMapToCredentialTypesUIFormSchemaDescriptor(

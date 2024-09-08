@@ -22,6 +22,7 @@ fun Map<String, Any>.toWritableMap(): WritableMap {
     when (value) {
       is Boolean -> writableMap.putBoolean(key, value)
       is Double -> writableMap.putDouble(key, value)
+      is Long -> writableMap.putDouble(key, value.toDouble())
       is Int -> writableMap.putInt(key, value)
       is String -> writableMap.putString(key, value)
       is WritableMap -> writableMap.putMap(key, value)

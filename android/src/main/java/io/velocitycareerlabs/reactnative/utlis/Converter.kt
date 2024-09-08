@@ -631,9 +631,6 @@ object Converter {
     return credentialTypesFormSchemaMap
   }
 
-  fun mapToJwt(jwtMap: ReadableMap?) =
-    VCLJwt(encodedJwt = jwtMap?.getStringOpt("encodedJwt") ?: "")
-
   fun mapToPublicJwk(publicJwkMap: ReadableMap?) =
     VCLPublicJwk(valueStr = publicJwkMap?.getStringOpt("valueStr") ?: "")
 
@@ -674,8 +671,14 @@ object Converter {
   fun jwtToMap(jwt: VCLJwt): ReadableMap {
     val jwtReadableMap = Arguments.createMap()
     jwtReadableMap.putString("encodedJwt", jwt.encodedJwt)
+    jwtReadableMap.putMap("header", jwt.header?.toJSONObject()?.toReadableMap())
+    jwtReadableMap.putMap("payload", jwt.payload?.toJSONObject()?.toReadableMap())
+    jwtReadableMap.putString("signature", jwt.signature?.toString())
     return jwtReadableMap
   }
+
+  fun mapToJwt(jwtMap: ReadableMap?) =
+    VCLJwt(encodedJwt = jwtMap?.getStringOpt("encodedJwt") ?: "")
 
   fun mapToCredentialTypesUIFormSchemaDescriptor(
     credentialTypesUIFormSchemaDescriptorMap: ReadableMap

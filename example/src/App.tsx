@@ -532,6 +532,11 @@ export default () => {
       .then(
         (jwt: VCLJwt) => {
           console.log('VCL generated signed jwt:', JSON.stringify(jwt));
+          // console.log('VCL generated signed jwt:');
+          // console.log('VCL jwt encodedJwt', jwt.encodedJwt);
+          // console.log('VCL jwt header', JSON.stringify(jwt.header));
+          // console.log('VCL jwt payload:', JSON.stringify(jwt.payload));
+          // console.log('VCL jwt signature:', JSON.stringify(jwt.signature));
         },
         (err: VCLError) => {
           console.log('VCL sign Error:', JSON.stringify(err));

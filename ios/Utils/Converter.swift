@@ -612,10 +612,10 @@ func jwtVerifiableCredentialsToDictionary(
 ) -> [String: Any] {
     var jwtVerifiableCredentialsDictionary = [String: Any]()
     let passedCredentials = jwtVerifiableCredentials.passedCredentials.map {
-        $0.encodedJwt
+        jwtToDictionary($0)
     }
     let failedCredentials = jwtVerifiableCredentials.failedCredentials.map {
-        $0.encodedJwt
+        jwtToDictionary($0)
     }
     jwtVerifiableCredentialsDictionary["passedCredentials"] = passedCredentials
     jwtVerifiableCredentialsDictionary["failedCredentials"] = failedCredentials

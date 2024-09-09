@@ -5,7 +5,7 @@ Velocity Career Labs React Native SDK
 
 Android:
 
-kotlin version: 1.8.0
+kotlin version: 1.9.24
 
 minSdkVersion: 24
 

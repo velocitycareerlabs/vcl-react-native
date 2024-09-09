@@ -658,10 +658,10 @@ object Converter {
     val passedCredentials = Arguments.createArray()
     val failedCredentials = Arguments.createArray()
     jwtVerifiableCredentials.passedCredentials.forEach {
-      passedCredentials.pushString(it.encodedJwt)
+      passedCredentials.pushMap(jwtToMap(it))
     }
     jwtVerifiableCredentials.failedCredentials.forEach {
-      failedCredentials.pushString(it.encodedJwt)
+      failedCredentials.pushMap(jwtToMap(it))
     }
     jwtVerifiableCredentialsMap.putArray("passedCredentials", passedCredentials)
     jwtVerifiableCredentialsMap.putArray("failedCredentials", failedCredentials)

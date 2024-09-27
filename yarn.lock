@@ -3875,7 +3875,7 @@ __metadata:
     eslint-config-prettier: ^9.1.0
     eslint-config-react-app: ^7.0.1
     eslint-import-resolver-typescript: ^3.6.1
-    eslint-plugin-autofix: ^1.1.0
+    eslint-plugin-autofix: ^2.2.0
     eslint-plugin-import: ^2.29.1
     eslint-plugin-jest: ^28.2.0
     eslint-plugin-jsx-a11y: "^6.8.0 "
@@ -6478,18 +6478,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-autofix@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "eslint-plugin-autofix@npm:1.1.0"
+"eslint-plugin-autofix@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "eslint-plugin-autofix@npm:2.2.0"
   dependencies:
     eslint-rule-composer: ^0.3.0
     espree: ^9.0.0
     esutils: ^2.0.2
-    lodash: ^4.17.20
     string-similarity: ^4.0.3
   peerDependencies:
-    eslint: ">= 5.12.1"
-  checksum: 93d33ca48f0a45d1298e1b8db9d241eb9e782f26a0d48d3e5721614c23e4edaba99215e72f890a3b1a6b885f3bfd40bd8c50f1fb863ed0a3bbf45e93c4495014
+    eslint: ">=8"
+  checksum: dfd5e8021f05344beeede85609697fefc53318cdeb53dfd1f70155f34a5249e5244f40ff7fac97ba7ea3bb45b21d62abe742af732043a44d7fdd12199d3f249d
   languageName: node
   linkType: hard
 
@@ -9863,7 +9862,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.17.20, lodash@npm:^4.17.21":
+"lodash@npm:4.17.21, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7

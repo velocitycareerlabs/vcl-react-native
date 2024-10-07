@@ -427,7 +427,7 @@ func dictionaryToCredentialManifestDescriptorByService(
     _ credentialManifestDescriptorByServiceDictionary: [String: Any]
 ) -> VCLCredentialManifestDescriptorByService {
     return VCLCredentialManifestDescriptorByService(
-        service: dictionaryToServiceCredentialAgentIssuer(
+        service: dictionaryToService(
             credentialManifestDescriptorByServiceDictionary["service"] as? [String : Any]
         ),
         issuingType: dictionaryToIssuingType(
@@ -449,7 +449,7 @@ func dictionaryToCredentialManifestDescriptorRefresh(
     _ credentialManifestDescriptorRefreshDictionary: [String: Any]
 ) -> VCLCredentialManifestDescriptorRefresh {
     return VCLCredentialManifestDescriptorRefresh(
-        service: dictionaryToServiceCredentialAgentIssuer(
+        service: dictionaryToService(
             credentialManifestDescriptorRefreshDictionary["service"] as? [String : Any]
         ),
         credentialIds: credentialManifestDescriptorRefreshDictionary["credentialIds"] as? [String] ?? [],
@@ -460,10 +460,10 @@ func dictionaryToCredentialManifestDescriptorRefresh(
     )
 }
 
-func dictionaryToServiceCredentialAgentIssuer(
+func dictionaryToService(
     _ serviceDictionary: [String: Any]?
-) -> VCLServiceCredentialAgentIssuer {
-    return VCLServiceCredentialAgentIssuer(payload: serviceDictionary?["payload"] as? [String : Any] ?? [:])
+) -> VCLService {
+    return VCLService(payload: serviceDictionary?["payload"] as? [String : Any] ?? [:])
 }
 
 func credentialManifestToDictionary(
@@ -491,7 +491,7 @@ func dictionaryToCredentialManifest(
     let deepLink = dictionaryToDeepLink(credentialManifestDictionary?["deepLink"] as? [String: Any])
     let didJwk = dictionaryToDidJwk(credentialManifestDictionary?["didJwk"] as? [String: Any])
     let remoteCryptoServicesToken = dictionaryToToken(credentialManifestDictionary?["remoteCryptoServicesToken"] as? [String: Any])
-    
+
     return VCLCredentialManifest(
         jwt: jwt,
         vendorOriginContext: vendorOriginContext,

@@ -49,7 +49,6 @@ import type { VCLPresentationSubmission } from './api/entities/VCLPresentationSu
 import type { VCLPublicJwk } from './api/entities/VCLPublicJwk';
 import type { VCLPushDelegate } from './api/entities/VCLPushDelegate';
 import type { VCLService } from './api/entities/VCLService';
-import type { VCLServiceCredentialAgentIssuer } from './api/entities/VCLServiceCredentialAgentIssuer';
 import { VCLServiceType } from './api/entities/VCLServiceType';
 import type { VCLServiceTypes } from './api/entities/VCLServiceTypes';
 import { VCLIssuingType } from './api/entities/VCLIssuingType';
@@ -117,7 +116,6 @@ export type {
   VCLPublicJwk,
   VCLPushDelegate,
   VCLService,
-  VCLServiceCredentialAgentIssuer,
   VCLServiceTypes,
   VCLSubmissionResult,
   VCLToken,

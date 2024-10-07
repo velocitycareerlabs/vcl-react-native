@@ -32,7 +32,6 @@ import vcl, {
   type VCLPresentationSubmission,
   type VCLSubmissionResult,
   type VCLService,
-  type VCLServiceCredentialAgentIssuer,
   type VCLToken,
   type VCLVerifiedProfile,
   type VCLDeepLink,
@@ -253,7 +252,7 @@ export default () => {
           JSON.stringify(organizations)
         );
 
-        const serviceCredentialAgentIssuer: VCLServiceCredentialAgentIssuer = {
+        const serviceCredentialAgentIssuer: VCLService = {
           payload:
             organizations.all[0]?.serviceCredentialAgentIssuers[0]?.payload ??
             {},
@@ -267,7 +266,7 @@ export default () => {
   };
 
   const getCredentialManifestByService = (
-    serviceCredentialAgentIssuer: VCLServiceCredentialAgentIssuer
+    serviceCredentialAgentIssuer: VCLService
   ) => {
     const credentialManifestDescriptorByOrganization: VCLCredentialManifestDescriptorByService =
       {

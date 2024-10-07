@@ -460,7 +460,7 @@ object Converter {
     credentialManifestDescriptorByServiceMap: ReadableMap
   ): VCLCredentialManifestDescriptorByService {
     return VCLCredentialManifestDescriptorByService(
-      service = mapToServiceCredentialAgentIssuer(
+      service = mapToService(
         credentialManifestDescriptorByServiceMap.getMapOpt("service")
       ),
       issuingType = mapToIssuingType(
@@ -484,7 +484,7 @@ object Converter {
     credentialManifestDescriptorRefreshMap: ReadableMap
   ): VCLCredentialManifestDescriptor {
     return VCLCredentialManifestDescriptorRefresh(
-      service = mapToServiceCredentialAgentIssuer(
+      service = mapToService(
         credentialManifestDescriptorRefreshMap.getMapOpt("service")
       ),
       credentialIds = credentialManifestDescriptorRefreshMap.getArrayOpt("credentialIds")
@@ -496,10 +496,10 @@ object Converter {
     )
   }
 
-  fun mapToServiceCredentialAgentIssuer(
+  fun mapToService(
     serviceMap: ReadableMap?
-  ): VCLServiceCredentialAgentIssuer =
-    VCLServiceCredentialAgentIssuer(
+  ): VCLService =
+    VCLService(
       payload = serviceMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject()
     )
 

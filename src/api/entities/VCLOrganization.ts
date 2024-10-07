@@ -6,9 +6,9 @@
  */
 
 import type { Dictionary } from '../Dictionary';
-import type { VCLServiceCredentialAgentIssuer } from './VCLServiceCredentialAgentIssuer';
+import type { VCLService } from './VCLService';
 
 export interface VCLOrganization {
   payload: Dictionary<any>;
-  serviceCredentialAgentIssuers: VCLServiceCredentialAgentIssuer[];
+  serviceCredentialAgentIssuers: VCLService[];
 }

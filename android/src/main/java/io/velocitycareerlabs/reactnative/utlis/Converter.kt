@@ -230,7 +230,10 @@ object Converter {
     val jwtMap = Arguments.createMap()
     jwtMap.putString("encodedJwt", presentationRequest.jwt.encodedJwt)
     presentationRequestMap.putMap("jwt", jwtMap)
-    presentationRequestMap.putMap("verifiedProfile", verifiedProfileToMap(presentationRequest.verifiedProfile))
+    presentationRequestMap.putMap(
+      "verifiedProfile",
+      verifiedProfileToMap(presentationRequest.verifiedProfile)
+    )
     presentationRequestMap.putString("iss", presentationRequest.iss)
     presentationRequestMap.putString("exchangeId", presentationRequest.exchangeId)
     presentationRequestMap.putString(
@@ -706,7 +709,9 @@ object Converter {
   fun mapToVerifiedProfile(
     verifiedProfileMap: ReadableMap?
   ): VCLVerifiedProfile {
-    return VCLVerifiedProfile(payload = verifiedProfileMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject("{}"))
+    return VCLVerifiedProfile(
+      payload = verifiedProfileMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject("{}")
+    )
   }
 
   fun mapToJwtDescriptor(

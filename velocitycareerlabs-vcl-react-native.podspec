@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   # https://github.com/CocoaPods/CocoaPods/issues/7234#issuecomment-346136322
   # s.static_framework = true
 
-  s.swift_version = "5.9"
+  s.swift_version = "5"
 
   s.dependency "VCL", "2.6.3"
 

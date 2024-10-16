@@ -11,14 +11,14 @@ class VclReactNative: NSObject {
 
   private let vcl = VCLProvider.vclInstance()
 
-  @MainActor private func initGlobalConfigurations(
+  private func initGlobalConfigurations(
     _ initializationDescriptor: VCLInitializationDescriptor
   ) {
     GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
     GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
   }
 
-  @MainActor @objc(initialize:withResolver:withRejecter:)
+  @objc(initialize:withResolver:withRejecter:)
   func initialize(
     initializationDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -35,7 +35,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(getCountries:withRejecter:)
+  @objc(getCountries:withRejecter:)
   func getCountries(
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -47,7 +47,7 @@ class VclReactNative: NSObject {
     }
   }
 
-  @MainActor @objc(getCredentialTypeSchemas:withRejecter:)
+  @objc(getCredentialTypeSchemas:withRejecter:)
   func getCredentialTypeSchemas(
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -59,7 +59,7 @@ class VclReactNative: NSObject {
     }
   }
 
-  @MainActor @objc(getCredentialTypes:withRejecter:)
+  @objc(getCredentialTypes:withRejecter:)
   func getCredentialTypes(
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -71,7 +71,7 @@ class VclReactNative: NSObject {
     }
   }
 
-  @MainActor @objc(getPresentationRequest:withResolver:withRejecter:)
+  @objc(getPresentationRequest:withResolver:withRejecter:)
   func getPresentationRequest(
     presentationRequestDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -87,7 +87,7 @@ class VclReactNative: NSObject {
     )
   }
 
-  @MainActor @objc(submitPresentation:withResolver:withRejecter:)
+  @objc(submitPresentation:withResolver:withRejecter:)
   func submitPresentation(
     presentationSubmissionDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -104,7 +104,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(getExchangeProgress:withResolver:withRejecter:)
+  @objc(getExchangeProgress:withResolver:withRejecter:)
   func getExchangeProgress(
     exchangeDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -119,7 +119,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(searchForOrganizations:withResolver:withRejecter:)
+  @objc(searchForOrganizations:withResolver:withRejecter:)
   func searchForOrganizations(
     organizationsSearchDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -134,7 +134,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(getCredentialManifest:withResolver:withRejecter:)
+  @objc(getCredentialManifest:withResolver:withRejecter:)
   func getCredentialManifest(
     credentialManifestDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -155,7 +155,7 @@ class VclReactNative: NSObject {
     }
   }
 
-  @MainActor @objc(generateOffers:withResolver:withRejecter:)
+  @objc(generateOffers:withResolver:withRejecter:)
   func generateOffers(
     generateOffersDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -170,7 +170,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(checkForOffers:withtSessionTokenDictionary:withResolver:withRejecter:)
+  @objc(checkForOffers:withtSessionTokenDictionary:withResolver:withRejecter:)
   func checkForOffers(
     generateOffersDescriptorDictionary: [String: Any],
     sessionTokenDictionary: [String: Any],
@@ -187,7 +187,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(finalizeOffers:withSessionTokenDictionary:withResolver:withRejecter:)
+  @objc(finalizeOffers:withSessionTokenDictionary:withResolver:withRejecter:)
   func finalizeOffers(
     finalizeOffersDescriptorDictionary: [String: Any],
     sessionTokenDictionary: [String: Any],
@@ -204,7 +204,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(getCredentialTypesUIFormSchema:withResolver:withRejecter:)
+  @objc(getCredentialTypesUIFormSchema:withResolver:withRejecter:)
   func getCredentialTypesUIFormSchema(
     credentialTypesUIFormSchemaDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -220,7 +220,7 @@ class VclReactNative: NSObject {
     )
   }
 
-  @MainActor @objc(getVerifiedProfile:withResolver:withRejecter:)
+  @objc(getVerifiedProfile:withResolver:withRejecter:)
   func getVerifiedProfile(
     verifiedProfileDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -235,7 +235,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(verifyJwt:withPublicJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
+  @objc(verifyJwt:withPublicJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
   func verifyJwt(
     jwtDictionary: [String: Any],
     publicJwkDictionary: [String: Any],
@@ -254,7 +254,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(generateSignedJwt:withDidJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
+  @objc(generateSignedJwt:withDidJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
   func generateSignedJwt(
     jwtDescriptorDictionary: [String: Any],
     didJwkDictionary: [String: Any],
@@ -273,7 +273,7 @@ class VclReactNative: NSObject {
       })
   }
 
-  @MainActor @objc(generateDidJwk:withResolver:withRejecter:)
+  @objc(generateDidJwk:withResolver:withRejecter:)
   func generateDidJwk(
     didJwkDescriptorDictionary: [String: Any]? = nil,
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock

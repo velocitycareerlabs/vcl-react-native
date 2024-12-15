@@ -1,6 +1,6 @@
 {
   "name": "@velocitycareerlabs/vcl-react-native",
-  "version": "2.6.10",
+  "version": "2.6.11",
   "description": "Velocity Career Labs React Native SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -100,7 +100,6 @@
   "workspaces": [
     "example"
   ],
-  "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
@@ -173,5 +172,6 @@
         }
       ]
     ]
-  }
+  },
+  "packageManager": "yarn@3.6.1"
 }

@@ -95,7 +95,7 @@ fun WritableMap.getMapOpt(key: String): ReadableMap? {
 
 fun ReadableMap.toJsonObject(): JSONObject {
   return try {
-    JSONObject(this.toHashMap())
+    JSONObject(this.toHashMap() as MutableMap<*, *>)
   } catch (e: Exception) {
 //    e.printStackTrace()
     JSONObject()

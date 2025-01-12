@@ -13,7 +13,7 @@ env:
   RC_SUFFIX: 'rc'
 jobs:
   test-react-sdk:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       # Git clone repository
       - name: Git clone repository

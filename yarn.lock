@@ -3765,7 +3765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:8.19.1, @typescript-eslint/utils@npm:^6.0.0 || ^7.0.0 || ^8.0.0":
+"@typescript-eslint/utils@npm:^6.0.0 || ^7.0.0 || ^8.0.0":
   version: 8.19.1
   resolution: "@typescript-eslint/utils@npm:8.19.1"
   dependencies:
@@ -3850,7 +3850,7 @@ __metadata:
     eslint-plugin-import: ^2.29.1
     eslint-plugin-jest: ^28.2.0
     eslint-plugin-jsx-a11y: "^6.8.0 "
-    eslint-plugin-prefer-arrow-functions: ^3.3.2
+    eslint-plugin-prefer-arrow: ^1.2.3
     eslint-plugin-prettier: ^5.1.3
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
@@ -6612,15 +6612,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prefer-arrow-functions@npm:^3.3.2":
-  version: 3.6.0
-  resolution: "eslint-plugin-prefer-arrow-functions@npm:3.6.0"
-  dependencies:
-    "@typescript-eslint/types": 8.19.1
-    "@typescript-eslint/utils": 8.19.1
+"eslint-plugin-prefer-arrow@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "eslint-plugin-prefer-arrow@npm:1.2.3"
   peerDependencies:
-    eslint: 9.17.0
-  checksum: ceffeccb2ecf5ebfaef1ae05c47652eb48ac3922cf2a76b34ff6e2891f3dc2c65e0b6be19cc1dc5af50c9d7ee7e8605f39b02bcd4bb962f653df942c698f68c5
+    eslint: ">=2.0.0"
+  checksum: 3cdae574121c4a683d77e329ee193103b2bf418d7a8c85831b274000ae4aba64cb4d302fe69a44ae4d729b90f5130c968e4a9e43852a5de940d00283e61f92fc
   languageName: node
   linkType: hard
 

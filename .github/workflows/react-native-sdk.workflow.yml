@@ -24,7 +24,7 @@ env:
   GLOBAL_ENV: ${{ github.event_name == 'push' && format('{0}', 'dev') || inputs.environment }}
 jobs:
   build-react-native-sdk:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Git clone repository
         uses: actions/checkout@v4

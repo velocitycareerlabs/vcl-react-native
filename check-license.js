@@ -9,6 +9,7 @@ stdin.on('data', (chunk) => {
 });
 
 stdin.on('end', () => {
+  // console.log('DATA', data);
   const licenses = JSON.parse(data);
   processBadLicenses(licenses.data.head, getBadLicenses(licenses));
 });

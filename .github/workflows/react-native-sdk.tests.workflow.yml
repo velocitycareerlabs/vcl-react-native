@@ -26,6 +26,14 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: corepack enable && yarn set version 3.6.1 && yarn
+      - name: DEBUG License Checker 1
+        run: yarn licenses list
+      - name: DEBUG License Checker 2
+        run: yarn licenses list --production
+      - name: DEBUG License Checker 3
+        run: yarn licenses list --production --json
+      - name: DEBUG License Checker 4
+        run: yarn licenses list --production --json | grep table
       # Check licenses
       - name: Check licenses
         run: yarn check-licenses

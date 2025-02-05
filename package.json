@@ -27,6 +27,7 @@
     "!**/.*"
   ],
   "scripts": {
+    "postinstall": "grep -v 'yarnPath: .yarn/releases/yarn-3.6.1.cjs' .yarnrc.yml > temp.yml && mv temp.yml .yarnrc.yml",
     "check-licenses": "yarn licenses list --production --json | grep table | ./check-license.js",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint:affected": "nx affected --target=lint",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^19.1.0",
+    "@evilmartians/lefthook": "^1.5.0",
     "@react-native/eslint-config": "^0.74.75",
     "@release-it/conventional-changelog": "^8.0.1",
     "@types/jest": "^29.5.14",

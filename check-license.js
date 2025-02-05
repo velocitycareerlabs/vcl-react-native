@@ -9,9 +9,17 @@ stdin.on('data', (chunk) => {
 });
 
 stdin.on('end', () => {
-  // console.log('DATA', data);
-  const licenses = JSON.parse(data);
-  processBadLicenses(licenses.data.head, getBadLicenses(licenses));
+  if (data.trim().length === 0) {
+    console.error('Error: No json data input received.');
+    process.exit(1);
+  }
+  try {
+    const licenses = JSON.parse(data);
+    processBadLicenses(licenses.data.head, getBadLicenses(licenses));
+  } catch (error) {
+    console.error('Error parsing json data:', error.message);
+    process.exit(1);
+  }
 });
 
 const validLicenseRegex =

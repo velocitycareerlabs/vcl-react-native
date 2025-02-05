@@ -27,7 +27,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "check-licenses": "yarn licenses list --production --json | grep table | ./check-license.js",
+    "check-licenses": "yarn dlx license-checker --production --json | grep table | ./check-license.js",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint:affected": "nx affected --target=lint",
     "lint:fix": "nx run-many --target=lint:fix --all",

@@ -28,7 +28,7 @@ jobs:
         run: corepack enable && yarn set version 3.6.1 && yarn
       # Check licenses
       - name: Check licenses
-        run: yarn check-licenses
+        run: corepack enable && yarn set version 3.6.1 && yarn check-licenses
       # Run lint
       - name: Run lint
         run: yarn lint

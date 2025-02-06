@@ -179,5 +179,5 @@
       ]
     ]
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@3.6.1"
 }

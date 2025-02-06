@@ -14,7 +14,7 @@ try {
     const content = fs.readFileSync(filePath, "utf8");
     const updatedContent = content
       .split("\n")
-      .filter(line => !line.includes("yarnPath: .yarn/releases/yarn-3.6.1.cjs"))
+      .filter(line => !line.includes("yarnPath: .yarn/releases/yarn-"))
       .join("\n");
 
     fs.writeFileSync(filePath, updatedContent, "utf8");

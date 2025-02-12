@@ -7,6 +7,7 @@
   "types": "lib/typescript/src/index.d.ts",
   "react-native": "src/index",
   "source": "src/index",
+  "private": true,
   "files": [
     "src",
     "lib",
@@ -26,6 +27,7 @@
     "!**/.*"
   ],
   "scripts": {
+    "check-licenses": "yarn licenses list --production --json | grep table | ./scripts/check-license.js",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint:affected": "nx affected --target=lint",
     "lint:fix": "nx run-many --target=lint:fix --all",
@@ -55,9 +57,17 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "dependencies": {
+    "license-checker": "^25.0.1"
+  },
   "devDependencies": {
+    "@babel/core": "7.26.0",
+    "@babel/preset-env": "7.26.0",
+    "@babel/preset-typescript": "7.26.0",
     "@commitlint/config-conventional": "^19.1.0",
     "@evilmartians/lefthook": "^1.5.0",
+    "@react-native/babel-preset": "^0.77.0",
+    "@react-native/community-cli-plugin": "^0.77.0",
     "@react-native/eslint-config": "^0.74.75",
     "@release-it/conventional-changelog": "^8.0.1",
     "@types/jest": "^29.5.14",
@@ -72,6 +82,7 @@
     "eslint-config-react-app": "^7.0.1",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-autofix": "^1.1.0",
+    "eslint-plugin-ft-flow": "^3.0.11",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jest": "^28.2.0",
     "eslint-plugin-jsx-a11y": "^6.8.0 ",

@@ -19,7 +19,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: '22'
   RC_SUFFIX: 'rc'
   GLOBAL_ENV: ${{ github.event_name == 'push' && format('{0}', 'dev') || inputs.environment }}
 jobs:

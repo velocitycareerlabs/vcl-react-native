@@ -3339,10 +3339,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/typescript-config@npm:0.76.1":
-  version: 0.76.1
-  resolution: "@react-native/typescript-config@npm:0.76.1"
-  checksum: ee87d6a70f31319cef777a8d54a4afd33fb25a0e47ec9d13b89ea8278ad9d048c8f8bd78b3822c99070cee3c0c4afcdb59b4e6ff2cda5800b8384db0cbb29674
+"@react-native/typescript-config@npm:0.78.1":
+  version: 0.78.1
+  resolution: "@react-native/typescript-config@npm:0.78.1"
+  checksum: fa444deee2671e29762bba59b6b2679833eec97388227598fedd5361f991230ca70127f7062310f0f863e4df7e29cdf93bf919042e5a98bf6758bd88f41d04c2
   languageName: node
   linkType: hard
 
@@ -4154,7 +4154,7 @@ __metadata:
     "@babel/runtime": ^7.20.0
     "@react-native/babel-preset": 0.74.75
     "@react-native/metro-config": 0.74.75
-    "@react-native/typescript-config": 0.76.1
+    "@react-native/typescript-config": 0.78.1
     babel-plugin-module-resolver: ^5.0.0
     react: 18.3.1
     react-native: 0.73.6

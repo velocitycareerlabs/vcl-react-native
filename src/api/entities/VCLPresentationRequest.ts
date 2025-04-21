@@ -18,6 +18,6 @@ export interface VCLPresentationRequest {
   presentationDefinitionId: string;
   iss: string;
   didJwk: VCLDidJwk;
-  feed: boolean;
+  feed?: boolean;
   remoteCryptoServicesToken?: VCLToken;
 }

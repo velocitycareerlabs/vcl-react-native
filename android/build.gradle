@@ -92,9 +92,9 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 //--------- Must: be added:
-  implementation "io.velocitycareerlabs:vcl:2.7.1"
+  implementation "io.velocitycareerlabs:vcl:2.7.2"
   implementation 'com.nimbusds:nimbus-jose-jwt:10.0.1'
-  implementation "androidx.security:security-crypto:1.1.0-alpha06"
+  implementation "androidx.security:security-crypto:1.1.0-alpha07"
 //-------------------------
 }
 

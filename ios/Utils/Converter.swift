@@ -234,6 +234,7 @@ func presentationRequestToDictionary(
   presentationRequestDictionary["presentationDefinitionId"] = presentationRequest.presentationDefinitionId
   presentationRequestDictionary["deepLink"] = deepLinkToDictionary(presentationRequest.deepLink)
   presentationRequestDictionary["didJwk"] = didJwkToDictionary(presentationRequest.didJwk)
+  presentationRequestDictionary["feed"] = presentationRequest.feed
   presentationRequestDictionary["remoteCryptoServicesToken"] = tokenToDictionary(presentationRequest.remoteCryptoServicesToken)
   return presentationRequestDictionary
 }
@@ -620,6 +621,42 @@ func jwtVerifiableCredentialsToDictionary(
   jwtVerifiableCredentialsDictionary["passedCredentials"] = passedCredentials
   jwtVerifiableCredentialsDictionary["failedCredentials"] = failedCredentials
   return jwtVerifiableCredentialsDictionary
+}
+
+func dictionaryToAuthTokenDescriptor(
+  _ authTokenDescriptorDictionary: [String: Any]
+) -> VCLAuthTokenDescriptor {
+  if let presentationRequestDictionary = authTokenDescriptorDictionary["presentationRequest"] as? [String: Any] {
+    return VCLAuthTokenDescriptor(presentationRequest: dictionaryToPresentationRequest(presentationRequestDictionary))
+  }
+  return VCLAuthTokenDescriptor(
+    authTokenUri: authTokenDescriptorDictionary["authTokenUri"] as? String ?? "",
+    refreshToken: dictionaryToToken(authTokenDescriptorDictionary["refreshToken"] as? [String : Any]),
+    walletDid: authTokenDescriptorDictionary["walletDid"] as? String,
+    relyingPartyDid: authTokenDescriptorDictionary["relyingPartyDid"] as? String,
+    vendorOriginContext: authTokenDescriptorDictionary["vendorOriginContext"] as? String
+  )
+}
+
+func authTokenToDictionary(
+  _ authToken: VCLAuthToken
+) -> [String: Any] {
+  var authTokenDictionary = [String: Any]()
+  authTokenDictionary["payload"] = authToken.payload
+  authTokenDictionary["authTokenUri"] = authToken.authTokenUri
+  authTokenDictionary["refreshToken"] = tokenToDictionary(authToken.refreshToken)
+  authTokenDictionary["walletDid"] = authToken.walletDid
+  authTokenDictionary["relyingPartyDid"] = authToken.relyingPartyDid
+  return authTokenDictionary
+}
+
+func dictionaryToAuthToken(_ authTokenDictionary: [String: Any]) -> VCLAuthToken {
+  return VCLAuthToken(
+    payload: authTokenDictionary["payload"] as? [String: Any] ?? [:],
+    authTokenUri: authTokenDictionary["authTokenUri"] as? String,
+    walletDid: authTokenDictionary["walletDid"] as? String,
+    relyingPartyDid: authTokenDictionary["relyingPartyDid"] as? String
+  )
 }
 
 func readableMapToCredentialTypesUIFormSchemaDescriptor(

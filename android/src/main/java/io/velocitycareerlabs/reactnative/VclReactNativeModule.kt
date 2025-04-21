@@ -37,7 +37,10 @@ import io.velocitycareerlabs.api.VCLProvider
 import io.velocitycareerlabs.api.entities.error.VCLError
 import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
 import io.velocitycareerlabs.reactnative.extensions.toThrowable
+import io.velocitycareerlabs.reactnative.utlis.Converter.authTokenToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToAuthToken
+import io.velocitycareerlabs.reactnative.utlis.Converter.mapToAuthTokenDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDidJwk
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToDidJwkDescriptor
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToInitializationDescriptor
@@ -152,11 +155,13 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun submitPresentation(
     presentationSubmissionMap: ReadableMap,
+    authTokenMap: ReadableMap? = null,
     promise: Promise
   ) {
     try {
       vcl.submitPresentation(
         presentationSubmission = mapToPresentationSubmission(presentationSubmissionMap),
+        authToken = mapToAuthToken(authTokenMap),
         successHandler = {
           promise.resolve(presentationSubmissionResultToMap(it))
         },
@@ -285,6 +290,25 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
         sessionToken = mapToToken(sessionTokenMap),
         successHandler = {
           promise.resolve(jwtVerifiableCredentialsToMap(it))
+        },
+        errorHandler = {
+          promise.reject(it.toThrowable())
+        })
+    } catch (ex: Exception) {
+      promise.reject(VCLError(ex).toThrowable())
+    }
+  }
+
+  @ReactMethod
+  fun getAuthToken(
+    authTokenDescriptorMap: ReadableMap,
+    promise: Promise
+  ) {
+    try {
+      vcl.getAuthToken(
+        authTokenDescriptor = mapToAuthTokenDescriptor(authTokenDescriptorMap),
+        successHandler = {
+          promise.resolve(authTokenToMap(it))
         },
         errorHandler = {
           promise.reject(it.toThrowable())

@@ -6,36 +6,39 @@
  */
 
 import { NativeModules } from 'react-native';
-import type { VCLCredentialManifest } from './entities/VCLCredentialManifest';
-import type { VCLCredentialManifestDescriptor } from './entities/VCLCredentialManifestDescriptor';
-import type { VCLCredentialTypeSchemas } from './entities/VCLCredentialTypeSchemas';
-import type { VCLCredentialTypesUIFormSchema } from './entities/VCLCredentialTypesUIFormSchema';
-import type { VCLCredentialTypesUIFormSchemaDescriptor } from './entities/VCLCredentialTypesUIFormSchemaDescriptor';
-import type { VCLExchange } from './entities/VCLExchange';
-import type { VCLExchangeDescriptor } from './entities/VCLExchangeDescriptor';
-import type { VCLFinalizeOffersDescriptor } from './entities/VCLFinalizeOffersDescriptor';
-import type { VCLGenerateOffersDescriptor } from './entities/VCLGenerateOffersDescriptor';
-import type { VCLJwt } from './entities/VCLJwt';
-import type { VCLJwtVerifiableCredentials } from './entities/VCLJwtVerifiableCredentials';
-import type { VCLOffers } from './entities/VCLOffers';
-import type { VCLOrganizations } from './entities/VCLOrganizations';
-import type { VCLOrganizationsSearchDescriptor } from './entities/VCLOrganizationsSearchDescriptor';
-import type { VCLPresentationRequest } from './entities/VCLPresentationRequest';
-import type { VCLPresentationSubmission } from './entities/VCLPresentationSubmission';
-import type { VCLPublicJwk } from './entities/VCLPublicJwk';
-import type { VCLToken } from './entities/VCLToken';
-import type { VCLVerifiedProfile } from './entities/VCLVerifiedProfile';
-import type { VCLVerifiedProfileDescriptor } from './entities/VCLVerifiedProfileDescriptor';
-import type { VCLCountries } from './entities/VCLCountries';
-import type { VCLInitializationDescriptor } from './entities/initialization/VCLInitializationDescriptor';
-import type { VCLSubmissionResult } from './entities/VCLSubmissionResult';
-import type { VCLPresentationRequestDescriptor } from './entities/VCLPresentationRequestDescriptor';
-import type { VCLJwtDescriptor } from './entities/VCLJwtDescriptor';
-import type { VCLDidJwk } from './entities/VCLDidJwk';
-import type { VCLCredentialTypes } from './entities/VCLCredentialTypes';
-import type { VCLDidJwkDescriptor } from './entities/VCLDidJwkDescriptor';
-
-import { VCLError } from './entities/error/VCLError';
+import {
+  type VCLAuthToken,
+  type VCLAuthTokenDescriptor,
+  type VCLCredentialManifest,
+  type VCLCredentialManifestDescriptor,
+  type VCLCredentialTypeSchemas,
+  type VCLCredentialTypesUIFormSchema,
+  type VCLCredentialTypesUIFormSchemaDescriptor,
+  type VCLExchange,
+  type VCLExchangeDescriptor,
+  type VCLFinalizeOffersDescriptor,
+  type VCLGenerateOffersDescriptor,
+  type VCLJwt,
+  type VCLJwtVerifiableCredentials,
+  type VCLOffers,
+  type VCLOrganizations,
+  type VCLOrganizationsSearchDescriptor,
+  type VCLPresentationRequest,
+  type VCLPresentationSubmission,
+  type VCLPublicJwk,
+  type VCLToken,
+  type VCLVerifiedProfile,
+  type VCLVerifiedProfileDescriptor,
+  type VCLCountries,
+  type VCLInitializationDescriptor,
+  type VCLSubmissionResult,
+  type VCLPresentationRequestDescriptor,
+  type VCLJwtDescriptor,
+  type VCLDidJwk,
+  type VCLCredentialTypes,
+  type VCLDidJwkDescriptor,
+  VCLError,
+} from '@velocitycareerlabs/vcl-react-native';
 
 const { VclReactNative } = NativeModules;
 
@@ -87,10 +90,11 @@ export const VclApi = {
   },
 
   submitPresentation: async (
-    presentationSubmission: VCLPresentationSubmission
+    presentationSubmission: VCLPresentationSubmission,
+    authToken?: VCLAuthToken
   ): Promise<VCLSubmissionResult> => {
     try {
-      return await VclReactNative.submitPresentation(presentationSubmission);
+      return await VclReactNative.submitPresentation(presentationSubmission, authToken);
     } catch (e) {
       throw new VCLError(e);
     }
@@ -163,6 +167,16 @@ export const VclApi = {
         finalizeOffersDescriptor,
         sessionToken
       );
+    } catch (e) {
+      throw new VCLError(e);
+    }
+  },
+
+  getAuthToken: async (
+    authTokenDescriptor: VCLAuthTokenDescriptor,
+  ): Promise<VCLAuthToken> => {
+    try {
+      return await VclReactNative.getAuthToken(authTokenDescriptor);
     } catch (e) {
       throw new VCLError(e);
     }

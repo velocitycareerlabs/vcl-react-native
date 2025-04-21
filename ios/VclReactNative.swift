@@ -87,15 +87,17 @@ class VclReactNative: NSObject {
     )
   }
 
-  @objc(submitPresentation:withResolver:withRejecter:)
+  @objc(submitPresentation:withAuthTokenDictionary:withResolver:withRejecter:)
   func submitPresentation(
     presentationSubmissionDictionary: [String: Any],
+    authTokenDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
     vcl.submitPresentation(
       presentationSubmission: dictionaryToPresentationSubmission(
         presentationSubmissionDictionary
       ),
+      authToken: dictionaryToAuthToken(authTokenDictionary),
       successHandler: {
         resolve(presentationSubmissionResultToDictionary($0))
       },
@@ -198,6 +200,20 @@ class VclReactNative: NSObject {
       sessionToken: dictionaryToToken(sessionTokenDictionary),
       successHandler: {
         resolve(jwtVerifiableCredentialsToDictionary($0))
+      },
+      errorHandler: {
+        reject(nil, $0.toDictionary().toJsonString(), $0)
+      })
+  }
+  
+  @objc(getAuthToken:withResolver:withRejecter:)
+  func getAuthToken(
+    authTokenDescriptorDictionary: [String: Any],
+    resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
+  ) {
+    vcl.getAuthToken(authTokenDescriptor: dictionaryToAuthTokenDescriptor(authTokenDescriptorDictionary),
+      successHandler: {
+        resolve(authTokenToDictionary($0))
       },
       errorHandler: {
         reject(nil, $0.toDictionary().toJsonString(), $0)

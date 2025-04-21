@@ -42,7 +42,7 @@ import vcl, {
   type VCLCredentialTypes,
   VCLStatusCode,
   VCLSignatureAlgorithm,
-  type VCLDidJwkDescriptor,
+  type VCLDidJwkDescriptor, type VCLAuthToken, type VCLAuthTokenDescriptor,
 } from '@velocitycareerlabs/vcl-react-native';
 import { useRef } from 'react';
 import { Utils } from './Utils';
@@ -168,7 +168,7 @@ export default () => {
         value: Constants.PresentationRequestDeepLinkStrStaging,
       };
     }
-    const pesentationRequestDescriptor: VCLPresentationRequestDescriptor = {
+    const presentationRequestDescriptor: VCLPresentationRequestDescriptor = {
       deepLink,
       pushDelegate: {
         pushToken: 'push_token',
@@ -176,7 +176,7 @@ export default () => {
       },
       didJwk: didJwkRef.current,
     };
-    vcl.getPresentationRequest(pesentationRequestDescriptor).then(
+    vcl.getPresentationRequest(presentationRequestDescriptor).then(
       (presentationRequest: VCLPresentationRequest) => {
         console.log(
           'VCL Presentation Request received:',
@@ -202,37 +202,99 @@ export default () => {
       presentationRequest,
       verifiableCredentials: Constants.getIdentificationList(environment),
     };
-    vcl.submitPresentation(presentationSubmission).then(
-      (presentationSubmissionResult: VCLSubmissionResult) => {
-        console.log(
-          'VCL Presentation submission result:',
-          JSON.stringify(presentationSubmissionResult)
-        );
+    if(presentationRequest.feed) {
+      const authTokenDescriptor: VCLAuthTokenDescriptor = { presentationRequest }
+      vcl.getAuthToken(authTokenDescriptor).then(
+        (authToken: VCLAuthToken) => {
+          console.log('VCL Auth Token received:', JSON.stringify(authToken));
+          vcl.submitPresentation(presentationSubmission, authToken).then(
+            (presentationSubmissionResult: VCLSubmissionResult) => {
+              console.log(
+                'VCL Presentation submission result:',
+                JSON.stringify(presentationSubmissionResult)
+              );
+            },
+            (err1: VCLError) => {
+              if (err1.statusCode === 401) {
+                const newAuthTokenDescriptor: VCLAuthTokenDescriptor = {
+                  authTokenUri: authToken.authTokenUri,
+                  refreshToken: authToken.refreshToken,
+                  walletDid: authToken.walletDid,
+                  relyingPartyDid: authToken.relyingPartyDid,
+                }
+                vcl.getAuthToken(newAuthTokenDescriptor).then(
+                  (newAuthToken: VCLAuthToken) => {
+                    console.log(
+                      'VCL Auth Token received:',
+                      JSON.stringify(authToken)
+                    );
+                    vcl.submitPresentation(presentationSubmission, newAuthToken).then(
+                      (presentationSubmissionResult: VCLSubmissionResult) => {
+                        console.log(
+                          'VCL Presentation submission result:',
+                          JSON.stringify(presentationSubmissionResult)
+                        );
+                      },
+                      (err2: VCLError) => {
+                        console.log(
+                          'VCL Presentation submission failed:',
+                          JSON.stringify(err2)
+                        );
+                      }
+                    );
+                  },
+                  (err3: VCLError) => {
+                    console.log(
+                      'VCL getAuthToken failed:',
+                      JSON.stringify(err3)
+                    );
+                  }
+                )
+              }
+              console.log(
+                'VCL Presentation submission failed:',
+                JSON.stringify(err1)
+              );
+            }
+          );
+        },
+        (err: VCLError) => {
+          console.log('VCL getAuthToken failed:', JSON.stringify(err));
+        }
+      )
+    } else {
+      vcl.submitPresentation(presentationSubmission).then(
+        (presentationSubmissionResult: VCLSubmissionResult) => {
+          console.log(
+            'VCL Presentation submission result:',
+            JSON.stringify(presentationSubmissionResult)
+          );
 
-        const exchangeDescriptor: VCLExchangeDescriptor = {
-          presentationSubmission,
-          submissionResult: presentationSubmissionResult,
-        };
+          const exchangeDescriptor: VCLExchangeDescriptor = {
+            presentationSubmission,
+            submissionResult: presentationSubmissionResult,
+          };
 
-        vcl.getExchangeProgress(exchangeDescriptor).then(
-          (exchange: VCLExchange) => {
-            console.log(
-              'VCL Presentation submission progress:',
-              JSON.stringify(exchange)
-            );
-          },
-          (err: VCLError) => {
-            console.log(
-              'VCL Presentation submission progress failed:',
-              JSON.stringify(err)
-            );
-          }
-        );
-      },
-      (err: VCLError) => {
-        console.log('VCL Presentation submission failed:', JSON.stringify(err));
-      }
-    );
+          vcl.getExchangeProgress(exchangeDescriptor).then(
+            (exchange: VCLExchange) => {
+              console.log(
+                'VCL Presentation submission progress:',
+                JSON.stringify(exchange)
+              );
+            },
+            (err: VCLError) => {
+              console.log(
+                'VCL Presentation submission progress failed:',
+                JSON.stringify(err)
+              );
+            }
+          );
+        },
+        (err: VCLError) => {
+          console.log('VCL Presentation submission failed:', JSON.stringify(err));
+        }
+      );
+    }
   };
 
   const getOrganizationsThenCredentialManifestByService = () => {

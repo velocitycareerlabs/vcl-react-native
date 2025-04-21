@@ -242,6 +242,7 @@ object Converter {
     )
     presentationRequestMap.putMap("deepLink", deepLinkToMap(presentationRequest.deepLink))
     presentationRequestMap.putMap("didJwk", didJwkToMap(presentationRequest.didJwk))
+    presentationRequestMap.putBoolean("feed", presentationRequest.feed)
     presentationRequestMap.putMap(
       "remoteCryptoServicesToken",
       tokenToMap(presentationRequest.remoteCryptoServicesToken)
@@ -471,8 +472,8 @@ object Converter {
         VCLIssuingType.Career
       ),
       credentialTypes =
-      (credentialManifestDescriptorByServiceMap.getArrayOpt("credentialTypes")?.toArrayList()
-        ?.toList() as? List<String>),
+        (credentialManifestDescriptorByServiceMap.getArrayOpt("credentialTypes")?.toArrayList()
+          ?.toList() as? List<String>),
       pushDelegate = mapToPushDelegate(
         credentialManifestDescriptorByServiceMap.getMapOpt("pushDelegate")
       ),
@@ -682,6 +683,46 @@ object Converter {
 
   fun mapToJwt(jwtMap: ReadableMap?) =
     VCLJwt(encodedJwt = jwtMap?.getStringOpt("encodedJwt") ?: "")
+
+  fun mapToAuthTokenDescriptor(
+    authTokenDescriptorMap: ReadableMap
+  ): VCLAuthTokenDescriptor {
+    authTokenDescriptorMap.getMapOpt("presentationRequest")?.let { presentationRequestMap ->
+      return VCLAuthTokenDescriptor(
+        presentationRequest = mapToPresentationRequest(
+          presentationRequestMap
+        )
+      )
+    }
+    return VCLAuthTokenDescriptor(
+      authTokenUri = authTokenDescriptorMap.getStringOpt("authTokenUri") ?: "",
+      refreshToken = mapToToken(authTokenDescriptorMap.getMapOpt("refreshToken")),
+      walletDid = authTokenDescriptorMap.getStringOpt("walletDid"),
+      relyingPartyDid = authTokenDescriptorMap.getStringOpt("relyingPartyDid"),
+      vendorOriginContext = authTokenDescriptorMap.getStringOpt("vendorOriginContext")
+    )
+  }
+
+  fun authTokenToMap(
+    authToken: VCLAuthToken
+  ): ReadableMap {
+    val authTokenMap = Arguments.createMap()
+    authTokenMap.putMap("payload", authToken.payload.toReadableMap())
+    authTokenMap.putString("authTokenUri", authToken.authTokenUri)
+    authTokenMap.putMap("refreshToken", tokenToMap(authToken.refreshToken))
+    authTokenMap.putString("walletDid", authToken.walletDid)
+    authTokenMap.putString("relyingPartyDid", authToken.relyingPartyDid)
+    return authTokenMap
+  }
+
+  fun mapToAuthToken(authTokenMap: ReadableMap?): VCLAuthToken {
+    return VCLAuthToken(
+      payload = authTokenMap?.getMapOpt("payload")?.toJsonObject() ?: JSONObject(),
+      authTokenUri = authTokenMap?.getStringOpt("authTokenUri"),
+      walletDid = authTokenMap?.getStringOpt("walletDid"),
+      relyingPartyDid = authTokenMap?.getStringOpt("relyingPartyDid")
+    )
+  }
 
   fun mapToCredentialTypesUIFormSchemaDescriptor(
     credentialTypesUIFormSchemaDescriptorMap: ReadableMap

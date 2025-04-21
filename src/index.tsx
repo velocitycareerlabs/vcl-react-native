@@ -66,6 +66,8 @@ import type { VCLDidJwk } from './api/entities/VCLDidJwk';
 import { VCLError } from './api/entities/error/VCLError';
 import { VCLStatusCode } from './api/entities/error/VCLStatusCode';
 import { VCLErrorCode } from './api/entities/error/VCLErrorCode';
+import type { VCLAuthToken } from './api/entities/VCLAuthToken';
+import type { VCLAuthTokenDescriptor } from './api/entities/VCLAuthTokenDescriptor';
 
 export default VclApi;
 export {
@@ -131,4 +133,6 @@ export type {
   VCLJwtServiceUrls,
   VCLKeyServiceUrls,
   VCLRemoteCryptoServicesUrlsDescriptor,
+  VCLAuthToken,
+  VCLAuthTokenDescriptor,
 };

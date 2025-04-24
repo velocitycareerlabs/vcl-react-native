@@ -5,10 +5,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { VCLOffers } from '@velocitycareerlabs/vcl-react-native';
+import type { VCLOffers, VCLToken } from '@velocitycareerlabs/vcl-react-native';
 
-export class Utils {
-  static readonly getApprovedRejectedOfferIdsMock = (
+  export const getApprovedRejectedOfferIdsMock = (
     offers: VCLOffers
   ): string[][] => {
     const approvedOfferIds: string[] = [];
@@ -21,4 +20,8 @@ export class Utils {
     }
     return [approvedOfferIds, rejectedOfferIds];
   };
-}
+
+  export const verifyToken = (token?: VCLToken) => {
+    return (token?.expiresIn ?? 0) > Date.now() / 1000;
+  };
+

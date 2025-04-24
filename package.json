@@ -1,7 +1,12 @@
 {
   "name": "@velocitycareerlabs/vcl-react-native",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "description": "Velocity Career Labs React Native SDK",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": true,
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
@@ -48,14 +53,10 @@
     "url": "git+https://github.com/velocitycareerlabs/vcl-react-native.git"
   },
   "author": "Michael Avoyan <michael.avoyan.dev@gmail.com> (https://github.com/velocitycareerlabs)",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/velocitycareerlabs/vcl-react-native/issues"
   },
   "homepage": "https://github.com/velocitycareerlabs/vcl-react-native#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
   "dependencies": {
     "license-checker": "^25.0.1"
   },

@@ -12,5 +12,5 @@ export interface VCLAuthTokenDescriptor {
   refreshToken?: VCLToken
   walletDid?: string
   relyingPartyDid?: string
-  vendorOriginContext?: string
+  authorizationCode?: string
 }

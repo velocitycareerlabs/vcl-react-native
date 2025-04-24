@@ -634,7 +634,7 @@ func dictionaryToAuthTokenDescriptor(
     refreshToken: dictionaryToToken(authTokenDescriptorDictionary["refreshToken"] as? [String : Any]),
     walletDid: authTokenDescriptorDictionary["walletDid"] as? String,
     relyingPartyDid: authTokenDescriptorDictionary["relyingPartyDid"] as? String,
-    vendorOriginContext: authTokenDescriptorDictionary["vendorOriginContext"] as? String
+    authorizationCode: authTokenDescriptorDictionary["authorizationCode"] as? String
   )
 }
 

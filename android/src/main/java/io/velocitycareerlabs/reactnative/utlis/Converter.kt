@@ -699,7 +699,7 @@ object Converter {
       refreshToken = mapToToken(authTokenDescriptorMap.getMapOpt("refreshToken")),
       walletDid = authTokenDescriptorMap.getStringOpt("walletDid"),
       relyingPartyDid = authTokenDescriptorMap.getStringOpt("relyingPartyDid"),
-      vendorOriginContext = authTokenDescriptorMap.getStringOpt("vendorOriginContext")
+      authorizationCode = authTokenDescriptorMap.getStringOpt("authorizationCode")
     )
   }
 

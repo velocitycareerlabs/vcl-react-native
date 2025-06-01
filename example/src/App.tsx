@@ -125,10 +125,10 @@ export default () => {
 
   const onGetCredentialTypeSchemas = () => {
     vcl.getCredentialTypeSchemas().then(
-      (credentialTypesScemas: VCLCredentialTypeSchemas) => {
+      (credentialTypesSchemas: VCLCredentialTypeSchemas) => {
         console.log(
           'VCL Credential type schemas received:',
-          JSON.stringify(credentialTypesScemas)
+          JSON.stringify(credentialTypesSchemas)
         );
       },
       (error: VCLError) => {
@@ -486,7 +486,7 @@ export default () => {
     } catch (error: any) {
       if (error.statusCode === VCLStatusCode.VerificationError) {
         console.log(
-          'VCL Profile verification failed dwith error:',
+          'VCL Profile verification failed with error:',
           JSON.stringify(error)
         );
       } else {

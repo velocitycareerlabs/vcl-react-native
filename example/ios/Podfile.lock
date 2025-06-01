@@ -1277,7 +1277,7 @@ SPEC CHECKSUMS:
   ReactCommon: 2e5492a3e3a8e72d635c266405e49d12627e5bf0
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   VCL: e98d7108c62081906d3e408e4125085a0fedd039
-  velocitycareerlabs-vcl-react-native: 23fa2cfd5d493bbb63a7b7cca3f53fede89ab68f
+  velocitycareerlabs-vcl-react-native: 4d1d9966ee16bc7017b3948ac6b5f339c6e6195d
   Yoga: 805bf71192903b20fc14babe48080582fee65a80
 
 PODFILE CHECKSUM: dda665d1488c2a02df92eccd852bd6de0cd38761

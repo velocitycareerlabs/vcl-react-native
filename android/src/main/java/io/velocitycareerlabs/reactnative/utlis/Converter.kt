@@ -410,6 +410,7 @@ object Converter {
         serviceCredentialAgentIssuersArr.pushMap(serviceCredentialAgentIssuerMap)
       }
       organizationMap.putArray("serviceCredentialAgentIssuers", serviceCredentialAgentIssuersArr)
+      organizationMap.putString("did", organization.did)
       organizationMap.putMap("payload", organization.payload.toReadableMap())
       organizationsWritableArray.pushMap(organizationMap)
     }
@@ -430,14 +431,17 @@ object Converter {
   fun mapToCredentialManifestDescriptor(
     credentialManifestDescriptorMap: ReadableMap
   ): VCLCredentialManifestDescriptor? {
-    credentialManifestDescriptorMap.getMapOpt("deepLink")?.let {
-      return mapToCredentialManifestDescriptorByDeepLink(credentialManifestDescriptorMap)
-    } ?: credentialManifestDescriptorMap.getMapOpt("service")?.let {
-      credentialManifestDescriptorMap.getArrayOpt("credentialIds")?.let {
-        return mapToCredentialManifestDescriptorRefresh(credentialManifestDescriptorMap)
-      } ?: return mapToCredentialManifestDescriptorByService(credentialManifestDescriptorMap)
+
+    val hasDeepLink = credentialManifestDescriptorMap.getMapOpt("deepLink") != null
+    val hasService = credentialManifestDescriptorMap.getMapOpt("service") != null
+    val hasCredentialIds = credentialManifestDescriptorMap.getArrayOpt("credentialIds") != null
+
+    return when {
+      hasDeepLink -> mapToCredentialManifestDescriptorByDeepLink(credentialManifestDescriptorMap)
+      hasService && hasCredentialIds -> mapToCredentialManifestDescriptorRefresh(credentialManifestDescriptorMap)
+      hasService -> mapToCredentialManifestDescriptorByService(credentialManifestDescriptorMap)
+      else -> null
     }
-    return null
   }
 
   fun mapToCredentialManifestDescriptorByDeepLink(
@@ -478,6 +482,7 @@ object Converter {
         credentialManifestDescriptorByServiceMap.getMapOpt("pushDelegate")
       ),
       didJwk = mapToDidJwk(credentialManifestDescriptorByServiceMap.getMapOpt("didJwk")),
+      did = credentialManifestDescriptorByServiceMap.getStringOpt("did") ?: "",
       remoteCryptoServicesToken = mapToToken(
         credentialManifestDescriptorByServiceMap.getMapOpt("remoteCryptoServicesToken")
       )
@@ -494,6 +499,7 @@ object Converter {
       credentialIds = credentialManifestDescriptorRefreshMap.getArrayOpt("credentialIds")
         ?.toArrayList()?.toList() as? List<String> ?: listOf(),
       didJwk = mapToDidJwk(credentialManifestDescriptorRefreshMap.getMapOpt("didJwk")),
+      did = credentialManifestDescriptorRefreshMap.getStringOpt("did") ?: "",
       remoteCryptoServicesToken = mapToToken(
         credentialManifestDescriptorRefreshMap.getMapOpt("remoteCryptoServicesToken")
       )

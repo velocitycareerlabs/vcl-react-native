@@ -371,6 +371,7 @@ func organizationsToDictionary(
       serviceCredentialAgentIssuersArr.append(serviceCredentialAgentIssuerMap)
     }
     organizationMap["serviceCredentialAgentIssuers"] = serviceCredentialAgentIssuersArr
+    organizationMap["did"] = organization.did
     organizationMap["payload"] = organization.payload
     organizationsArr.append(organizationMap)
   }
@@ -393,16 +394,20 @@ func dictionaryToPushDelegate(_ pushDelegateMap: [String: Any]?) -> VCLPushDeleg
 func dictionaryToCredentialManifestDescriptor(
     _ credentialManifestDescriptorDictionary: [String: Any]
 ) -> VCLCredentialManifestDescriptor? {
-  if (credentialManifestDescriptorDictionary["deepLink"] != nil) {
-    return dictionaryToCredentialManifestDescriptorByDeepLink(credentialManifestDescriptorDictionary)
-  } else if (credentialManifestDescriptorDictionary["service"] != nil) {
-    if(credentialManifestDescriptorDictionary["credentialIds"] != nil) {
-      return dictionaryToCredentialManifestDescriptorRefresh(credentialManifestDescriptorDictionary)
-    } else {
-      return dictionaryToCredentialManifestDescriptorByService(credentialManifestDescriptorDictionary)
+    let hasDeepLink = credentialManifestDescriptorDictionary["deepLink"] != nil
+    let hasService = credentialManifestDescriptorDictionary["service"] != nil
+    let hasCredentialIds = credentialManifestDescriptorDictionary["credentialIds"] != nil
+
+    switch (hasDeepLink, hasService, hasCredentialIds) {
+    case (true, _, _):
+        return dictionaryToCredentialManifestDescriptorByDeepLink(credentialManifestDescriptorDictionary)
+    case (false, true, true):
+        return dictionaryToCredentialManifestDescriptorRefresh(credentialManifestDescriptorDictionary)
+    case (false, true, false):
+        return dictionaryToCredentialManifestDescriptorByService(credentialManifestDescriptorDictionary)
+    default:
+        return nil
     }
-  }
-  return nil
 }
 
 func dictionaryToCredentialManifestDescriptorByDeepLink(
@@ -440,6 +445,7 @@ func dictionaryToCredentialManifestDescriptorByService(
       credentialManifestDescriptorByServiceDictionary["pushDelegate"] as? [String: Any]
     ),
     didJwk: dictionaryToDidJwk(credentialManifestDescriptorByServiceDictionary["didJwk"] as? [String: Any]),
+    did: credentialManifestDescriptorByServiceDictionary["did"] as? String ?? "",
     remoteCryptoServicesToken: dictionaryToToken(
       credentialManifestDescriptorByServiceDictionary["remoteCryptoServicesToken"] as? [String: Any]
     )
@@ -455,6 +461,7 @@ func dictionaryToCredentialManifestDescriptorRefresh(
     ),
     credentialIds: credentialManifestDescriptorRefreshDictionary["credentialIds"] as? [String] ?? [],
     didJwk: dictionaryToDidJwk(credentialManifestDescriptorRefreshDictionary["didJwk"] as? [String: Any]),
+    did: credentialManifestDescriptorRefreshDictionary["did"] as? String ?? "",
     remoteCryptoServicesToken: dictionaryToToken(
       credentialManifestDescriptorRefreshDictionary["remoteCryptoServicesToken"] as? [String: Any]
     )

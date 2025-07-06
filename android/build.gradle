@@ -8,7 +8,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:7.2.2"
+    classpath "com.android.tools.build:gradle:8.8.2"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -92,9 +92,9 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 //--------- Must: be added:
-  implementation "io.velocitycareerlabs:vcl:2.7.3"
-  implementation 'com.nimbusds:nimbus-jose-jwt:10.0.1'
-  implementation "androidx.security:security-crypto:1.1.0-alpha07"
+  implementation "io.velocitycareerlabs:vcl:2.7.5"
+  implementation 'com.nimbusds:nimbus-jose-jwt:10.3.1'
+  implementation "androidx.security:security-crypto:1.1.0-beta01"
 //-------------------------
 }
 

@@ -11,5 +11,6 @@ import type { VCLService } from './VCLService';
 export interface VCLCredentialManifestDescriptorRefresh
   extends VCLCredentialManifestDescriptor {
   service: VCLService;
+  did: string;
   credentialIds: string[];
 }

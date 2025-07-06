@@ -11,4 +11,5 @@ import type { VCLService } from './VCLService';
 export interface VCLOrganization {
   payload: Dictionary<any>;
   serviceCredentialAgentIssuers: VCLService[];
+  did: string;
 }

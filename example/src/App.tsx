@@ -30,6 +30,7 @@ import vcl, {
   type VCLGenerateOffersDescriptor,
   type VCLInitializationDescriptor,
   type VCLOffers,
+  type VCLOrganization,
   type VCLPresentationRequest,
   type VCLPresentationRequestDescriptor,
   type VCLPresentationSubmission,
@@ -252,21 +253,20 @@ export default () => {
         'VCL Organizations received:',
         JSON.stringify(organizations)
       );
-
-      const serviceCredentialAgentIssuer: VCLService = {
-        payload:
-          organizations.all[0]?.serviceCredentialAgentIssuers[0]?.payload ??
-          {},
-      };
-      await getCredentialManifestByService(serviceCredentialAgentIssuer);
+      await getCredentialManifestByService(organizations.all[0]!);
     } catch (error: any) {
       console.log('VCL Organizations search failed: ', JSON.stringify(error));
     }
   }
 
   const getCredentialManifestByService = async (
-    serviceCredentialAgentIssuer: VCLService
+    organization: VCLOrganization
   ) => {
+    const serviceCredentialAgentIssuer: VCLService = {
+      payload:
+        organization?.serviceCredentialAgentIssuers[0]?.payload ??
+        {},
+    };
     const credentialManifestDescriptorByOrganization: VCLCredentialManifestDescriptorByService =
       {
         service: serviceCredentialAgentIssuer,
@@ -276,6 +276,7 @@ export default () => {
           'EducationDegreeRegistrationV1.0',
         ],
         didJwk: didJwkRef.current,
+        did: organization.did,
       };
 
     try {
@@ -345,6 +346,7 @@ export default () => {
       {
         service,
         credentialIds: Constants.getCredentialIdsToRefresh(environment),
+        did: 'some did',
         didJwk: didJwkRef.current,
       };
 

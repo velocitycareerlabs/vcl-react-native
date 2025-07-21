@@ -6,7 +6,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "private": true,
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",

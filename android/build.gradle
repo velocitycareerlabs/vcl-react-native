@@ -1,3 +1,5 @@
+import com.android.Version
+
 buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["VclReactNative_kotlinVersion"]
@@ -34,7 +36,7 @@ def getExtOrIntegerDefault(name) {
 }
 
 static def supportsNamespace() {
-  def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+  def parsed = Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
   def major = parsed[0].toInteger()
   def minor = parsed[1].toInteger()
 
@@ -92,7 +94,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 //--------- Must: be added:
-  implementation "io.velocitycareerlabs:vcl:2.7.5"
+  implementation "io.velocitycareerlabs:vcl:2.7.6"
   implementation 'com.nimbusds:nimbus-jose-jwt:10.3.1'
   implementation "androidx.security:security-crypto:1.1.0-beta01"
 //-------------------------

@@ -1,4 +1,4 @@
-name: ReactNative-SDK Tests
+name: ReactNative-SDK-Tests
 
 on:
   pull_request:

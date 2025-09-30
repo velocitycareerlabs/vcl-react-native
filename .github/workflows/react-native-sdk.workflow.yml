@@ -1,4 +1,4 @@
-name: ReactNative-SDK
+name: ReactNative-SDK-Publish
 
 on:
   push:

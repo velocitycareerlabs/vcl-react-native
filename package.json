@@ -109,6 +109,10 @@
     "react": "*",
     "react-native": "*"
   },
+  "private": true,
+  "workspaces": [
+    "example"
+  ],
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [

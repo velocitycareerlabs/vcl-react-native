@@ -60,7 +60,8 @@ export default () => {
   const [initState, setInitState] = React.useState<InitState>(
     InitState.Initializing
   );
-  const [initializationError, setInitializationError] = React.useState<VCLError>();
+  const [initializationError, setInitializationError] =
+    React.useState<VCLError>();
 
   React.useEffect(() => {
     setInitState(InitState.Initializing);
@@ -106,7 +107,10 @@ export default () => {
           setInitializationError(error as VCLError);
         }
       } catch (err: any) {
-        console.log('VCL initialization failed with error:', JSON.stringify(err));
+        console.log(
+          'VCL initialization failed with error:',
+          JSON.stringify(err)
+        );
         setInitState(InitState.InitializationFailed);
         setInitializationError(err);
       }
@@ -133,7 +137,10 @@ export default () => {
         );
       },
       (error: VCLError) => {
-        console.log('VCL getCredentialTypeSchemas Error:', JSON.stringify(error));
+        console.log(
+          'VCL getCredentialTypeSchemas Error:',
+          JSON.stringify(error)
+        );
       }
     );
   };
@@ -148,7 +155,7 @@ export default () => {
     } catch (error: any) {
       console.log('VCL getCredentialTypes Error:', JSON.stringify(error));
     }
-}
+  };
 
   const onGetPresentationRequest = async () => {
     let deepLink: VCLDeepLink = {
@@ -169,7 +176,9 @@ export default () => {
     };
 
     try {
-      const presentationRequest = await vcl.getPresentationRequest(presentationRequestDescriptor);
+      const presentationRequest = await vcl.getPresentationRequest(
+        presentationRequestDescriptor
+      );
       console.log(
         'VCL Presentation Request received:',
         JSON.stringify(presentationRequest)
@@ -187,7 +196,9 @@ export default () => {
     }
   };
 
-  const submitPresentation = async (presentationRequest: VCLPresentationRequest) => {
+  const submitPresentation = async (
+    presentationRequest: VCLPresentationRequest
+  ) => {
     const presentationSubmission: VCLPresentationSubmission = {
       presentationRequest,
       verifiableCredentials: Constants.getIdentificationList(environment),
@@ -211,7 +222,10 @@ export default () => {
         }
       }
     }
-    const presentationSubmissionResult = await vcl.submitPresentation(presentationSubmission, authToken);
+    const presentationSubmissionResult = await vcl.submitPresentation(
+      presentationSubmission,
+      authToken
+    );
     console.log(
       'VCL Presentation submission result:',
       JSON.stringify(presentationSubmissionResult)
@@ -243,29 +257,26 @@ export default () => {
 
   const searchForOrganizations = async () => {
     const organizationDescriptor =
-      environment === VCLEnvironment.Dev.valueOf() ?
-        Constants.OrganizationsSearchDescriptorByDidDev :
-        Constants.OrganizationsSearchDescriptorByDidStaging;
+      environment === VCLEnvironment.Dev.valueOf()
+        ? Constants.OrganizationsSearchDescriptorByDidDev
+        : Constants.OrganizationsSearchDescriptorByDidStaging;
 
     try {
-      const organizations = await vcl.searchForOrganizations(organizationDescriptor);
-      console.log(
-        'VCL Organizations received:',
-        JSON.stringify(organizations)
+      const organizations = await vcl.searchForOrganizations(
+        organizationDescriptor
       );
+      console.log('VCL Organizations received:', JSON.stringify(organizations));
       await getCredentialManifestByService(organizations.all[0]!);
     } catch (error: any) {
       console.log('VCL Organizations search failed: ', JSON.stringify(error));
     }
-  }
+  };
 
   const getCredentialManifestByService = async (
     organization: VCLOrganization
   ) => {
     const serviceCredentialAgentIssuer: VCLService = {
-      payload:
-        organization?.serviceCredentialAgentIssuers[0]?.payload ??
-        {},
+      payload: organization?.serviceCredentialAgentIssuers[0]?.payload ?? {},
     };
     const credentialManifestDescriptorByOrganization: VCLCredentialManifestDescriptorByService =
       {
@@ -289,7 +300,6 @@ export default () => {
       );
 
       await generateOffers(credentialManifest);
-
     } catch (error: any) {
       if (error.statusCode === VCLStatusCode.VerificationError) {
         console.log(
@@ -300,7 +310,7 @@ export default () => {
         console.log('VCL Credential Manifest failed:', JSON.stringify(error));
       }
     }
-  }
+  };
 
   const onGetCredentialManifestByDeepLink = async () => {
     let deepLink: VCLDeepLink = {
@@ -336,7 +346,7 @@ export default () => {
         console.log('VCL Credential Manifest failed:', JSON.stringify(error));
       }
     }
-  }
+  };
 
   const onRefreshCredentials = async () => {
     const service: VCLService = {
@@ -367,13 +377,14 @@ export default () => {
         console.log('VCL Refresh Credentials failed:', JSON.stringify(error));
       }
     }
-  }
+  };
 
   const generateOffers = async (credentialManifest: VCLCredentialManifest) => {
     const generateOffersDescriptor: VCLGenerateOffersDescriptor = {
       credentialManifest,
       types: Constants.CredentialTypes,
-      identificationVerifiableCredentials: Constants.getIdentificationList(environment),
+      identificationVerifiableCredentials:
+        Constants.getIdentificationList(environment),
     };
 
     try {
@@ -383,9 +394,7 @@ export default () => {
           JSON.stringify(o.payload)
         )}`
       );
-      console.log(
-        `VCL Generated Offers Response Code: ${offers.responseCode}`
-      );
+      console.log(`VCL Generated Offers Response Code: ${offers.responseCode}`);
       console.log(
         `VCL Generated Offers Session Token value: ${offers.sessionToken.value}`,
         `VCL Generated Offers Session Token expires in: ${offers.sessionToken.expiresIn}`
@@ -398,7 +407,7 @@ export default () => {
     } catch (error: any) {
       console.log('VCL generateOffers Error:', JSON.stringify(error));
     }
-  }
+  };
 
   const checkForOffers = async (
     credentialManifest: VCLCredentialManifest,
@@ -406,7 +415,10 @@ export default () => {
     sessionToken: VCLToken
   ) => {
     try {
-      const offers = await vcl.checkForOffers(generateOffersDescriptor, sessionToken);
+      const offers = await vcl.checkForOffers(
+        generateOffersDescriptor,
+        sessionToken
+      );
       console.log(
         `VCL Checked Offers: ${offers.all.map((o) =>
           JSON.stringify(o.payload)
@@ -423,7 +435,7 @@ export default () => {
     } catch (error: any) {
       console.log('VCL checkForOffers Error:', JSON.stringify(error));
     }
-  }
+  };
 
   const finalizeOffers = async (
     credentialManifest: VCLCredentialManifest,
@@ -438,7 +450,10 @@ export default () => {
     };
 
     try {
-      const credentials = await vcl.finalizeOffers(finalizeOffersDescriptor, offers.sessionToken)
+      const credentials = await vcl.finalizeOffers(
+        finalizeOffersDescriptor,
+        offers.sessionToken
+      );
       console.log(
         'VCL Finalized Offers received:',
         JSON.stringify(credentials)
@@ -455,7 +470,7 @@ export default () => {
     } catch (error: any) {
       console.log('VCL finalizeOffers Error:', JSON.stringify(error));
     }
-  }
+  };
 
   const onGetCredentialTypesUIFormSchema = async () => {
     const credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor =
@@ -466,7 +481,9 @@ export default () => {
 
     try {
       const credentialTypesUIFormSchema =
-        await vcl.getCredentialTypesUIFormSchema(credentialTypesUIFormSchemaDescriptor);
+        await vcl.getCredentialTypesUIFormSchema(
+          credentialTypesUIFormSchemaDescriptor
+        );
       console.log(
         'VCL Credential Types UI Form Schema received:',
         JSON.stringify(credentialTypesUIFormSchema)
@@ -477,14 +494,14 @@ export default () => {
         JSON.stringify(error)
       );
     }
-  }
+  };
 
   const onGetVerifiedProfile = async () => {
     try {
-      const verifiedProfile =
-        await vcl.getVerifiedProfile(Constants.getVerifiedProfileDescriptor(environment));
+      const verifiedProfile = await vcl.getVerifiedProfile(
+        Constants.getVerifiedProfileDescriptor(environment)
+      );
       console.log('VCL Verified Profile: ', JSON.stringify(verifiedProfile));
-
     } catch (error: any) {
       if (error.statusCode === VCLStatusCode.VerificationError) {
         console.log(
@@ -495,29 +512,30 @@ export default () => {
         console.log('VCL Verified profile failed:', JSON.stringify(error));
       }
     }
-  }
+  };
 
   const onVerifyJwt = async () => {
     try {
-      const isVerified =
-        await vcl.verifyJwt(Constants.SomeJwt, Constants.SomeJwkPublic);
+      const isVerified = await vcl.verifyJwt(
+        Constants.SomeJwt,
+        Constants.SomeJwkPublic
+      );
       console.log('VCL verified jwt:', isVerified);
     } catch (error: any) {
       console.log('VCL verify Error:', JSON.stringify(error));
     }
-  }
+  };
 
   const onGenerateSignedJwt = async () => {
     try {
-      const jwt =
-        await vcl.generateSignedJwt(
-          {
-            payload: Constants.SomePayload,
-            iss: 'iss123',
-            jti: 'jti123',
-          },
-          didJwkRef.current
-        );
+      const jwt = await vcl.generateSignedJwt(
+        {
+          payload: Constants.SomePayload,
+          iss: 'iss123',
+          jti: 'jti123',
+        },
+        didJwkRef.current
+      );
       console.log('VCL generated signed jwt:', JSON.stringify(jwt));
       // console.log('VCL generated signed jwt:');
       // console.log('VCL jwt encodedJwt', jwt.encodedJwt);
@@ -527,7 +545,7 @@ export default () => {
     } catch (error: any) {
       console.log('VCL sign Error:', JSON.stringify(error));
     }
-  }
+  };
 
   const onGenerateDidJwk = async () => {
     try {
@@ -536,7 +554,7 @@ export default () => {
     } catch (error: any) {
       console.log('VCL did:jwk generation failed:', JSON.stringify(error));
     }
-  }
+  };
 
   const menuItems = {
     'Get Countries': onGetCountries,
@@ -544,11 +562,11 @@ export default () => {
     'Get Credential Type Schemas': onGetCredentialTypeSchemas,
     'Disclosing Credentials (aka Inspection)': onGetPresentationRequest,
     'Receiving Credentials (aka Issuing) By Deeplink':
-    onGetCredentialManifestByDeepLink,
+      onGetCredentialManifestByDeepLink,
     'Receiving Credentials (aka Issuing) By Services':
-    onGetOrganizationsThenCredentialManifestByService,
+      onGetOrganizationsThenCredentialManifestByService,
     'Self Reporting Credentials (aka Self Attested)':
-    onGetCredentialTypesUIFormSchema,
+      onGetCredentialTypesUIFormSchema,
     'Refresh Credentials': onRefreshCredentials,
     'Get Verified Profile': onGetVerifiedProfile,
     'Verify JWT': onVerifyJwt,
@@ -592,7 +610,6 @@ export default () => {
       <Text>Initializing...</Text>
     </View>
   );
-
 };
 
 const styles = StyleSheet.create({

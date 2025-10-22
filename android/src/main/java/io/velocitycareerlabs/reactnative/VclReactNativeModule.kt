@@ -7,6 +7,8 @@
 
 package io.velocitycareerlabs.reactnative
 
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.bridge.*
 import io.velocitycareerlabs.reactnative.utlis.Converter
 import io.velocitycareerlabs.reactnative.utlis.Converter.countriesToMap
@@ -48,24 +50,17 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.mapToJwtDescriptor
 import io.velocitycareerlabs.reactnative.utlis.VCLLog
 import kotlin.Exception
 
-class VclReactNativeModule(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext) {
-
-  val TAG = "VclReactNativeModule"
-
-  override fun getName(): String {
-    return NAME
-  }
-
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
-  @ReactMethod
-  fun multiply(a: Double, b: Double, promise: Promise) {
-    promise.resolve(a * b)
-  }
+@ReactModule(name = VclReactNativeModule.NAME)
+class VclReactNativeModule(val reactContext: ReactApplicationContext) :
+  NativeVclReactNativeSpec(reactContext) {
 
   companion object {
     const val NAME = "VclReactNative"
+    const val TAG = NAME
+  }
+
+  override fun getName(): String {
+    return NAME
   }
 
   private val vcl = VCLProvider.vclInstance()
@@ -77,8 +72,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
   }
 
-  @ReactMethod
-  fun initialize(
+  override fun initialize(
     initializationDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -88,7 +82,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
       )
       initGlobalConfigurations(initializationDescriptor)
       vcl.initialize(
-        context = reactApplicationContext.applicationContext,
+        context = reactContext,
         initializationDescriptor = initializationDescriptor,
         successHandler = {
           promise.resolve("VCL initialization succeed!")
@@ -101,8 +95,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getCountries(promise: Promise) {
+  override fun getCountries(promise: Promise) {
     try {
       vcl.countries?.let { promise.resolve(countriesToMap(it)) }
         ?: promise.reject(VCLError(message = "Countries not found").toThrowable())
@@ -111,8 +104,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getCredentialTypeSchemas(promise: Promise) {
+  override fun getCredentialTypeSchemas(promise: Promise) {
     try {
       vcl.credentialTypeSchemas?.let { promise.resolve(credentialTypeSchemasToMap(it)) }
         ?: promise.reject(VCLError(message = "Credential Types not found").toThrowable())
@@ -121,8 +113,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getCredentialTypes(promise: Promise) {
+  override fun getCredentialTypes(promise: Promise) {
     try {
       vcl.credentialTypes?.let { promise.resolve(credentialTypesToMap(it)) }
         ?: promise.reject(VCLError(message = "Credential Types not found").toThrowable())
@@ -131,8 +122,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getPresentationRequest(
+  override fun getPresentationRequest(
     presentationRequestDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -152,10 +142,9 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun submitPresentation(
+  override fun submitPresentation(
     presentationSubmissionMap: ReadableMap,
-    authTokenMap: ReadableMap? = null,
+    authTokenMap: ReadableMap?,
     promise: Promise
   ) {
     try {
@@ -173,8 +162,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getExchangeProgress(
+  override fun getExchangeProgress(
     exchangeDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -191,8 +179,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun searchForOrganizations(
+  override fun searchForOrganizations(
     organizationsSearchDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -210,8 +197,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getCredentialManifest(
+  override fun getCredentialManifest(
     credentialManifestDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -238,8 +224,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun generateOffers(
+  override fun generateOffers(
     generateOffersDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -257,8 +242,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun checkForOffers(
+  override fun checkForOffers(
     generateOffersDescriptorMap: ReadableMap,
     sessionTokenMap: ReadableMap,
     promise: Promise
@@ -278,8 +262,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun finalizeOffers(
+  override fun finalizeOffers(
     finalizeOffersDescriptorMap: ReadableMap,
     sessionTokenMap: ReadableMap,
     promise: Promise
@@ -299,8 +282,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getAuthToken(
+  override fun getAuthToken(
     authTokenDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -318,8 +300,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getCredentialTypesUIFormSchema(
+  override fun getCredentialTypesUIFormSchema(
     credentialTypesUIFormSchemaDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -338,8 +319,7 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getVerifiedProfile(
+  override fun getVerifiedProfile(
     verifiedProfileDescriptorMap: ReadableMap,
     promise: Promise
   ) {
@@ -356,11 +336,10 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun verifyJwt(
+  override fun verifyJwt(
     jwtMap: ReadableMap,
     publicJwkMap: ReadableMap,
-    remoteCryptoServicesTokenMap: ReadableMap? = null,
+    remoteCryptoServicesTokenMap: ReadableMap?,
     promise: Promise
   ) {
     try {
@@ -379,11 +358,10 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun generateSignedJwt(
+  override fun generateSignedJwt(
     jwtDescriptorMap: ReadableMap,
     didJwkMap: ReadableMap,
-    remoteCryptoServicesTokenMap: ReadableMap? = null,
+    remoteCryptoServicesTokenMap: ReadableMap?,
     promise: Promise
   ) {
     try {
@@ -402,9 +380,8 @@ class VclReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun generateDidJwk(
-    didJwkDescriptorMap: ReadableMap? = null,
+  override fun generateDidJwk(
+    didJwkDescriptorMap: ReadableMap?,
     promise: Promise
   ) {
     try {

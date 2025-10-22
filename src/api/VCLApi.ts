@@ -94,7 +94,10 @@ export const VclApi = {
     authToken?: VCLAuthToken
   ): Promise<VCLSubmissionResult> => {
     try {
-      return await VclReactNative.submitPresentation(presentationSubmission, authToken);
+      return await VclReactNative.submitPresentation(
+        presentationSubmission,
+        authToken
+      );
     } catch (e) {
       throw new VCLError(e);
     }
@@ -173,7 +176,7 @@ export const VclApi = {
   },
 
   getAuthToken: async (
-    authTokenDescriptor: VCLAuthTokenDescriptor,
+    authTokenDescriptor: VCLAuthTokenDescriptor
   ): Promise<VCLAuthToken> => {
     try {
       return await VclReactNative.getAuthToken(authTokenDescriptor);

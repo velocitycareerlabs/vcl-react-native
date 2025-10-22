@@ -84,9 +84,9 @@ example/android/app/src/main/assets/index.android.bundle
 example/ios/.xcode.env
 .pnp.loader.mjs
 .pnp.cjs
-.yarn/*
-example/ios/.xcode.env
 example/ios/.xcode.env.local
 /example/android/.idea
 /android/.idea
-/example/android/.idea
+example/android/java_pid80455.hprof
+/.yarn/cache
+/example/android/app/.cxx

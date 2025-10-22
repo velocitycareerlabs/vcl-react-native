@@ -1,13 +1,20 @@
+//
+//  VclReactNativeImpl.swift
+//  vcl-react-native
+//
 //  Created by Michael Avoyan on 05/07/2021.
 //
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
+import React
 import VCL
 
-@objc(VclReactNative)
-class VclReactNative: NSObject {
+@objc public class VclReactNativeImpl: NSObject {
+  
+  @objc public static let shared = VclReactNativeImpl()
 
   private let vcl = VCLProvider.vclInstance()
 
@@ -18,8 +25,8 @@ class VclReactNative: NSObject {
     GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
   }
 
-  @objc(initialize:withResolver:withRejecter:)
-  func initialize(
+//  @objc(initialize:withResolver:withRejecter:)
+  @objc public func initialize(
     initializationDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -35,8 +42,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(getCountries:withRejecter:)
-  func getCountries(
+//  @objc(getCountries:withRejecter:)
+  @objc public func getCountries(
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
     if let countries = vcl.countries {
@@ -47,8 +54,8 @@ class VclReactNative: NSObject {
     }
   }
 
-  @objc(getCredentialTypeSchemas:withRejecter:)
-  func getCredentialTypeSchemas(
+//  @objc(getCredentialTypeSchemas:withRejecter:)
+  @objc public func getCredentialTypeSchemas(
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
     if let credentialTypeSchemas = vcl.credentialTypeSchemas {
@@ -59,8 +66,8 @@ class VclReactNative: NSObject {
     }
   }
 
-  @objc(getCredentialTypes:withRejecter:)
-  func getCredentialTypes(
+//  @objc(getCredentialTypes:withRejecter:)
+  @objc public func getCredentialTypes(
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
     if let credentialTypes = vcl.credentialTypes {
@@ -71,8 +78,8 @@ class VclReactNative: NSObject {
     }
   }
 
-  @objc(getPresentationRequest:withResolver:withRejecter:)
-  func getPresentationRequest(
+//  @objc(getPresentationRequest:withResolver:withRejecter:)
+  @objc public func getPresentationRequest(
     presentationRequestDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -87,8 +94,8 @@ class VclReactNative: NSObject {
     )
   }
 
-  @objc(submitPresentation:withAuthTokenDictionary:withResolver:withRejecter:)
-  func submitPresentation(
+//  @objc(submitPresentation:withAuthTokenDictionary:withResolver:withRejecter:)
+  @objc public func submitPresentation(
     presentationSubmissionDictionary: [String: Any],
     authTokenDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -106,8 +113,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(getExchangeProgress:withResolver:withRejecter:)
-  func getExchangeProgress(
+//  @objc(getExchangeProgress:withResolver:withRejecter:)
+  @objc public func getExchangeProgress(
     exchangeDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -121,8 +128,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(searchForOrganizations:withResolver:withRejecter:)
-  func searchForOrganizations(
+//  @objc(searchForOrganizations:withResolver:withRejecter:)
+  @objc public func searchForOrganizations(
     organizationsSearchDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -136,8 +143,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(getCredentialManifest:withResolver:withRejecter:)
-  func getCredentialManifest(
+//  @objc(getCredentialManifest:withResolver:withRejecter:)
+  @objc public func getCredentialManifest(
     credentialManifestDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -157,8 +164,8 @@ class VclReactNative: NSObject {
     }
   }
 
-  @objc(generateOffers:withResolver:withRejecter:)
-  func generateOffers(
+//  @objc(generateOffers:withResolver:withRejecter:)
+  @objc public func generateOffers(
     generateOffersDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -172,8 +179,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(checkForOffers:withtSessionTokenDictionary:withResolver:withRejecter:)
-  func checkForOffers(
+//  @objc(checkForOffers:withtSessionTokenDictionary:withResolver:withRejecter:)
+  @objc public func checkForOffers(
     generateOffersDescriptorDictionary: [String: Any],
     sessionTokenDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -189,8 +196,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(finalizeOffers:withSessionTokenDictionary:withResolver:withRejecter:)
-  func finalizeOffers(
+//  @objc(finalizeOffers:withSessionTokenDictionary:withResolver:withRejecter:)
+  @objc public func finalizeOffers(
     finalizeOffersDescriptorDictionary: [String: Any],
     sessionTokenDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
@@ -206,8 +213,8 @@ class VclReactNative: NSObject {
       })
   }
   
-  @objc(getAuthToken:withResolver:withRejecter:)
-  func getAuthToken(
+//  @objc(getAuthToken:withResolver:withRejecter:)
+  @objc public func getAuthToken(
     authTokenDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -220,8 +227,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(getCredentialTypesUIFormSchema:withResolver:withRejecter:)
-  func getCredentialTypesUIFormSchema(
+//  @objc(getCredentialTypesUIFormSchema:withResolver:withRejecter:)
+  @objc public func getCredentialTypesUIFormSchema(
     credentialTypesUIFormSchemaDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -236,8 +243,8 @@ class VclReactNative: NSObject {
     )
   }
 
-  @objc(getVerifiedProfile:withResolver:withRejecter:)
-  func getVerifiedProfile(
+//  @objc(getVerifiedProfile:withResolver:withRejecter:)
+  @objc public func getVerifiedProfile(
     verifiedProfileDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -251,8 +258,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(verifyJwt:withPublicJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
-  func verifyJwt(
+//  @objc(verifyJwt:withPublicJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
+  @objc public func verifyJwt(
     jwtDictionary: [String: Any],
     publicJwkDictionary: [String: Any],
     remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
@@ -270,8 +277,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(generateSignedJwt:withDidJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
-  func generateSignedJwt(
+//  @objc(generateSignedJwt:withDidJwkDictionary:withRemoteCryptoServicesTokenDictionary:withResolver:withRejecter:)
+  @objc public func generateSignedJwt(
     jwtDescriptorDictionary: [String: Any],
     didJwkDictionary: [String: Any],
     remoteCryptoServicesTokenDictionary: [String: Any]? = nil,
@@ -289,8 +296,8 @@ class VclReactNative: NSObject {
       })
   }
 
-  @objc(generateDidJwk:withResolver:withRejecter:)
-  func generateDidJwk(
+//  @objc(generateDidJwk:withResolver:withRejecter:)
+  @objc public func generateDidJwk(
     didJwkDescriptorDictionary: [String: Any]? = nil,
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -304,3 +311,4 @@ class VclReactNative: NSObject {
       })
   }
 }
+

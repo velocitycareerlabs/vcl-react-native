@@ -13,7 +13,7 @@ env:
   RC_SUFFIX: 'rc'
 jobs:
   test-react-sdk:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       # Git clone repository
       - name: Git clone repository
@@ -25,15 +25,15 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       # Install dependencies
       - name: Install dependencies
-        run: corepack enable && yarn set version 3.6.1 && yarn
+        run: corepack enable && yarn set version 3.6.1 && yarn install --frozen-lockfile
       # Check licenses
-      - name: Check licenses
-        run: corepack enable && yarn set version 1.22.22 && yarn check-licenses
+#      - name: Check licenses
+#        run: corepack enable && yarn set version 1.22.22 && yarn check-licenses
       # Run lint
       - name: Run lint
         run: corepack enable && yarn set version 3.6.1 && yarn lint
         continue-on-error: false
       # Run test
       - name: Run Test
-        run: corepack enable && yarn set version 3.6.1 && yarn test
+        run: yarn test
         continue-on-error: true

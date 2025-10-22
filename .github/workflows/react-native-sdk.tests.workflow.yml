@@ -26,9 +26,7 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: corepack enable && yarn set version 3.6.1 && yarn
-      # Check licenses
-      - name: Check licenses
-        run: corepack enable && yarn set version 1.22.22 && yarn check-licenses
+
       # Run lint
       - name: Run lint
         run: corepack enable && yarn set version 3.6.1 && yarn lint

@@ -46,7 +46,7 @@ jobs:
         run: git add .npmrc && git commit -am "Prepare to release"
       # Install dependencies
       - name: Install dependencies
-        run: corepack enable && yarn set version 3.6.1 && yarn
+        run: yarn install --frozen-lockfile
       # Build and Publish SDK
       - name: Build and Publish SDK
         if: ${{ env.GLOBAL_ENV == 'prod' || env.GLOBAL_ENV == 'rc' }}

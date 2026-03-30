@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   s.swift_version = "5.0"
 
-  s.dependency "VCL", "2.8.2"
+  s.dependency "VCL", "2.9.0"
 
   install_modules_dependencies(s)
 end

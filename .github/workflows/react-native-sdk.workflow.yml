@@ -14,7 +14,7 @@ on:
         options:
           - dev
           - rc
-      - prod
+          - prod
 
 permissions:
   id-token: write

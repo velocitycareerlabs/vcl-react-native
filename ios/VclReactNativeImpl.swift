@@ -20,7 +20,7 @@ import VCL
 
   private let vcl = VCLProvider.vclInstance()
 
-  private func rejectStructuredError(
+  private func rejectBridgedVCLError(
     _ reject: @escaping RCTPromiseRejectBlock,
     error: VCLError
   ) {
@@ -47,7 +47,7 @@ import VCL
         resolve("VCL initialization succeed!")
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -58,7 +58,7 @@ import VCL
     if let countries = vcl.countries {
       resolve(countriesToDictionary(countries))
     } else {
-      rejectStructuredError(reject, error: VCLError(message: "Countries not found"))
+      rejectBridgedVCLError(reject, error: VCLError(message: "Countries not found"))
     }
   }
 
@@ -69,7 +69,7 @@ import VCL
     if let credentialTypeSchemas = vcl.credentialTypeSchemas {
       resolve(credentialTypeSchemasToDictionary(credentialTypeSchemas))
     } else {
-      rejectStructuredError(
+      rejectBridgedVCLError(
         reject,
         error: VCLError(message: "Credential Type Schemas not found")
       )
@@ -83,7 +83,7 @@ import VCL
     if let credentialTypes = vcl.credentialTypes {
       resolve(credentialTypesToDictionary(credentialTypes))
     } else {
-      rejectStructuredError(reject, error: VCLError(message: "Credential Types not found"))
+      rejectBridgedVCLError(reject, error: VCLError(message: "Credential Types not found"))
     }
   }
 
@@ -98,7 +98,7 @@ import VCL
         resolve(presentationRequestToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       }
     )
   }
@@ -118,7 +118,7 @@ import VCL
         resolve(presentationSubmissionResultToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -133,7 +133,7 @@ import VCL
         resolve(exchangeToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -148,7 +148,7 @@ import VCL
         resolve(organizationsToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -166,10 +166,10 @@ import VCL
           resolve(credentialManifestToDictionary($0))
         },
         errorHandler: {
-          rejectStructuredError(reject, error: $0)
+          rejectBridgedVCLError(reject, error: $0)
         })
     } else {
-      rejectStructuredError(
+      rejectBridgedVCLError(
         reject,
         error: VCLError(
           message: "Unexpected Credential Credential Manifest Descriptor: \(credentialManifestDescriptorDictionary)"
@@ -189,7 +189,7 @@ import VCL
         resolve(offersToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -206,7 +206,7 @@ import VCL
         resolve(offersToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -223,7 +223,7 @@ import VCL
         resolve(jwtVerifiableCredentialsToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
   
@@ -237,7 +237,7 @@ import VCL
         resolve(authTokenToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -252,7 +252,7 @@ import VCL
         resolve(credentialTypesFormSchemaToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       }
     )
   }
@@ -268,7 +268,7 @@ import VCL
         resolve(verifiedProfileToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -287,7 +287,7 @@ import VCL
         resolve($0)
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -306,7 +306,7 @@ import VCL
         resolve(jwtToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -321,7 +321,7 @@ import VCL
         resolve(didJwkToDictionary($0))
       },
       errorHandler: {
-        rejectStructuredError(reject, error: $0)
+        rejectBridgedVCLError(reject, error: $0)
       })
   }
 }

@@ -2254,8 +2254,8 @@ PODS:
     - React-utils (= 0.81.4)
     - SocketRocket
   - SocketRocket (0.7.1)
-  - VCL (2.8.2)
-  - VclReactNative (2.8.2):
+  - VCL (2.9.0)
+  - VclReactNative (2.9.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2282,7 +2282,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - SocketRocket
-    - VCL (= 2.8.2)
+    - VCL (= 2.9.0)
     - Yoga
   - Yoga (0.0.0)
 

@@ -21,7 +21,10 @@ export class VCLError extends Error {
       this.errorCode = errorJson.errorCode;
       this.requestId = errorJson.requestId;
       this.message = errorJson.message;
-      this.statusCode = parseInt(errorJson.statusCode, 10);
+      this.statusCode =
+        errorJson.statusCode != null
+          ? parseInt(String(errorJson.statusCode), 10)
+          : undefined;
     } catch (e) {
       this.message = JSON.stringify(error);
     }

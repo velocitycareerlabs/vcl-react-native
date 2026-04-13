@@ -217,7 +217,11 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
             promise.reject(it.toThrowable())
           })
       } ?: run {
-        promise.reject(VCLError("Unexpected Credential Credential Manifest Descriptor: $credentialManifestDescriptorMap").toThrowable())
+        promise.reject(
+          VCLError(
+            message = "Unexpected Credential Credential Manifest Descriptor: $credentialManifestDescriptorMap"
+          ).toThrowable()
+        )
       }
     } catch (ex: Exception) {
       promise.reject(VCLError(ex).toThrowable())

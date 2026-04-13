@@ -7,7 +7,12 @@
 
 package io.velocitycareerlabs.reactnative.extensions
 
+import com.facebook.react.bridge.Promise
 import io.velocitycareerlabs.api.entities.error.VCLError
 
-fun VCLError.toThrowable() =
-  Throwable(this.toJsonObject().toString())
+const val BRIDGED_VCL_ERROR_CODE = "VCL_BRIDGED_ERROR_V1"
+
+fun Promise.rejectBridgedVCLError(error: VCLError) {
+  val serializedError = error.toJsonObject().toString()
+  reject(BRIDGED_VCL_ERROR_CODE, serializedError, Throwable(serializedError))
+}

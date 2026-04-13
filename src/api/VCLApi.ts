@@ -39,6 +39,10 @@ import {
   type VCLDidJwkDescriptor,
   VCLError,
 } from '@velocitycareerlabs/vcl-react-native';
+import {
+  BRIDGED_VCL_ERROR_CODE,
+  VCLErrorDeserializer,
+} from './entities/error/VCLErrorDeserializer';
 
 const { VclReactNative } = NativeModules;
 
@@ -49,7 +53,7 @@ export const VclApi = {
     try {
       return await VclReactNative.initialize(initializationDescriptor);
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -57,7 +61,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getCountries();
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -65,7 +69,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getCredentialTypes();
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -73,7 +77,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getCredentialTypeSchemas();
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -85,7 +89,7 @@ export const VclApi = {
         presentationRequestDescriptor
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -99,7 +103,7 @@ export const VclApi = {
         authToken
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -109,7 +113,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getExchangeProgress(exchangeDescriptor);
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -121,7 +125,7 @@ export const VclApi = {
         organizationsSearchDescriptor
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -133,7 +137,7 @@ export const VclApi = {
         credentialManifestDescriptor
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -143,7 +147,7 @@ export const VclApi = {
     try {
       return await VclReactNative.generateOffers(generateOffersDescriptor);
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -157,7 +161,7 @@ export const VclApi = {
         sessionToken
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -171,7 +175,7 @@ export const VclApi = {
         sessionToken
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -181,7 +185,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getAuthToken(authTokenDescriptor);
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -193,7 +197,7 @@ export const VclApi = {
         credentialTypesUIFormSchemaDescriptor
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -203,7 +207,7 @@ export const VclApi = {
     try {
       return await VclReactNative.getVerifiedProfile(verifiedProfileDescriptor);
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -219,7 +223,7 @@ export const VclApi = {
         remoteCryptoServicesToken
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -235,7 +239,7 @@ export const VclApi = {
         remoteCryptoServicesToken
       );
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
 
@@ -245,7 +249,43 @@ export const VclApi = {
     try {
       return await VclReactNative.generateDidJwk(didJwkDescriptor);
     } catch (e) {
-      throw new VCLError(e);
+      throw toVCLError(e);
     }
   },
+};
+
+const toVCLError = (error: unknown): VCLError => {
+  if (error instanceof VCLError) {
+    return error;
+  }
+
+  if (isBridgedVCLError(error)) {
+    return VCLErrorDeserializer.fromJsonString(error.message);
+  }
+
+  return new VCLError({ message: toErrorMessage(error) });
+};
+
+const isBridgedVCLError = (
+  error: unknown
+): error is { code: typeof BRIDGED_VCL_ERROR_CODE; message: string } =>
+  typeof error === 'object' &&
+  error != null &&
+  (error as { code?: unknown }).code === BRIDGED_VCL_ERROR_CODE &&
+  typeof (error as { message?: unknown }).message === 'string';
+
+const toErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  try {
+    return JSON.stringify(error) ?? String(error);
+  } catch (_stringifyError) {
+    return String(error);
+  }
 };

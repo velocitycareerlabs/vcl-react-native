@@ -278,7 +278,7 @@ import VCL
       rejectBridgedVCLError(
         reject,
         error: VCLError(
-          message: "Unexpected Credential Credential Manifest Descriptor: \(credentialManifestDescriptorDictionary)"
+          message: "Unexpected Credential Manifest Descriptor: \(credentialManifestDescriptorDictionary)"
         )
       )
     }

@@ -2255,7 +2255,7 @@ PODS:
     - SocketRocket
   - SocketRocket (0.7.1)
   - VCL (2.9.3)
-  - VclReactNative (2.9.0):
+  - VclReactNative (2.9.1):
     - boost
     - DoubleConversion
     - fast_float

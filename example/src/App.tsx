@@ -571,8 +571,12 @@ export default () => {
     try {
       await vcl.getCredentialManifest({} as any);
     } catch (error: any) {
-      console.log('VCL bridged error demo:', JSON.stringify(error));
-      setBridgedError(error as VCLError);
+      const bridgedVCLError = error as VCLError;
+      console.log(
+        'VCL bridged error demo:',
+        JSON.stringify(toErrorDisplayObject(bridgedVCLError))
+      );
+      setBridgedError(bridgedVCLError);
     }
   };
 

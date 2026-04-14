@@ -31,7 +31,7 @@ object VCLErrorBridgeConfig {
 fun Promise.rejectBridgedVCLError(error: VCLError) {
   val serializedError =
     error.toBridgedJsonObject(VCLErrorBridgeConfig.nativeErrorStackFrameLimit).toString()
-  reject(BRIDGED_VCL_ERROR_CODE, serializedError, Throwable(serializedError))
+  reject(BRIDGED_VCL_ERROR_CODE, serializedError, error)
 }
 
 private fun VCLError.toBridgedJsonObject(

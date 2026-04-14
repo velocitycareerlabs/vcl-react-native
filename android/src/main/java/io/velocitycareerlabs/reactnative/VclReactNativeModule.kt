@@ -224,7 +224,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
       } ?: run {
         promise.rejectBridgedVCLError(
           VCLError(
-            message = "Unexpected Credential Manifest Descriptor: $credentialManifestDescriptorMap"
+            message = "Unexpected Credential Manifest Descriptor"
           )
         )
       }

@@ -36,30 +36,8 @@ import VCL
   }
 
   private func bridgedVCLErrorPayload(_ error: VCLError) -> [String: Any] {
-    var payload = [String: Any]()
-
-    if let errorPayload = error.payload {
-      payload["payload"] = errorPayload
-    }
-
-    if let errorValue = error.error {
-      payload["error"] = errorValue
-    }
-
-    payload["errorCode"] = error.errorCode
-
-    if let requestId = error.requestId {
-      payload["requestId"] = requestId
-    }
-
-    if let message = error.message {
-      payload["message"] = message
-    }
-
-    if let statusCode = error.statusCode {
-      payload["statusCode"] = statusCode
-    }
-
+    var payload = error.toDictionary().compactMapValues { $0 }
+    payload.removeValue(forKey: Self.nativeStackFramesDictionaryKey)
     payload["diagnostics"] = bridgedDiagnostics(error)
     return payload
   }

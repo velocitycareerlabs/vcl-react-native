@@ -112,7 +112,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
   override fun getCredentialTypeSchemas(promise: Promise) {
     try {
       vcl.credentialTypeSchemas?.let { promise.resolve(credentialTypeSchemasToMap(it)) }
-        ?: promise.rejectBridgedVCLError(VCLError(message = "Credential Types not found"))
+        ?: promise.rejectBridgedVCLError(VCLError(message = "Credential Type Schemas not found"))
     } catch (ex: Exception) {
       promise.rejectBridgedVCLError(VCLError(ex))
     }

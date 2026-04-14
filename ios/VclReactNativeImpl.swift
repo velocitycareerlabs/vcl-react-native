@@ -47,7 +47,7 @@ import VCL
         resolve("VCL initialization succeed!")
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -98,7 +98,7 @@ import VCL
         resolve(presentationRequestToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       }
     )
   }
@@ -118,7 +118,7 @@ import VCL
         resolve(presentationSubmissionResultToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -133,7 +133,7 @@ import VCL
         resolve(exchangeToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -148,7 +148,7 @@ import VCL
         resolve(organizationsToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -166,7 +166,7 @@ import VCL
           resolve(credentialManifestToDictionary($0))
         },
         errorHandler: {
-          rejectBridgedVCLError(reject, error: $0)
+          self.rejectBridgedVCLError(reject, error: $0)
         })
     } else {
       rejectBridgedVCLError(
@@ -189,7 +189,7 @@ import VCL
         resolve(offersToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -206,7 +206,7 @@ import VCL
         resolve(offersToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -223,7 +223,7 @@ import VCL
         resolve(jwtVerifiableCredentialsToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
   
@@ -237,7 +237,7 @@ import VCL
         resolve(authTokenToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -252,7 +252,7 @@ import VCL
         resolve(credentialTypesFormSchemaToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       }
     )
   }
@@ -268,7 +268,7 @@ import VCL
         resolve(verifiedProfileToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -287,7 +287,7 @@ import VCL
         resolve($0)
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -306,7 +306,7 @@ import VCL
         resolve(jwtToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -321,7 +321,7 @@ import VCL
         resolve(didJwkToDictionary($0))
       },
       errorHandler: {
-        rejectBridgedVCLError(reject, error: $0)
+        self.rejectBridgedVCLError(reject, error: $0)
       })
   }
 }

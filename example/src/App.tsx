@@ -62,6 +62,7 @@ export default () => {
   );
   const [initializationError, setInitializationError] =
     React.useState<VCLError>();
+  const [bridgedError, setBridgedError] = React.useState<VCLError>();
 
   React.useEffect(() => {
     setInitState(InitState.Initializing);
@@ -556,6 +557,17 @@ export default () => {
     }
   };
 
+  const onTriggerBridgedError = async () => {
+    setBridgedError(undefined);
+
+    try {
+      await vcl.getCredentialManifest({} as any);
+    } catch (error: any) {
+      console.log('VCL bridged error demo:', JSON.stringify(error));
+      setBridgedError(error as VCLError);
+    }
+  };
+
   const menuItems = {
     'Get Countries': onGetCountries,
     'Get Credential Types': onGetCredentialTypes,
@@ -572,6 +584,7 @@ export default () => {
     'Verify JWT': onVerifyJwt,
     'Generate Signed JWT': onGenerateSignedJwt,
     'Generate DID:JWK': onGenerateDidJwk,
+    'Trigger Bridged VCLError': onTriggerBridgedError,
   };
 
   const handleClick = (key: string, value: () => void) => {
@@ -579,6 +592,10 @@ export default () => {
       value();
     }
   };
+
+  const bridgedErrorDisplay = bridgedError
+    ? JSON.stringify(toErrorDisplayObject(bridgedError), null, 2)
+    : undefined;
 
   if (initState === InitState.InitializationSucceed) {
     return (
@@ -594,6 +611,12 @@ export default () => {
             <View style={styles.space} />
           </React.Fragment>
         ))}
+        {bridgedError ? (
+          <>
+            <Text style={styles.errorTitle}>Latest Bridged Error</Text>
+            <Text style={styles.errorText}>{bridgedErrorDisplay}</Text>
+          </>
+        ) : null}
       </View>
     );
   }
@@ -617,6 +640,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 16,
   },
   box: {
     width: 60,
@@ -627,4 +651,34 @@ const styles = StyleSheet.create({
     width: 5, // or whatever size you need
     height: 5,
   },
+  errorTitle: {
+    marginTop: 12,
+    fontWeight: '600',
+  },
+  errorText: {
+    marginTop: 8,
+    textAlign: 'center',
+  },
 });
+
+const toErrorDisplayObject = (error: VCLError) => {
+  const stackFrames =
+    typeof error.stack === 'string'
+      ? error.stack
+          .split('\n')
+          .map((frame) => frame.trim())
+          .filter(Boolean)
+      : [];
+
+  return {
+    name: error.name,
+    message: error.message,
+    payload: error.payload,
+    error: error.error,
+    errorCode: error.errorCode,
+    requestId: error.requestId,
+    statusCode: error.statusCode,
+    stackFrameCount: stackFrames.length,
+    firstStackFrame: stackFrames[0],
+  };
+};

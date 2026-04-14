@@ -5,6 +5,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export type VCLNativeCauseDiagnostics = {
+  type?: string;
+  message?: string;
+  stackFrames?: string[];
+};
+
+export type VCLDiagnostics = {
+  nativePlatform?: 'ios' | 'android';
+  nativeType?: string;
+  nativeStackFrames?: string[];
+  nativeCause?: VCLNativeCauseDiagnostics;
+};
+
 export type VCLErrorInit = {
   payload?: string;
   error?: string;
@@ -12,6 +25,7 @@ export type VCLErrorInit = {
   requestId?: string;
   message?: string;
   statusCode?: number;
+  diagnostics?: VCLDiagnostics;
 };
 
 export class VCLError extends Error {
@@ -20,6 +34,7 @@ export class VCLError extends Error {
   errorCode?: string;
   requestId?: string;
   statusCode?: number;
+  diagnostics?: VCLDiagnostics;
 
   constructor(error: VCLErrorInit = {}) {
     super(error.message);
@@ -29,5 +44,6 @@ export class VCLError extends Error {
     this.errorCode = error.errorCode;
     this.requestId = error.requestId;
     this.statusCode = error.statusCode;
+    this.diagnostics = error.diagnostics;
   }
 }

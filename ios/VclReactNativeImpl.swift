@@ -15,16 +15,121 @@ import VCL
 @objc public class VclReactNativeImpl: NSObject {
 
   private static let bridgedVCLErrorCode = "VCL_BRIDGED_ERROR_V1"
+  private static let defaultNativeErrorStackFrameLimit = 5
+  private static let maxNativeErrorStackFrameLimit = 20
+  private static let nativeStackFramesDictionaryKey = "callStackSymbols"
   
   @objc public static let shared = VclReactNativeImpl()
 
   private let vcl = VCLProvider.vclInstance()
+  private var nativeErrorStackFrameLimit = VclReactNativeImpl.defaultNativeErrorStackFrameLimit
 
   private func rejectBridgedVCLError(
     _ reject: @escaping RCTPromiseRejectBlock,
     error: VCLError
   ) {
-    reject(Self.bridgedVCLErrorCode, error.toDictionary().toJsonString(), error)
+    let serializedError =
+      bridgedVCLErrorPayload(error).toJsonString()
+      ?? error.message
+      ?? "Unexpected VCLError"
+    reject(Self.bridgedVCLErrorCode, serializedError, error)
+  }
+
+  private func bridgedVCLErrorPayload(_ error: VCLError) -> [String: Any] {
+    var payload = [String: Any]()
+
+    if let errorPayload = error.payload {
+      payload["payload"] = errorPayload
+    }
+
+    if let errorValue = error.error {
+      payload["error"] = errorValue
+    }
+
+    payload["errorCode"] = error.errorCode
+
+    if let requestId = error.requestId {
+      payload["requestId"] = requestId
+    }
+
+    if let message = error.message {
+      payload["message"] = message
+    }
+
+    if let statusCode = error.statusCode {
+      payload["statusCode"] = statusCode
+    }
+
+    payload["diagnostics"] = bridgedDiagnostics(error)
+    return payload
+  }
+
+  private func bridgedDiagnostics(_ error: VCLError) -> [String: Any] {
+    var diagnostics: [String: Any] = [
+      "nativePlatform": "ios",
+      "nativeType": String(describing: type(of: error)),
+    ]
+
+    if let nativeStackFrames = bridgedStackFrames(from: error) {
+      diagnostics["nativeStackFrames"] = nativeStackFrames
+    }
+
+    if let cause = error.cause {
+      diagnostics["nativeCause"] = bridgedNativeCause(cause)
+    }
+
+    return diagnostics
+  }
+
+  private func bridgedNativeCause(_ cause: Error) -> [String: Any] {
+    var nativeCause: [String: Any] = [
+      "type": String(describing: type(of: cause)),
+      "message": String(describing: cause),
+    ]
+
+    if let stackFrames = bridgedStackFrames(from: cause) {
+      nativeCause["stackFrames"] = stackFrames
+    }
+
+    return nativeCause
+  }
+
+  private func bridgedStackFrames(from error: VCLError) -> [String]? {
+    return limitedStackFrames(
+      error.toDictionary()[Self.nativeStackFramesDictionaryKey] as? [String]
+    )
+  }
+
+  private func bridgedStackFrames(from cause: Error) -> [String]? {
+    guard let errorCause = cause as? VCLError else {
+      return nil
+    }
+
+    return bridgedStackFrames(from: errorCause)
+  }
+
+  private func limitedStackFrames(_ stackFrames: [String]?) -> [String]? {
+    guard nativeErrorStackFrameLimit > 0, let stackFrames else {
+      return nil
+    }
+
+    let trimmedStackFrames = Array(stackFrames.prefix(nativeErrorStackFrameLimit))
+    return trimmedStackFrames.isEmpty ? nil : trimmedStackFrames
+  }
+
+  private func updateBridgeConfigurations(
+    _ initializationDescriptorDictionary: [String: Any]
+  ) {
+    let stackFrameLimit = initializationDescriptorDictionary["nativeErrorStackFrameLimit"] as? Int
+    nativeErrorStackFrameLimit = Self.clampNativeErrorStackFrameLimit(stackFrameLimit)
+  }
+
+  private static func clampNativeErrorStackFrameLimit(_ stackFrameLimit: Int?) -> Int {
+    guard let stackFrameLimit else {
+      return defaultNativeErrorStackFrameLimit
+    }
+
+    return min(max(stackFrameLimit, 0), maxNativeErrorStackFrameLimit)
   }
 
   private func initGlobalConfigurations(
@@ -39,6 +144,7 @@ import VCL
     initializationDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
+    updateBridgeConfigurations(initializationDescriptorDictionary)
     let initializationDescriptor = dictionaryToInitializationDescriptor(initializationDescriptorDictionary)
     initGlobalConfigurations(initializationDescriptor)
     vcl.initialize(

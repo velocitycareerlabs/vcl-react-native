@@ -16,4 +16,5 @@ export interface VCLInitializationDescriptor {
   isDebugOn?: boolean;
   cryptoServicesDescriptor?: VCLCryptoServicesDescriptor;
   isDirectIssuerCheckOn?: boolean;
+  nativeErrorStackFrameLimit?: number;
 }

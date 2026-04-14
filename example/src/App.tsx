@@ -8,7 +8,14 @@
 import * as React from 'react';
 import { useRef } from 'react';
 
-import { Button, StyleSheet, Text, View } from 'react-native';
+import {
+  Button,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import vcl, {
   type VCLAuthToken,
@@ -611,12 +618,25 @@ export default () => {
             <View style={styles.space} />
           </React.Fragment>
         ))}
-        {bridgedError ? (
-          <>
-            <Text style={styles.errorTitle}>Latest Bridged Error</Text>
-            <Text style={styles.errorText}>{bridgedErrorDisplay}</Text>
-          </>
-        ) : null}
+        <Modal
+          animationType="slide"
+          presentationStyle="fullScreen"
+          visible={bridgedError != null}
+          onRequestClose={() => setBridgedError(undefined)}
+        >
+          <View style={styles.errorScreen}>
+            <View style={styles.errorHeader}>
+              <Text style={styles.errorTitle}>Latest Bridged Error</Text>
+              <Button
+                title="Close"
+                onPress={() => setBridgedError(undefined)}
+              />
+            </View>
+            <ScrollView contentContainerStyle={styles.errorScrollContent}>
+              <Text style={styles.errorText}>{bridgedErrorDisplay}</Text>
+            </ScrollView>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -652,33 +672,47 @@ const styles = StyleSheet.create({
     height: 5,
   },
   errorTitle: {
-    marginTop: 12,
     fontWeight: '600',
+    fontSize: 16,
   },
   errorText: {
-    marginTop: 8,
-    textAlign: 'center',
+    marginTop: 12,
+    textAlign: 'left',
+    fontSize: 12,
+  },
+  errorScreen: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 56,
+    paddingBottom: 24,
+    backgroundColor: '#fff',
+  },
+  errorHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  errorScrollContent: {
+    paddingTop: 12,
+    paddingBottom: 24,
   },
 });
 
 const toErrorDisplayObject = (error: VCLError) => {
-  const stackFrames =
-    typeof error.stack === 'string'
-      ? error.stack
-          .split('\n')
-          .map((frame) => frame.trim())
-          .filter(Boolean)
-      : [];
-
   return {
     name: error.name,
     message: error.message,
+    stack: error.stack
+      ?.split('\n')
+      .map((frame) => frame.trim())
+      .filter(Boolean)
+      .slice(0, 5),
     payload: error.payload,
     error: error.error,
     errorCode: error.errorCode,
     requestId: error.requestId,
     statusCode: error.statusCode,
-    stackFrameCount: stackFrames.length,
-    firstStackFrame: stackFrames[0],
+    diagnostics: error.diagnostics,
   };
 };

@@ -38,6 +38,8 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
 import io.velocitycareerlabs.api.entities.error.VCLError
 import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
+import io.velocitycareerlabs.reactnative.extensions.VCLErrorBridgeConfig
+import io.velocitycareerlabs.reactnative.extensions.getIntOpt
 import io.velocitycareerlabs.reactnative.extensions.rejectBridgedVCLError
 import io.velocitycareerlabs.reactnative.utlis.Converter.authTokenToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
@@ -77,6 +79,9 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     promise: Promise
   ) {
     try {
+      VCLErrorBridgeConfig.updateNativeErrorStackFrameLimit(
+        initializationDescriptorMap.getIntOpt("nativeErrorStackFrameLimit")
+      )
       val initializationDescriptor = mapToInitializationDescriptor(
         initializationDescriptorMap
       )

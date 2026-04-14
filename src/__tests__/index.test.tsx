@@ -21,6 +21,7 @@ describe('VCLError', () => {
     expect(error.requestId).toBe('request-123');
     expect(error.message).toBe('Credential Types not found');
     expect(error.statusCode).toBe(401);
+    expect(error.diagnostics).toBeUndefined();
   });
 
   it('parses structured native error payloads from a marked bridged error', () => {
@@ -32,6 +33,16 @@ describe('VCLError', () => {
         requestId: 'request-123',
         message: 'Credential Types not found',
         statusCode: '401',
+        diagnostics: {
+          nativePlatform: 'android',
+          nativeType: 'io.velocitycareerlabs.api.entities.error.VCLError',
+          nativeStackFrames: ['frame-a', 'frame-b'],
+          nativeCause: {
+            type: 'java.lang.IllegalStateException',
+            message: 'Underlying failure',
+            stackFrames: ['cause-frame-a'],
+          },
+        },
       })
     );
 
@@ -41,6 +52,16 @@ describe('VCLError', () => {
     expect(error.requestId).toBe('request-123');
     expect(error.message).toBe('Credential Types not found');
     expect(error.statusCode).toBe(401);
+    expect(error.diagnostics).toEqual({
+      nativePlatform: 'android',
+      nativeType: 'io.velocitycareerlabs.api.entities.error.VCLError',
+      nativeStackFrames: ['frame-a', 'frame-b'],
+      nativeCause: {
+        type: 'java.lang.IllegalStateException',
+        message: 'Underlying failure',
+        stackFrames: ['cause-frame-a'],
+      },
+    });
   });
 
   it('leaves missing statusCode undefined', () => {

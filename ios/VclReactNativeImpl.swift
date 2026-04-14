@@ -13,102 +13,11 @@ import React
 import VCL
 
 @objc public class VclReactNativeImpl: NSObject {
-
-  private static let bridgedVCLErrorCode = "VCL_BRIDGED_ERROR_V1"
-  private static let defaultNativeErrorStackFrameLimit = 5
-  private static let maxNativeErrorStackFrameLimit = 20
-  private static let nativeStackFramesDictionaryKey = "callStackSymbols"
   
   @objc public static let shared = VclReactNativeImpl()
 
   private let vcl = VCLProvider.vclInstance()
-  private var nativeErrorStackFrameLimit = VclReactNativeImpl.defaultNativeErrorStackFrameLimit
-
-  private func rejectBridgedVCLError(
-    _ reject: @escaping RCTPromiseRejectBlock,
-    error: VCLError
-  ) {
-    let serializedError =
-      bridgedVCLErrorPayload(error).toJsonString()
-      ?? error.message
-      ?? "Unexpected VCLError"
-    reject(Self.bridgedVCLErrorCode, serializedError, error)
-  }
-
-  private func bridgedVCLErrorPayload(_ error: VCLError) -> [String: Any] {
-    var payload = error.toDictionary().compactMapValues { $0 }
-    payload.removeValue(forKey: Self.nativeStackFramesDictionaryKey)
-    payload["diagnostics"] = bridgedDiagnostics(error)
-    return payload
-  }
-
-  private func bridgedDiagnostics(_ error: VCLError) -> [String: Any] {
-    var diagnostics: [String: Any] = [
-      "nativePlatform": "ios",
-      "nativeType": String(describing: type(of: error)),
-    ]
-
-    if let nativeStackFrames = bridgedStackFrames(from: error) {
-      diagnostics["nativeStackFrames"] = nativeStackFrames
-    }
-
-    if let cause = error.cause {
-      diagnostics["nativeCause"] = bridgedNativeCause(cause)
-    }
-
-    return diagnostics
-  }
-
-  private func bridgedNativeCause(_ cause: Error) -> [String: Any] {
-    var nativeCause: [String: Any] = [
-      "type": String(describing: type(of: cause)),
-      "message": String(describing: cause),
-    ]
-
-    if let stackFrames = bridgedStackFrames(from: cause) {
-      nativeCause["stackFrames"] = stackFrames
-    }
-
-    return nativeCause
-  }
-
-  private func bridgedStackFrames(from error: VCLError) -> [String]? {
-    return limitedStackFrames(
-      error.toDictionary()[Self.nativeStackFramesDictionaryKey] as? [String]
-    )
-  }
-
-  private func bridgedStackFrames(from cause: Error) -> [String]? {
-    guard let errorCause = cause as? VCLError else {
-      return nil
-    }
-
-    return bridgedStackFrames(from: errorCause)
-  }
-
-  private func limitedStackFrames(_ stackFrames: [String]?) -> [String]? {
-    guard nativeErrorStackFrameLimit > 0, let stackFrames else {
-      return nil
-    }
-
-    let trimmedStackFrames = Array(stackFrames.prefix(nativeErrorStackFrameLimit))
-    return trimmedStackFrames.isEmpty ? nil : trimmedStackFrames
-  }
-
-  private func updateBridgeConfigurations(
-    _ initializationDescriptorDictionary: [String: Any]
-  ) {
-    let stackFrameLimit = initializationDescriptorDictionary["nativeErrorStackFrameLimit"] as? Int
-    nativeErrorStackFrameLimit = Self.clampNativeErrorStackFrameLimit(stackFrameLimit)
-  }
-
-  private static func clampNativeErrorStackFrameLimit(_ stackFrameLimit: Int?) -> Int {
-    guard let stackFrameLimit else {
-      return defaultNativeErrorStackFrameLimit
-    }
-
-    return min(max(stackFrameLimit, 0), maxNativeErrorStackFrameLimit)
-  }
+  private let errorBridge = VCLErrorBridge()
 
   private func initGlobalConfigurations(
     _ initializationDescriptor: VCLInitializationDescriptor
@@ -122,7 +31,7 @@ import VCL
     initializationDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
-    updateBridgeConfigurations(initializationDescriptorDictionary)
+    errorBridge.updateConfiguration(initializationDescriptorDictionary)
     let initializationDescriptor = dictionaryToInitializationDescriptor(initializationDescriptorDictionary)
     initGlobalConfigurations(initializationDescriptor)
     vcl.initialize(
@@ -131,7 +40,7 @@ import VCL
         resolve("VCL initialization succeed!")
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -142,7 +51,7 @@ import VCL
     if let countries = vcl.countries {
       resolve(countriesToDictionary(countries))
     } else {
-      rejectBridgedVCLError(reject, error: VCLError(message: "Countries not found"))
+      errorBridge.rejectBridgedVCLError(reject, error: VCLError(message: "Countries not found"))
     }
   }
 
@@ -153,7 +62,7 @@ import VCL
     if let credentialTypeSchemas = vcl.credentialTypeSchemas {
       resolve(credentialTypeSchemasToDictionary(credentialTypeSchemas))
     } else {
-      rejectBridgedVCLError(
+      errorBridge.rejectBridgedVCLError(
         reject,
         error: VCLError(message: "Credential Type Schemas not found")
       )
@@ -167,7 +76,7 @@ import VCL
     if let credentialTypes = vcl.credentialTypes {
       resolve(credentialTypesToDictionary(credentialTypes))
     } else {
-      rejectBridgedVCLError(reject, error: VCLError(message: "Credential Types not found"))
+      errorBridge.rejectBridgedVCLError(reject, error: VCLError(message: "Credential Types not found"))
     }
   }
 
@@ -182,7 +91,7 @@ import VCL
         resolve(presentationRequestToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       }
     )
   }
@@ -202,7 +111,7 @@ import VCL
         resolve(presentationSubmissionResultToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -217,7 +126,7 @@ import VCL
         resolve(exchangeToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -232,7 +141,7 @@ import VCL
         resolve(organizationsToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -250,10 +159,10 @@ import VCL
           resolve(credentialManifestToDictionary($0))
         },
         errorHandler: {
-          self.rejectBridgedVCLError(reject, error: $0)
+          self.errorBridge.rejectBridgedVCLError(reject, error: $0)
         })
     } else {
-      rejectBridgedVCLError(
+      errorBridge.rejectBridgedVCLError(
         reject,
         error: VCLError(
           message: "Unexpected Credential Manifest Descriptor"
@@ -273,7 +182,7 @@ import VCL
         resolve(offersToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -290,7 +199,7 @@ import VCL
         resolve(offersToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -307,7 +216,7 @@ import VCL
         resolve(jwtVerifiableCredentialsToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
   
@@ -321,7 +230,7 @@ import VCL
         resolve(authTokenToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -336,7 +245,7 @@ import VCL
         resolve(credentialTypesFormSchemaToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       }
     )
   }
@@ -352,7 +261,7 @@ import VCL
         resolve(verifiedProfileToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -371,7 +280,7 @@ import VCL
         resolve($0)
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -390,7 +299,7 @@ import VCL
         resolve(jwtToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -405,7 +314,7 @@ import VCL
         resolve(didJwkToDictionary($0))
       },
       errorHandler: {
-        self.rejectBridgedVCLError(reject, error: $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 }

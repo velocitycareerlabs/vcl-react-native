@@ -51,15 +51,7 @@ private fun VCLError.toDiagnosticsJsonObject(
 ) = JSONObject().apply {
   put("nativePlatform", "android")
   put("nativeType", this@toDiagnosticsJsonObject::class.java.name)
-  putOpt(
-    "nativeStackFrames",
-    stackTrace
-      .takeIf { nativeErrorStackFrameLimit > 0 }
-      ?.take(nativeErrorStackFrameLimit)
-      ?.map { it.toString() }
-      ?.takeIf { it.isNotEmpty() }
-      ?.let { JSONArray(it) }
-  )
+  putOpt("nativeStackFrames", stackTrace.toStackFramesJsonArray(nativeErrorStackFrameLimit))
   cause?.let { put("nativeCause", it.toNativeCauseJsonObject(nativeErrorStackFrameLimit)) }
 }
 
@@ -68,13 +60,14 @@ private fun Throwable.toNativeCauseJsonObject(
 ) = JSONObject().apply {
   put("type", javaClass.name)
   put("message", message ?: toString())
-  putOpt(
-    "stackFrames",
-    stackTrace
-      .takeIf { nativeErrorStackFrameLimit > 0 }
-      ?.take(nativeErrorStackFrameLimit)
-      ?.map { it.toString() }
-      ?.takeIf { it.isNotEmpty() }
-      ?.let { JSONArray(it) }
-  )
+  putOpt("stackFrames", stackTrace.toStackFramesJsonArray(nativeErrorStackFrameLimit))
 }
+
+private fun Array<StackTraceElement>.toStackFramesJsonArray(
+  nativeErrorStackFrameLimit: Int
+): JSONArray? =
+  takeIf { nativeErrorStackFrameLimit > 0 }
+    ?.take(nativeErrorStackFrameLimit)
+    ?.map { it.toString() }
+    ?.takeIf { it.isNotEmpty() }
+    ?.let { JSONArray(it) }

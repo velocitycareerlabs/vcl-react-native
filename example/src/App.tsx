@@ -96,6 +96,7 @@ export default () => {
     const initialize = async () => {
       const initializationDescriptor: VCLInitializationDescriptor = {
         environment,
+        nativeErrorStackFrameLimit: 20,
       };
 
       try {

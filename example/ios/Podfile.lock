@@ -2255,7 +2255,7 @@ PODS:
     - SocketRocket
   - SocketRocket (0.7.1)
   - VCL (2.9.3)
-  - VclReactNative (2.8.2):
+  - VclReactNative (2.9.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2588,7 +2588,7 @@ SPEC CHECKSUMS:
   ReactCommon: 394c6b92765cf6d211c2c3f7f6bc601dffb316a6
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   VCL: ddd97baeeb55c836bc9d62a2d0c1aa67ea8dad70
-  VclReactNative: ecc4b88e3daf206192c7e927375a986e3fbe761a
+  VclReactNative: f799e8ba16febf859d7d5912b2d472e4bca034a6
   Yoga: a3ed390a19db0459bd6839823a6ac6d9c6db198d
 
 PODFILE CHECKSUM: eb9f38205ee147e9d14ddc267e7020344603cfc4

@@ -8,7 +8,14 @@
 import * as React from 'react';
 import { useRef } from 'react';
 
-import { Button, StyleSheet, Text, View } from 'react-native';
+import {
+  Button,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import vcl, {
   type VCLAuthToken,
@@ -62,6 +69,7 @@ export default () => {
   );
   const [initializationError, setInitializationError] =
     React.useState<VCLError>();
+  const [bridgedError, setBridgedError] = React.useState<VCLError>();
 
   React.useEffect(() => {
     setInitState(InitState.Initializing);
@@ -88,6 +96,7 @@ export default () => {
     const initialize = async () => {
       const initializationDescriptor: VCLInitializationDescriptor = {
         environment,
+        nativeErrorStackFrameLimit: 20,
       };
 
       try {
@@ -556,6 +565,21 @@ export default () => {
     }
   };
 
+  const onTriggerBridgedError = async () => {
+    setBridgedError(undefined);
+
+    try {
+      await vcl.getCredentialManifest({} as any);
+    } catch (error: any) {
+      const bridgedVCLError = error as VCLError;
+      console.log(
+        'VCL bridged error demo:',
+        JSON.stringify(toErrorDisplayObject(bridgedVCLError))
+      );
+      setBridgedError(bridgedVCLError);
+    }
+  };
+
   const menuItems = {
     'Get Countries': onGetCountries,
     'Get Credential Types': onGetCredentialTypes,
@@ -572,6 +596,7 @@ export default () => {
     'Verify JWT': onVerifyJwt,
     'Generate Signed JWT': onGenerateSignedJwt,
     'Generate DID:JWK': onGenerateDidJwk,
+    'Trigger Bridged VCLError': onTriggerBridgedError,
   };
 
   const handleClick = (key: string, value: () => void) => {
@@ -579,6 +604,10 @@ export default () => {
       value();
     }
   };
+
+  const bridgedErrorDisplay = bridgedError
+    ? JSON.stringify(toErrorDisplayObject(bridgedError), null, 2)
+    : undefined;
 
   if (initState === InitState.InitializationSucceed) {
     return (
@@ -594,6 +623,25 @@ export default () => {
             <View style={styles.space} />
           </React.Fragment>
         ))}
+        <Modal
+          animationType="slide"
+          presentationStyle="fullScreen"
+          visible={bridgedError != null}
+          onRequestClose={() => setBridgedError(undefined)}
+        >
+          <View style={styles.errorScreen}>
+            <View style={styles.errorHeader}>
+              <Text style={styles.errorTitle}>Latest Bridged Error</Text>
+              <Button
+                title="Close"
+                onPress={() => setBridgedError(undefined)}
+              />
+            </View>
+            <ScrollView contentContainerStyle={styles.errorScrollContent}>
+              <Text style={styles.errorText}>{bridgedErrorDisplay}</Text>
+            </ScrollView>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -617,6 +665,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 16,
   },
   box: {
     width: 60,
@@ -627,4 +676,48 @@ const styles = StyleSheet.create({
     width: 5, // or whatever size you need
     height: 5,
   },
+  errorTitle: {
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  errorText: {
+    marginTop: 12,
+    textAlign: 'left',
+    fontSize: 12,
+  },
+  errorScreen: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 56,
+    paddingBottom: 24,
+    backgroundColor: '#fff',
+  },
+  errorHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  errorScrollContent: {
+    paddingTop: 12,
+    paddingBottom: 24,
+  },
 });
+
+const toErrorDisplayObject = (error: VCLError) => {
+  return {
+    name: error.name,
+    message: error.message,
+    stack: error.stack
+      ?.split('\n')
+      .map((frame) => frame.trim())
+      .filter(Boolean)
+      .slice(0, 5),
+    payload: error.payload,
+    error: error.error,
+    errorCode: error.errorCode,
+    requestId: error.requestId,
+    statusCode: error.statusCode,
+    diagnostics: error.diagnostics,
+  };
+};

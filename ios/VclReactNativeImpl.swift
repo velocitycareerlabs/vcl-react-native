@@ -17,6 +17,7 @@ import VCL
   @objc public static let shared = VclReactNativeImpl()
 
   private let vcl = VCLProvider.vclInstance()
+  private let errorBridge = VCLErrorBridge()
 
   private func initGlobalConfigurations(
     _ initializationDescriptor: VCLInitializationDescriptor
@@ -30,6 +31,7 @@ import VCL
     initializationDescriptorDictionary: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
+    errorBridge.updateConfiguration(initializationDescriptorDictionary)
     let initializationDescriptor = dictionaryToInitializationDescriptor(initializationDescriptorDictionary)
     initGlobalConfigurations(initializationDescriptor)
     vcl.initialize(
@@ -38,7 +40,7 @@ import VCL
         resolve("VCL initialization succeed!")
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -49,8 +51,7 @@ import VCL
     if let countries = vcl.countries {
       resolve(countriesToDictionary(countries))
     } else {
-      let message = "Countries not found"
-      reject(nil, message, VCLError(message: message))
+      errorBridge.rejectBridgedVCLError(reject, error: VCLError(message: "Countries not found"))
     }
   }
 
@@ -61,8 +62,10 @@ import VCL
     if let credentialTypeSchemas = vcl.credentialTypeSchemas {
       resolve(credentialTypeSchemasToDictionary(credentialTypeSchemas))
     } else {
-      let message = "Credential Type Schemas not found"
-      reject(nil, message, VCLError(message: message))
+      errorBridge.rejectBridgedVCLError(
+        reject,
+        error: VCLError(message: "Credential Type Schemas not found")
+      )
     }
   }
 
@@ -73,8 +76,7 @@ import VCL
     if let credentialTypes = vcl.credentialTypes {
       resolve(credentialTypesToDictionary(credentialTypes))
     } else {
-      let message = "Credential Types not found"
-      reject(nil, message, VCLError(message: message))
+      errorBridge.rejectBridgedVCLError(reject, error: VCLError(message: "Credential Types not found"))
     }
   }
 
@@ -89,7 +91,7 @@ import VCL
         resolve(presentationRequestToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       }
     )
   }
@@ -109,7 +111,7 @@ import VCL
         resolve(presentationSubmissionResultToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -124,7 +126,7 @@ import VCL
         resolve(exchangeToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -139,7 +141,7 @@ import VCL
         resolve(organizationsToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -157,10 +159,15 @@ import VCL
           resolve(credentialManifestToDictionary($0))
         },
         errorHandler: {
-          reject(nil, $0.toDictionary().toJsonString(), $0)
+          self.errorBridge.rejectBridgedVCLError(reject, error: $0)
         })
     } else {
-      reject(nil, "Unexpected Credential Credential Manifest Descriptor: \(credentialManifestDescriptorDictionary)", nil)
+      errorBridge.rejectBridgedVCLError(
+        reject,
+        error: VCLError(
+          message: "Unexpected Credential Manifest Descriptor"
+        )
+      )
     }
   }
 
@@ -175,7 +182,7 @@ import VCL
         resolve(offersToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -192,7 +199,7 @@ import VCL
         resolve(offersToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -209,7 +216,7 @@ import VCL
         resolve(jwtVerifiableCredentialsToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
   
@@ -223,7 +230,7 @@ import VCL
         resolve(authTokenToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -238,7 +245,7 @@ import VCL
         resolve(credentialTypesFormSchemaToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       }
     )
   }
@@ -254,7 +261,7 @@ import VCL
         resolve(verifiedProfileToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -273,7 +280,7 @@ import VCL
         resolve($0)
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -292,7 +299,7 @@ import VCL
         resolve(jwtToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 
@@ -307,8 +314,7 @@ import VCL
         resolve(didJwkToDictionary($0))
       },
       errorHandler: {
-        reject(nil, $0.toDictionary().toJsonString(), $0)
+        self.errorBridge.rejectBridgedVCLError(reject, error: $0)
       })
   }
 }
-

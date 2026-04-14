@@ -38,7 +38,9 @@ import io.velocitycareerlabs.reactnative.utlis.Converter.verifiedProfileToMap
 import io.velocitycareerlabs.api.VCLProvider
 import io.velocitycareerlabs.api.entities.error.VCLError
 import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
-import io.velocitycareerlabs.reactnative.extensions.toThrowable
+import io.velocitycareerlabs.reactnative.extensions.VCLErrorBridgeConfig
+import io.velocitycareerlabs.reactnative.extensions.getIntOpt
+import io.velocitycareerlabs.reactnative.extensions.rejectBridgedVCLError
 import io.velocitycareerlabs.reactnative.utlis.Converter.authTokenToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.didJwkToMap
 import io.velocitycareerlabs.reactnative.utlis.Converter.mapToAuthToken
@@ -72,11 +74,25 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
   }
 
+  private inline fun withBridgedLocalExceptions(
+    promise: Promise,
+    block: () -> Unit
+  ) {
+    try {
+      block()
+    } catch (ex: Exception) {
+      promise.rejectBridgedVCLError(VCLError(ex))
+    }
+  }
+
   override fun initialize(
     initializationDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
+      VCLErrorBridgeConfig.updateNativeErrorStackFrameLimit(
+        initializationDescriptorMap.getIntOpt("nativeErrorStackFrameLimit")
+      )
       val initializationDescriptor = mapToInitializationDescriptor(
         initializationDescriptorMap
       )
@@ -88,37 +104,29 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
           promise.resolve("VCL initialization succeed!")
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
   override fun getCountries(promise: Promise) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.countries?.let { promise.resolve(countriesToMap(it)) }
-        ?: promise.reject(VCLError(message = "Countries not found").toThrowable())
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
+        ?: promise.rejectBridgedVCLError(VCLError(message = "Countries not found"))
     }
   }
 
   override fun getCredentialTypeSchemas(promise: Promise) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.credentialTypeSchemas?.let { promise.resolve(credentialTypeSchemasToMap(it)) }
-        ?: promise.reject(VCLError(message = "Credential Types not found").toThrowable())
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
+        ?: promise.rejectBridgedVCLError(VCLError(message = "Credential Type Schemas not found"))
     }
   }
 
   override fun getCredentialTypes(promise: Promise) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.credentialTypes?.let { promise.resolve(credentialTypesToMap(it)) }
-        ?: promise.reject(VCLError(message = "Credential Types not found").toThrowable())
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
+        ?: promise.rejectBridgedVCLError(VCLError(message = "Credential Types not found"))
     }
   }
 
@@ -126,7 +134,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     presentationRequestDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.getPresentationRequest(
         presentationRequestDescriptor = mapTopPresentationRequestDescriptor(
           presentationRequestDescriptorMap
@@ -135,10 +143,8 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
           promise.resolve(presentationRequestToMap(it))
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -147,7 +153,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     authTokenMap: ReadableMap?,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.submitPresentation(
         presentationSubmission = mapToPresentationSubmission(presentationSubmissionMap),
         authToken = mapToAuthToken(authTokenMap),
@@ -155,10 +161,8 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
           promise.resolve(presentationSubmissionResultToMap(it))
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -166,16 +170,14 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     exchangeDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.getExchangeProgress(mapToExchangeDescriptor(exchangeDescriptorMap),
         {
           promise.resolve(exchangeToMap(it))
         },
         {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -183,17 +185,15 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     organizationsSearchDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.searchForOrganizations(
         mapToOrganizationsSearchDescriptor(organizationsSearchDescriptorMap),
         {
           promise.resolve(organizationsToMap(it))
         },
         {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -201,7 +201,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     credentialManifestDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       VCLLog.d(TAG, "credentialManifestDescriptorMap map: $credentialManifestDescriptorMap")
       mapToCredentialManifestDescriptor(credentialManifestDescriptorMap)?.let { credentialManifestDescriptor ->
         VCLLog.d(
@@ -214,13 +214,15 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
             promise.resolve(credentialManifestToMap(it))
           },
           errorHandler = {
-            promise.reject(it.toThrowable())
+            promise.rejectBridgedVCLError(it)
           })
       } ?: run {
-        promise.reject(VCLError("Unexpected Credential Credential Manifest Descriptor: $credentialManifestDescriptorMap").toThrowable())
+        promise.rejectBridgedVCLError(
+          VCLError(
+            message = "Unexpected Credential Manifest Descriptor"
+          )
+        )
       }
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -228,17 +230,15 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     generateOffersDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.generateOffers(
         generateOffersDescriptor = mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
         successHandler = {
           promise.resolve(offersToMap(it))
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -247,7 +247,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     sessionTokenMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.checkForOffers(
         mapToGenerateOffersDescriptor(generateOffersDescriptorMap),
         mapToToken(sessionTokenMap),
@@ -255,10 +255,8 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
           promise.resolve(offersToMap(it))
         },
         {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -267,7 +265,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     sessionTokenMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.finalizeOffers(
         finalizeOffersDescriptor = mapToFinalizedOffersDescriptor(finalizeOffersDescriptorMap),
         sessionToken = mapToToken(sessionTokenMap),
@@ -275,10 +273,8 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
           promise.resolve(jwtVerifiableCredentialsToMap(it))
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -286,17 +282,15 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     authTokenDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.getAuthToken(
         authTokenDescriptor = mapToAuthTokenDescriptor(authTokenDescriptorMap),
         successHandler = {
           promise.resolve(authTokenToMap(it))
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -304,18 +298,16 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     credentialTypesUIFormSchemaDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.getCredentialTypesUIFormSchema(
         mapToCredentialTypesUIFormSchemaDescriptor(credentialTypesUIFormSchemaDescriptorMap),
         {
           promise.resolve(credentialTypesFormSchemaToMap(it))
         },
         {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         }
       )
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -323,16 +315,14 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     verifiedProfileDescriptorMap: ReadableMap,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.getVerifiedProfile(mapToVerifiedProfileDescriptor(verifiedProfileDescriptorMap),
         {
           promise.resolve(verifiedProfileToMap(it))
         },
         {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -342,7 +332,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     remoteCryptoServicesTokenMap: ReadableMap?,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.verifyJwt(
         jwt = mapToJwt(jwtMap),
         publicJwk = mapToPublicJwk(publicJwkMap),
@@ -351,10 +341,8 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
           promise.resolve(it)
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -364,7 +352,7 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     remoteCryptoServicesTokenMap: ReadableMap?,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.generateSignedJwt(
         jwtDescriptor = mapToJwtDescriptor(jwtDescriptorMap),
         didJwk = mapToDidJwk(didJwkMap),
@@ -373,10 +361,8 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
           promise.resolve(Converter.jwtToMap(it))
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 
@@ -384,17 +370,15 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
     didJwkDescriptorMap: ReadableMap?,
     promise: Promise
   ) {
-    try {
+    withBridgedLocalExceptions(promise) {
       vcl.generateDidJwk(
         didJwkDescriptor = mapToDidJwkDescriptor(didJwkDescriptorMap),
         successHandler = {
           promise.resolve(didJwkToMap(it))
         },
         errorHandler = {
-          promise.reject(it.toThrowable())
+          promise.rejectBridgedVCLError(it)
         })
-    } catch (ex: Exception) {
-      promise.reject(VCLError(ex).toThrowable())
     }
   }
 }

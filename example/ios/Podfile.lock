@@ -2254,7 +2254,7 @@ PODS:
     - React-utils (= 0.81.4)
     - SocketRocket
   - SocketRocket (0.7.1)
-  - VCL (2.9.0)
+  - VCL (2.9.3)
   - VclReactNative (2.9.0):
     - boost
     - DoubleConversion
@@ -2282,7 +2282,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - SocketRocket
-    - VCL (= 2.9.0)
+    - VCL (= 2.9.3)
     - Yoga
   - Yoga (0.0.0)
 
@@ -2587,10 +2587,10 @@ SPEC CHECKSUMS:
   ReactCodegen: 1d05923ad119796be9db37830d5e5dc76586aa00
   ReactCommon: 394c6b92765cf6d211c2c3f7f6bc601dffb316a6
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  VCL: 962253dfea91c00810d183b701dce9add915a795
-  VclReactNative: 1631d39773f8073d32dce47ee5cfe1cb5e146072
+  VCL: ddd97baeeb55c836bc9d62a2d0c1aa67ea8dad70
+  VclReactNative: f799e8ba16febf859d7d5912b2d472e4bca034a6
   Yoga: a3ed390a19db0459bd6839823a6ac6d9c6db198d
 
-PODFILE CHECKSUM: afa9f7a1a2fa6253c48a09cad5a9582e924a9b5a
+PODFILE CHECKSUM: c716dbb5c708f8f12edc61c121a3a6625e50177a
 
 COCOAPODS: 1.16.2

@@ -75,6 +75,13 @@ describe('VCLError', () => {
     expect(error.statusCode).toBeUndefined();
   });
 
+  it('falls back to the original message when parsed JSON is not an object', () => {
+    const error = VCLErrorDeserializer.fromJsonString('"foo"');
+
+    expect(error.message).toBe('"foo"');
+    expect(error.diagnostics).toBeUndefined();
+  });
+
   it('exports the bridge marker constant', () => {
     expect(BRIDGED_VCL_ERROR_CODE).toBe('VCL_BRIDGED_ERROR_V1');
   });

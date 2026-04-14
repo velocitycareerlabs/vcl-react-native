@@ -68,6 +68,11 @@ import { VCLStatusCode } from './api/entities/error/VCLStatusCode';
 import { VCLErrorCode } from './api/entities/error/VCLErrorCode';
 import type { VCLAuthToken } from './api/entities/VCLAuthToken';
 import type { VCLAuthTokenDescriptor } from './api/entities/VCLAuthTokenDescriptor';
+import type {
+  VCLDiagnostics,
+  VCLNativeCauseDiagnostics,
+  VCLErrorInit,
+} from './api/entities/error/VCLError';
 
 export default VclApi;
 export {
@@ -135,4 +140,7 @@ export type {
   VCLRemoteCryptoServicesUrlsDescriptor,
   VCLAuthToken,
   VCLAuthTokenDescriptor,
+  VCLDiagnostics,
+  VCLNativeCauseDiagnostics,
+  VCLErrorInit,
 };

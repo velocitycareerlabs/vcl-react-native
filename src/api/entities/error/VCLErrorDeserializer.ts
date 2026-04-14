@@ -26,7 +26,13 @@ type SerializedVCLError = {
 export class VCLErrorDeserializer {
   static fromJsonString(jsonString: string): VCLError {
     try {
-      const error = JSON.parse(jsonString) as SerializedVCLError;
+      const parsedError = JSON.parse(jsonString);
+
+      if (!VCLErrorDeserializer.isSerializedVCLError(parsedError)) {
+        return new VCLError({ message: jsonString });
+      }
+
+      const error = parsedError as SerializedVCLError;
       return new VCLError({
         payload: error.payload,
         error: error.error,
@@ -39,6 +45,12 @@ export class VCLErrorDeserializer {
     } catch (_parseError) {
       return new VCLError({ message: jsonString });
     }
+  }
+
+  private static isSerializedVCLError(
+    value: unknown
+  ): value is SerializedVCLError {
+    return typeof value === 'object' && value != null && !Array.isArray(value);
   }
 
   private static parseStatusCode(statusCode: unknown): number | undefined {

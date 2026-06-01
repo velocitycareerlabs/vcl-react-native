@@ -26,7 +26,10 @@ func dictionaryToInitializationDescriptor(
     cryptoServicesDescriptor: dictionaryToCryptoServicesDescriptor(
       initializationDescriptorDictionary["cryptoServicesDescriptor"] as? [String : Any]
     ),
-    isDirectIssuerCheckOn: initializationDescriptorDictionary["isDirectIssuerCheckOn"] as? Bool ?? true
+    isDirectIssuerCheckOn: initializationDescriptorDictionary["isDirectIssuerCheckOn"] as? Bool ?? true,
+    errorCodeCompatibilityMode: dictionaryToErrorCodeCompatibilityMode(
+      initializationDescriptorDictionary["errorCodeCompatibilityMode"] as? String
+    )
   )
 }
 
@@ -65,6 +68,14 @@ private func dictionaryToXVnfProtocolVersion(
     _ xVnfProtocolVersion: String?
 ) -> VCLXVnfProtocolVersion {
   return VCLXVnfProtocolVersion.fromString(value: xVnfProtocolVersion ?? "")
+}
+
+private func dictionaryToErrorCodeCompatibilityMode(
+  _ errorCodeCompatibilityMode: String?
+) -> VCLErrorCodeCompatibilityMode {
+  return VCLErrorCodeCompatibilityMode(
+    rawValue: errorCodeCompatibilityMode ?? ""
+  ) ?? .Taxonomy
 }
 
 func regionToDictionary(

@@ -10,6 +10,7 @@ import com.facebook.react.bridge.*
 import io.velocitycareerlabs.api.*
 import io.velocitycareerlabs.api.entities.*
 import io.velocitycareerlabs.api.entities.initialization.VCLCryptoServicesDescriptor
+import io.velocitycareerlabs.api.entities.initialization.VCLErrorCodeCompatibilityMode
 import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
 import io.velocitycareerlabs.api.entities.initialization.VCLJwtServiceUrls
 import io.velocitycareerlabs.api.entities.initialization.VCLKeyServiceUrls
@@ -34,7 +35,10 @@ object Converter {
       initializationDescriptorMap.getMapOpt("cryptoServicesDescriptor")
     ),
     isDirectIssuerCheckOn = initializationDescriptorMap.getBooleanOpt("isDirectIssuerCheckOn")
-      ?: true
+      ?: true,
+    errorCodeCompatibilityMode = mapToErrorCodeCompatibilityMode(
+      initializationDescriptorMap.getStringOpt("errorCodeCompatibilityMode")
+    )
   )
 
   private fun mapToEnvironment(environment: String?) =
@@ -68,6 +72,11 @@ object Converter {
 
   private fun mapToXVnfProtocolVersion(xVnfProtocolVersion: String?) =
     VCLXVnfProtocolVersion.fromString(xVnfProtocolVersion ?: "")
+
+  private fun mapToErrorCodeCompatibilityMode(errorCodeCompatibilityMode: String?) =
+    VCLErrorCodeCompatibilityMode.entries.firstOrNull {
+      it.value == errorCodeCompatibilityMode
+    } ?: VCLErrorCodeCompatibilityMode.Taxonomy
 
   fun regionToMap(
     region: VCLRegion
@@ -796,4 +805,3 @@ object Converter {
     )
   }
 }
-

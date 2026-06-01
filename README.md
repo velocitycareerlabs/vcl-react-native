@@ -48,7 +48,9 @@ npm install @velocitycareerlabs/vcl-react-native --save
 ### Usage
 To start using the VCL SDK, you’ll need to create its object and initialize it in Velocity Network&trade;:
 ```js
-import vcl from '@velocitycareerlabs/vcl-react-native';
+import vcl, {
+  VCLErrorCodeCompatibilityMode,
+} from '@velocitycareerlabs/vcl-react-native';
 ```
 ```js
 const initializationDescriptor: VCLInitializationDescriptor = {
@@ -62,6 +64,15 @@ vcl.initialize(initializationDescriptor).then(
     // Handle initialization failure
   }
 );
+```
+
+SDK `2.10.0-rc` uses native taxonomy error codes by default. To temporarily
+preserve legacy native error-code mappings during migration, initialize with:
+```js
+const initializationDescriptor: VCLInitializationDescriptor = {
+  environment: environment,
+  errorCodeCompatibilityMode: VCLErrorCodeCompatibilityMode.Legacy,
+};
 ```
 
 More details can be found [HERE](https://www.velocitynetwork.foundation/main/career-wallets-velocity-sdks#react-native)

@@ -1,8 +1,10 @@
 import { VCLError } from '../api/entities/error/VCLError';
+import { VCLErrorCode } from '../api/entities/error/VCLErrorCode';
 import {
   BRIDGED_VCL_ERROR_CODE,
   VCLErrorDeserializer,
 } from '../api/entities/error/VCLErrorDeserializer';
+import { VCLErrorCodeCompatibilityMode } from '../api/entities/initialization/VCLErrorCodeCompatibilityMode';
 
 describe('VCLError', () => {
   it('keeps the constructor as a plain structured initializer', () => {
@@ -84,5 +86,22 @@ describe('VCLError', () => {
 
   it('exports the bridge marker constant', () => {
     expect(BRIDGED_VCL_ERROR_CODE).toBe('VCL_BRIDGED_ERROR_V1');
+  });
+
+  it('exposes native error taxonomy codes', () => {
+    expect(VCLErrorCode.InvalidLink).toBe('invalid_link');
+    expect(VCLErrorCode.ConnectivityFailure).toBe('connectivity_failure');
+    expect(VCLErrorCode.RegistrationCheckInconclusive).toBe(
+      'registration_check_inconclusive'
+    );
+    expect(VCLErrorCode.IssuerRequestInvalid).toBe('issuer_request_invalid');
+    expect(VCLErrorCode.VerifierRequestUnauthorized).toBe(
+      'verifier_request_unauthorized'
+    );
+  });
+
+  it('exposes native error code compatibility modes', () => {
+    expect(VCLErrorCodeCompatibilityMode.Taxonomy).toBe('taxonomy');
+    expect(VCLErrorCodeCompatibilityMode.Legacy).toBe('legacy');
   });
 });

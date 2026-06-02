@@ -29,6 +29,7 @@ import vcl, {
   type VCLDeepLink,
   type VCLDidJwk,
   type VCLDidJwkDescriptor,
+  VCLErrorCodeCompatibilityMode,
   VCLEnvironment,
   type VCLError,
   type VCLExchange,
@@ -96,6 +97,7 @@ export default () => {
     const initialize = async () => {
       const initializationDescriptor: VCLInitializationDescriptor = {
         environment,
+        errorCodeCompatibilityMode: VCLErrorCodeCompatibilityMode.Taxonomy,
         nativeErrorStackFrameLimit: 20,
       };
 

@@ -10,6 +10,7 @@ import { VCLEnvironment } from './api/VCLEnvironment';
 import { VCLXVnfProtocolVersion } from './api/VCLXVnfProtocolVersion';
 import { VCLCryptoServiceType } from './api/VCLCryptoServiceType';
 import { VCLSignatureAlgorithm } from './api/VCLSignatureAlgorithm';
+import { VCLErrorCodeCompatibilityMode } from './api/entities/initialization/VCLErrorCodeCompatibilityMode';
 import type { VCLCryptoServicesDescriptor } from './api/entities/initialization/VCLCryptoServicesDescriptor';
 import type { VCLJwtServiceUrls } from './api/entities/initialization/VCLJwtServiceUrls';
 import type { VCLKeyServiceUrls } from './api/entities/initialization/VCLKeyServiceUrls';
@@ -86,6 +87,7 @@ export {
   VCLError,
   VCLStatusCode,
   VCLErrorCode,
+  VCLErrorCodeCompatibilityMode,
 };
 export type {
   Dictionary,

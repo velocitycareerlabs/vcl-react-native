@@ -7,8 +7,8 @@
 
 export enum VCLErrorCode {
   // Initialization
-  RemoteServicesUrlsNotFount = 'remote_services_urls_not_found',
-  InjectedServicesNotFount = 'injected_services_not_found',
+  RemoteServicesUrlsNotFound = 'remote_services_urls_not_found',
+  InjectedServicesNotFound = 'injected_services_not_found',
 
   // Credential issuer verification error codes:
   CredentialTypeNotRegistered = 'credential_type_not_registered',

@@ -504,7 +504,7 @@ func credentialManifestToDictionary(
 func dictionaryToCredentialManifest(
     _ credentialManifestDictionary: [String: Any]?
 ) -> VCLCredentialManifest {
-  let jwt = VCLJwt(encodedJwt: (credentialManifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
+  let jwt = jwtFromEncodedJwt((credentialManifestDictionary?["jwt"] as? [String: Any])?["encodedJwt"] as? String ?? "")
   let vendorOriginContext = credentialManifestDictionary?["vendorOriginContext"] as? String
   let verifiedProfileDictionary = credentialManifestDictionary?["verifiedProfile"] as? [String: Any]
   let deepLink = dictionaryToDeepLink(credentialManifestDictionary?["deepLink"] as? [String: Any])
@@ -591,7 +591,11 @@ func credentialTypesFormSchemaToDictionary(
 func dictionaryToJwt(
     _ jwtDictionary: [String: Any]?
 ) -> VCLJwt {
-  return VCLJwt(encodedJwt: jwtDictionary?["encodedJwt"] as? String ?? "")
+  return jwtFromEncodedJwt(jwtDictionary?["encodedJwt"] as? String ?? "")
+}
+
+func jwtFromEncodedJwt(_ encodedJwt: String) -> VCLJwt {
+  return (try? VCLJwt(encodedJwt: encodedJwt)) ?? VCLJwt(header: nil, payload: nil, signature: nil, encodedJwt: encodedJwt)
 }
 
 func jwtToDictionary(_ jwt: VCLJwt) -> [String: Any?] {

@@ -107,6 +107,10 @@ To publish new versions, run the following:
 yarn release
 ```
 
+For release candidate publishes, dispatch the `ReactNative-SDK-Publish`
+workflow with the `rc` environment. CI appends a SemVer `rc.<index>` suffix to
+the target patch version in `package.json` before publishing.
+
 ### Scripts
 
 The `package.json` file contains various scripts for common tasks:

@@ -15,6 +15,9 @@ on:
           - dev
           - rc
           - prod
+      rcIndex:
+        description: Optional release candidate index. Defaults to the CI run number.
+        required: false
 
 permissions:
   id-token: write
@@ -42,6 +45,13 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: corepack enable && yarn set version 3.6.1 && yarn install --frozen-lockfile
+      # Apply CI package version
+      - name: Apply release candidate version
+        if: ${{ env.GLOBAL_ENV == 'rc' }}
+        run: node scripts/apply-ci-version.js
+        env:
+          RC_INDEX: ${{ github.event.inputs.rcIndex }}
+          RC_SUFFIX: ${{ env.RC_SUFFIX }}
       # Build and Publish SDK
       - name: Build and Publish SDK
         if: ${{ env.GLOBAL_ENV == 'prod' || env.GLOBAL_ENV == 'rc' }}

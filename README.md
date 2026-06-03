@@ -66,7 +66,7 @@ vcl.initialize(initializationDescriptor).then(
 );
 ```
 
-SDK `2.10.0-rc` uses native taxonomy error codes by default. To temporarily
+SDK `2.10.0` uses native taxonomy error codes by default. To temporarily
 preserve legacy native error-code mappings during migration, initialize with:
 ```js
 const initializationDescriptor: VCLInitializationDescriptor = {

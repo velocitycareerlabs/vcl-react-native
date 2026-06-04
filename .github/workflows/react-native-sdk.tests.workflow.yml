@@ -193,21 +193,45 @@ jobs:
           );
           NODE
 
-      - name: Add Velocity CocoaPods specs source
+      - name: Configure consumer iOS Pods
         working-directory: ${{ runner.temp }}/ConsumerSmoke
         run: |
           node <<'NODE'
           const fs = require('fs');
           const podfile = 'ios/Podfile';
-          const source = fs.readFileSync(podfile, 'utf8');
+          let source = fs.readFileSync(podfile, 'utf8');
+
           if (!source.includes("https://github.com/velocitycareerlabs/Specs.git")) {
-            fs.writeFileSync(
-              podfile,
+            source =
               "source 'https://github.com/CocoaPods/Specs.git'\n" +
-                "source 'https://github.com/velocitycareerlabs/Specs.git'\n\n" +
-                source
-            );
+              "source 'https://github.com/velocitycareerlabs/Specs.git'\n\n" +
+              source;
           }
+
+          const fmtOverride = `
+
+              installer.pods_project.targets.each do |target|
+                next unless target.name == 'fmt'
+
+                target.build_configurations.each do |build_configuration|
+                  build_configuration.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+                end
+              end`;
+
+          if (!source.includes("target.name == 'fmt'")) {
+            const updatedSource = source.replace(
+              /(\n {4}react_native_post_install\([\s\S]*?\n {4}\))/,
+              `$1${fmtOverride}`
+            );
+
+            if (updatedSource === source) {
+              throw new Error('Unable to add fmt build settings to the generated Podfile');
+            }
+
+            source = updatedSource;
+          }
+
+          fs.writeFileSync(podfile, source);
           NODE
 
       - name: Verify React Native autolinking

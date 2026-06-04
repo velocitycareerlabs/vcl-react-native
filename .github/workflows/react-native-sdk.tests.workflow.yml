@@ -188,8 +188,9 @@ jobs:
           fs.writeFileSync(
             appFile,
             "import VclReactNative, { VCLEnvironment } from '@velocitycareerlabs/vcl-react-native';\n" +
-              "console.log('VCL smoke import', typeof VclReactNative, VCLEnvironment.Staging);\n" +
-              source
+              source +
+              (source.endsWith('\n') ? '' : '\n') +
+              "console.log('VCL smoke import', typeof VclReactNative, VCLEnvironment.Staging);\n"
           );
           NODE
 
@@ -201,11 +202,14 @@ jobs:
           const podfile = 'ios/Podfile';
           let source = fs.readFileSync(podfile, 'utf8');
 
-          if (!source.includes("https://github.com/velocitycareerlabs/Specs.git")) {
-            source =
-              "source 'https://github.com/CocoaPods/Specs.git'\n" +
-              "source 'https://github.com/velocitycareerlabs/Specs.git'\n\n" +
-              source;
+          const specsSource = "source 'https://github.com/CocoaPods/Specs.git'";
+          const velocitySource = "source 'https://github.com/velocitycareerlabs/Specs.git'";
+          const missingSources = [specsSource, velocitySource].filter(
+            (podSource) => !source.includes(podSource)
+          );
+
+          if (missingSources.length > 0) {
+            source = `${missingSources.join('\n')}\n\n${source}`;
           }
 
           const fmtOverride = `

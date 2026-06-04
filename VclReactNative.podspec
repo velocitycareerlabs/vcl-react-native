@@ -2,12 +2,11 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
-def first_present_value(*values)
-  values.find { |value| !value.nil? && !value.to_s.strip.empty? }
-end
-
 vcl_native_sdk_versions = package["vclNativeSdkVersions"] || {}
-vcl_ios_sdk_version = first_present_value(vcl_native_sdk_versions["ios"], package["version"])
+vcl_ios_sdk_version = [
+  vcl_native_sdk_versions["ios"],
+  package["version"]
+].find { |value| !value.nil? && !value.to_s.strip.empty? }
 
 Pod::Spec.new do |s|
   s.name         = "VclReactNative"

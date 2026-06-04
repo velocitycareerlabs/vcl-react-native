@@ -168,7 +168,7 @@ jobs:
       - name: Create clean React Native app
         working-directory: ${{ runner.temp }}
         run: |
-          npx --yes @react-native-community/cli@20.0.0 init ConsumerSmoke \
+          npx --yes @react-native-community/cli@20.0.1 init ConsumerSmoke \
             --version ${{ env.REACT_NATIVE_VERSION }} \
             --pm npm \
             --install-pods false \

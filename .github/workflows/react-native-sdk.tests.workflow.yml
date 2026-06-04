@@ -96,7 +96,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.1'
 
       - name: Install dependencies
         run: |
@@ -149,7 +149,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.1'
 
       - name: Install dependencies
         run: |
@@ -161,7 +161,8 @@ jobs:
         run: |
           yarn prepare
           mkdir -p "$RUNNER_TEMP/vcl-react-native-pack"
-          PACKAGE_TGZ="$(npm pack --pack-destination "$RUNNER_TEMP/vcl-react-native-pack")"
+          npm pack --ignore-scripts --json --pack-destination "$RUNNER_TEMP/vcl-react-native-pack" > "$RUNNER_TEMP/vcl-react-native-pack/pack.json"
+          PACKAGE_TGZ="$(node -e "const pack = require(process.argv[1]); process.stdout.write(pack[0].filename);" "$RUNNER_TEMP/vcl-react-native-pack/pack.json")"
           echo "PACKAGE_TGZ=$RUNNER_TEMP/vcl-react-native-pack/$PACKAGE_TGZ" >> "$GITHUB_ENV"
 
       - name: Create clean React Native app
@@ -252,7 +253,7 @@ jobs:
         run: ./gradlew :app:assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a
 
       - name: Install consumer Ruby dependencies
-        working-directory: ${{ runner.temp }}/ConsumerSmoke
+        working-directory: ${{ runner.temp }}/ConsumerSmoke/ios
         run: bundle install
 
       - name: Install consumer Pods

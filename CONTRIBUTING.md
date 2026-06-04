@@ -107,6 +107,15 @@ To publish new versions, run the following:
 yarn release
 ```
 
+For release candidate publishes, dispatch the `ReactNative-SDK-Publish`
+workflow with the `rc` environment. CI appends a SemVer `rc.<index>` suffix to
+the target patch version in `package.json` before publishing.
+
+The wrapper package version and native SDK artifact versions do not need to
+match. For wrapper-only releases, leave `vclNativeSdkVersions` pinned to the
+published iOS and Android native SDK artifact versions. Update those pins only
+when the corresponding native SDK artifacts are published.
+
 ### Scripts
 
 The `package.json` file contains various scripts for common tasks:

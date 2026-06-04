@@ -21,6 +21,16 @@ apply plugin: "kotlin-android"
 
 apply plugin: "com.facebook.react"
 
+def packageJson = new groovy.json.JsonSlurper().parse(file("$projectDir/../package.json"))
+def vclNativeSdkVersions = packageJson.vclNativeSdkVersions instanceof Map ? packageJson.vclNativeSdkVersions : [:]
+def firstPresentValue = { values ->
+  return values.find { value -> value != null && value.toString().trim() }
+}
+def vclSdkVersion = firstPresentValue([
+  vclNativeSdkVersions.android,
+  packageJson.version,
+])
+
 def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["VclReactNative_" + name]).toInteger()
 }
@@ -76,7 +86,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 //--------- Must: be added:
-  implementation "io.velocitycareerlabs:vcl:2.10.0-rc"
+  implementation "io.velocitycareerlabs:vcl:$vclSdkVersion"
   implementation 'com.nimbusds:nimbus-jose-jwt:10.5'
   implementation "androidx.security:security-crypto:1.1.0"
 //-------------------------

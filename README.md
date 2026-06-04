@@ -45,6 +45,21 @@ yarn add @velocitycareerlabs/vcl-react-native
 npm install @velocitycareerlabs/vcl-react-native --save
 ```
 
+### Native SDK versions
+By default, the package pins native iOS and Android SDK versions through
+`vclNativeSdkVersions` in its `package.json`, falling back to the React Native
+package version if no native pin is present.
+
+```json
+{
+  "version": "2.10.0",
+  "vclNativeSdkVersions": {
+    "ios": "2.10.0-rc",
+    "android": "2.10.0-rc"
+  }
+}
+```
+
 ### Usage
 To start using the VCL SDK, you’ll need to create its object and initialize it in Velocity Network&trade;:
 ```js

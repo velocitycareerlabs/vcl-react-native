@@ -5,12 +5,16 @@ const { spawnSync } = require('node:child_process');
 
 const scriptPath = path.join(__dirname, '..', 'apply-ci-version.js');
 
-const writePackageJson = (version) => {
+const writePackageJson = (version, overrides = {}) => {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'vcl-ci-version-'));
   const packageJsonPath = path.join(tmpDir, 'package.json');
   fs.writeFileSync(
     packageJsonPath,
-    `${JSON.stringify({ name: 'test-package', version }, null, 2)}\n`
+    `${JSON.stringify(
+      { name: 'test-package', version, ...overrides },
+      null,
+      2
+    )}\n`
   );
   return packageJsonPath;
 };
@@ -54,6 +58,29 @@ describe('apply-ci-version', () => {
     expect(JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')).version).toBe(
       '2.10.0-rc.42'
     );
+  });
+
+  it('leaves native SDK version pins unchanged', () => {
+    const packageJsonPath = writePackageJson('2.10.0', {
+      vclNativeSdkVersions: {
+        ios: '2.9.0',
+        android: '2.9.0',
+      },
+    });
+
+    const result = runScript(packageJsonPath, {
+      RC_INDEX: '7',
+      RC_SUFFIX: 'rc',
+    });
+
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+    expect(result.status).toBe(0);
+    expect(packageJson.version).toBe('2.10.0-rc.7');
+    expect(packageJson.vclNativeSdkVersions).toEqual({
+      ios: '2.9.0',
+      android: '2.9.0',
+    });
   });
 
   it('rejects invalid release candidate indexes', () => {

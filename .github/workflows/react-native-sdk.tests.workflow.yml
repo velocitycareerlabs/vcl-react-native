@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '24'
   YARN_VERSION: '3.6.1'
@@ -18,7 +21,7 @@ env:
 jobs:
   package-checks:
     name: JS and package checks
-    runs-on: macos-26
+    runs-on: ubuntu-latest
     steps:
       - name: Git clone repository
         uses: actions/checkout@v4
@@ -52,7 +55,7 @@ jobs:
   example-android-build:
     name: Example Android build
     needs: package-checks
-    runs-on: macos-26
+    runs-on: ubuntu-latest
     steps:
       - name: Git clone repository
         uses: actions/checkout@v4

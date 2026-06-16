@@ -2,8 +2,8 @@
   "name": "@velocitycareerlabs/vcl-react-native",
   "version": "2.10.0",
   "vclNativeSdkVersions": {
-    "ios": "2.10.0-rc",
-    "android": "2.10.0-rc"
+    "ios": "2.10.0",
+    "android": "2.10.0"
   },
   "description": "Velocity Career Labs React Native SDK",
   "license": "Apache-2.0",

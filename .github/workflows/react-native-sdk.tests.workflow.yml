@@ -5,35 +5,300 @@ on:
     branches:
       - main
       - release/**
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '24'
-  RC_SUFFIX: 'rc'
+  YARN_VERSION: '3.6.1'
+  REACT_NATIVE_VERSION: '0.81.4'
+
 jobs:
-  test-react-sdk:
-    runs-on: macos-26
+  package-checks:
+    name: JS and package checks
+    runs-on: ubuntu-latest
     steps:
-      # Git clone repository
       - name: Git clone repository
         uses: actions/checkout@v4
-      # Setup Node.js
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-      # Install dependencies
+
       - name: Install dependencies
-        run: corepack enable && yarn set version 3.6.1 && yarn install --frozen-lockfile
-      # Check licenses
-#      - name: Check licenses
-#        run: corepack enable && yarn set version 1.22.22 && yarn check-licenses
-      # Run lint
+        run: |
+          corepack enable
+          yarn set version ${{ env.YARN_VERSION }}
+          yarn install --frozen-lockfile
+
       - name: Run lint
-        run: corepack enable && yarn set version 3.6.1 && yarn lint
-        continue-on-error: false
-      # Run test
-      - name: Run Test
+        run: yarn lint
+
+      - name: Run typecheck
+        run: yarn typecheck
+
+      - name: Run tests
         run: yarn test
-        continue-on-error: true
+
+      - name: Build package output
+        run: yarn prepare
+
+      - name: Verify package contents
+        run: npm pack --dry-run
+
+  example-android-build:
+    name: Example Android build
+    needs: package-checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          yarn set version ${{ env.YARN_VERSION }}
+          yarn install --frozen-lockfile
+
+      - name: Build package output
+        run: yarn prepare
+
+      - name: Build example Android app
+        run: yarn example build:android
+
+  example-ios-build:
+    name: Example iOS build
+    needs: package-checks
+    runs-on: macos-26
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          yarn set version ${{ env.YARN_VERSION }}
+          yarn install --frozen-lockfile
+
+      - name: Install Ruby dependencies
+        working-directory: example
+        run: bundle install
+
+      - name: Build package output
+        run: yarn prepare
+
+      - name: Install example Pods
+        working-directory: example/ios
+        run: bundle exec pod install
+
+      - name: Build example iOS app
+        run: |
+          xcodebuild \
+            -workspace example/ios/VclReactNativeExample.xcworkspace \
+            -scheme VclReactNativeExample \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+  packaged-consumer-build:
+    name: Packaged consumer build
+    needs: package-checks
+    runs-on: macos-26
+    timeout-minutes: 90
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          yarn set version ${{ env.YARN_VERSION }}
+          yarn install --frozen-lockfile
+
+      - name: Pack library
+        run: |
+          yarn prepare
+          mkdir -p "$RUNNER_TEMP/vcl-react-native-pack"
+          npm pack --ignore-scripts --json --pack-destination "$RUNNER_TEMP/vcl-react-native-pack" > "$RUNNER_TEMP/vcl-react-native-pack/pack.json"
+          PACKAGE_TGZ="$(node -e "const pack = require(process.argv[1]); process.stdout.write(pack[0].filename);" "$RUNNER_TEMP/vcl-react-native-pack/pack.json")"
+          echo "PACKAGE_TGZ=$RUNNER_TEMP/vcl-react-native-pack/$PACKAGE_TGZ" >> "$GITHUB_ENV"
+
+      - name: Create clean React Native app
+        working-directory: ${{ runner.temp }}
+        run: |
+          npx --yes @react-native-community/cli@20.0.1 init ConsumerSmoke \
+            --version ${{ env.REACT_NATIVE_VERSION }} \
+            --pm npm \
+            --install-pods false \
+            --skip-git-init
+
+      - name: Install packed library
+        working-directory: ${{ runner.temp }}/ConsumerSmoke
+        run: npm install "$PACKAGE_TGZ"
+
+      - name: Import packed library in smoke app
+        working-directory: ${{ runner.temp }}/ConsumerSmoke
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const appFile = 'App.tsx';
+          const source = fs.readFileSync(appFile, 'utf8');
+          fs.writeFileSync(
+            appFile,
+            "import VclReactNative, { VCLEnvironment } from '@velocitycareerlabs/vcl-react-native';\n" +
+              source +
+              (source.endsWith('\n') ? '' : '\n') +
+              "console.log('VCL smoke import', typeof VclReactNative, VCLEnvironment.Staging);\n"
+          );
+          NODE
+
+      - name: Configure consumer iOS Pods
+        working-directory: ${{ runner.temp }}/ConsumerSmoke
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const podfile = 'ios/Podfile';
+          let source = fs.readFileSync(podfile, 'utf8');
+
+          const specsSource = "source 'https://github.com/CocoaPods/Specs.git'";
+          const velocitySource = "source 'https://github.com/velocitycareerlabs/Specs.git'";
+          const missingSources = [specsSource, velocitySource].filter(
+            (podSource) => !source.includes(podSource)
+          );
+
+          if (missingSources.length > 0) {
+            source = `${missingSources.join('\n')}\n\n${source}`;
+          }
+
+          const fmtOverride = `
+
+              installer.pods_project.targets.each do |target|
+                next unless target.name == 'fmt'
+
+                target.build_configurations.each do |build_configuration|
+                  build_configuration.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+                end
+              end`;
+
+          if (!source.includes("target.name == 'fmt'")) {
+            const updatedSource = source.replace(
+              /(\n {4}react_native_post_install\([\s\S]*?\n {4}\))/,
+              `$1${fmtOverride}`
+            );
+
+            if (updatedSource === source) {
+              throw new Error('Unable to add fmt build settings to the generated Podfile');
+            }
+
+            source = updatedSource;
+          }
+
+          fs.writeFileSync(podfile, source);
+          NODE
+
+      - name: Verify React Native autolinking
+        working-directory: ${{ runner.temp }}/ConsumerSmoke
+        run: |
+          npx react-native config > react-native.config.json
+          node <<'NODE'
+          const config = require('./react-native.config.json');
+          const dependency = config.dependencies['@velocitycareerlabs/vcl-react-native'];
+          if (!dependency) {
+            throw new Error('Package was not discovered by React Native autolinking');
+          }
+          if (!dependency.platforms.android) {
+            throw new Error('Package is missing Android autolinking metadata');
+          }
+          if (!dependency.platforms.ios) {
+            throw new Error('Package is missing iOS autolinking metadata');
+          }
+          NODE
+
+      - name: Bundle Android JavaScript
+        working-directory: ${{ runner.temp }}/ConsumerSmoke
+        run: |
+          npx react-native bundle \
+            --platform android \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output "$RUNNER_TEMP/consumer-smoke.android.bundle" \
+            --assets-dest "$RUNNER_TEMP/consumer-smoke-assets/android"
+
+      - name: Bundle iOS JavaScript
+        working-directory: ${{ runner.temp }}/ConsumerSmoke
+        run: |
+          npx react-native bundle \
+            --platform ios \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output "$RUNNER_TEMP/consumer-smoke.ios.bundle" \
+            --assets-dest "$RUNNER_TEMP/consumer-smoke-assets/ios"
+
+      - name: Build consumer Android app
+        working-directory: ${{ runner.temp }}/ConsumerSmoke/android
+        run: ./gradlew :app:assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a
+
+      - name: Install consumer Ruby dependencies
+        working-directory: ${{ runner.temp }}/ConsumerSmoke/ios
+        run: bundle install
+
+      - name: Install consumer Pods
+        working-directory: ${{ runner.temp }}/ConsumerSmoke/ios
+        run: bundle exec pod install
+
+      - name: Build consumer iOS app
+        working-directory: ${{ runner.temp }}/ConsumerSmoke
+        run: |
+          xcodebuild \
+            -workspace ios/ConsumerSmoke.xcworkspace \
+            -scheme ConsumerSmoke \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build

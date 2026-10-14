@@ -136,5 +136,21 @@ describe('VclApi error bridging', () => {
     expect(error.requestDid).toBeUndefined();
     expect(error.requestUri).toBeUndefined();
     expect(error.requestKind).toBeUndefined();
+    expect(error.cause).toBeUndefined();
+  });
+
+  it('keeps a rejection that is not a bridged VCLError as the cause', async () => {
+    const nativeRejection = Object.assign(new Error('Native module crashed'), {
+      code: 'EUNSPECIFIED',
+      nativeStackAndroid: [{ class: 'VclReactNativeModule', lineNumber: 84 }],
+    });
+    getCredentialManifest.mockRejectedValueOnce(nativeRejection);
+
+    const error = await catchGetCredentialManifestError();
+
+    expect(error).toBeInstanceOf(VCLError);
+    expect(error.message).toBe('Native module crashed');
+    expect(error.cause).toBe(nativeRejection);
+    expect(error.errorCode).toBeUndefined();
   });
 });

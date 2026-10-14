@@ -31,6 +31,7 @@ export type VCLErrorInit = {
   requestUri?: string;
   requestKind?: string;
   diagnostics?: VCLDiagnostics;
+  cause?: unknown;
 };
 
 export class VCLError extends Error {
@@ -57,6 +58,8 @@ export class VCLError extends Error {
   /** The kind of request that failed, e.g. `issuing_request`. */
   requestKind?: string;
   diagnostics?: VCLDiagnostics;
+  /** The original rejection, when it was not a bridged native `VCLError`. */
+  cause?: unknown;
 
   constructor(error: VCLErrorInit = {}) {
     super(error.message);
@@ -72,5 +75,16 @@ export class VCLError extends Error {
     this.requestUri = error.requestUri;
     this.requestKind = error.requestKind;
     this.diagnostics = error.diagnostics;
+
+    if (error.cause !== undefined) {
+      // Defined like the ES2022 `new Error(message, { cause })` option, which
+      // not every JS engine supports.
+      Object.defineProperty(this, 'cause', {
+        value: error.cause,
+        writable: true,
+        enumerable: false,
+        configurable: true,
+      });
+    }
   }
 }

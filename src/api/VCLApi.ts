@@ -263,7 +263,7 @@ const toVCLError = (error: unknown): VCLError => {
     return VCLErrorDeserializer.fromJsonString(error.message);
   }
 
-  return new VCLError({ message: toErrorMessage(error), cause: error });
+  return new VCLError({ message: toErrorMessage(error) });
 };
 
 const isBridgedVCLError = (

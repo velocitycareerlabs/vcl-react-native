@@ -90,4 +90,38 @@ const initializationDescriptor: VCLInitializationDescriptor = {
 };
 ```
 
+### Error context
+When the native SDKs map a failure to a taxonomy `errorCode`, `VCLError` keeps
+the original error code and the request it belongs to. Each field is an optional
+string, set only when the native SDK recorded it:
+
+| Field | Description |
+| --- | --- |
+| `sourceErrorCode` | The error code before the taxonomy mapping, e.g. the server's `exchange_invalid` behind `client_request_rejected`. Failures the SDK detects itself have no `payload`, so this is their only record of the cause. |
+| `validationPhase` | The phase that failed: `link_validation`, `client_request_fetch`, `did_resolution`, `registration_check`, `request_validation` or `request_authorization`. |
+| `requestDid` | The DID of the issuer or verifier the request was for. |
+| `requestUri` | The URI of the failed request. |
+| `requestKind` | `issuing_request` or `presentation_request`. |
+
+```js
+try {
+  await vcl.getCredentialManifest(credentialManifestDescriptor);
+} catch (error) {
+  // error.errorCode === 'client_request_rejected'
+  // error.sourceErrorCode === 'exchange_invalid'
+  // error.validationPhase === 'client_request_fetch'
+  // error.requestKind === 'issuing_request'
+}
+```
+
+The SDK passes these values through unchanged. `requestUri` can carry query
+parameters (`exchange_id`, `credential_types` and issuer-specific values), so
+redact it before sending it to telemetry.
+
+In `Legacy` mode the native SDKs clear these fields and report the error codes
+they used before 2.10.0.
+
+A rejection that does not come from a native `VCLError` is still thrown as a
+`VCLError`, with the original rejection as its `cause`.
+
 More details can be found [HERE](https://www.velocitynetwork.foundation/main/career-wallets-velocity-sdks#react-native)

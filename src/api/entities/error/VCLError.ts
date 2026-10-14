@@ -25,7 +25,13 @@ export type VCLErrorInit = {
   requestId?: string;
   message?: string;
   statusCode?: number;
+  sourceErrorCode?: string;
+  validationPhase?: string;
+  requestDid?: string;
+  requestUri?: string;
+  requestKind?: string;
   diagnostics?: VCLDiagnostics;
+  cause?: unknown;
 };
 
 export class VCLError extends Error {
@@ -34,7 +40,26 @@ export class VCLError extends Error {
   errorCode?: string;
   requestId?: string;
   statusCode?: number;
+  /**
+   * The error code before the native SDK mapped it to the taxonomy `errorCode`,
+   * e.g. the server's `exchange_invalid` behind `client_request_rejected`.
+   */
+  sourceErrorCode?: string;
+  /** The native validation phase that failed, e.g. `client_request_fetch`. */
+  validationPhase?: string;
+  /** The DID of the issuer or verifier the failed request was for. */
+  requestDid?: string;
+  /**
+   * The URI of the failed request, passed through unchanged. It can carry query
+   * parameters (`exchange_id`, `credential_types` and issuer-specific values),
+   * so redact it before sending it to telemetry.
+   */
+  requestUri?: string;
+  /** The kind of request that failed, e.g. `issuing_request`. */
+  requestKind?: string;
   diagnostics?: VCLDiagnostics;
+  /** The original rejection, when it was not a bridged native `VCLError`. */
+  cause?: unknown;
 
   constructor(error: VCLErrorInit = {}) {
     super(error.message);
@@ -44,6 +69,22 @@ export class VCLError extends Error {
     this.errorCode = error.errorCode;
     this.requestId = error.requestId;
     this.statusCode = error.statusCode;
+    this.sourceErrorCode = error.sourceErrorCode;
+    this.validationPhase = error.validationPhase;
+    this.requestDid = error.requestDid;
+    this.requestUri = error.requestUri;
+    this.requestKind = error.requestKind;
     this.diagnostics = error.diagnostics;
+
+    if (error.cause !== undefined) {
+      // Defined like the ES2022 `new Error(message, { cause })` option, which
+      // not every JS engine supports.
+      Object.defineProperty(this, 'cause', {
+        value: error.cause,
+        writable: true,
+        enumerable: false,
+        configurable: true,
+      });
+    }
   }
 }

@@ -20,6 +20,11 @@ type SerializedVCLError = {
   requestId?: string;
   message?: string;
   statusCode?: unknown;
+  sourceErrorCode?: unknown;
+  validationPhase?: unknown;
+  requestDid?: unknown;
+  requestUri?: unknown;
+  requestKind?: unknown;
   diagnostics?: unknown;
 };
 
@@ -40,6 +45,15 @@ export class VCLErrorDeserializer {
         requestId: error.requestId,
         message: error.message,
         statusCode: VCLErrorDeserializer.parseStatusCode(error.statusCode),
+        sourceErrorCode: VCLErrorDeserializer.parseString(
+          error.sourceErrorCode
+        ),
+        validationPhase: VCLErrorDeserializer.parseString(
+          error.validationPhase
+        ),
+        requestDid: VCLErrorDeserializer.parseString(error.requestDid),
+        requestUri: VCLErrorDeserializer.parseString(error.requestUri),
+        requestKind: VCLErrorDeserializer.parseString(error.requestKind),
         diagnostics: VCLErrorDeserializer.parseDiagnostics(error.diagnostics),
       });
     } catch (_parseError) {

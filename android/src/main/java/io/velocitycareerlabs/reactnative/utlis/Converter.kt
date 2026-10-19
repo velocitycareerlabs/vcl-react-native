@@ -9,6 +9,7 @@ package io.velocitycareerlabs.reactnative.utlis
 import com.facebook.react.bridge.*
 import io.velocitycareerlabs.api.*
 import io.velocitycareerlabs.api.entities.*
+import io.velocitycareerlabs.api.entities.error.VCLError
 import io.velocitycareerlabs.api.entities.initialization.VCLCryptoServicesDescriptor
 import io.velocitycareerlabs.api.entities.initialization.VCLErrorCodeCompatibilityMode
 import io.velocitycareerlabs.api.entities.initialization.VCLInitializationDescriptor
@@ -798,10 +799,32 @@ object Converter {
 
   fun mapToDidJwkDescriptor(didJwkDescriptorMap: ReadableMap?): VCLDidJwkDescriptor {
     return VCLDidJwkDescriptor(
-      signatureAlgorithm = VCLSignatureAlgorithm.fromString(
-        value = didJwkDescriptorMap?.getStringOpt("signatureAlgorithm") ?: ""
-      ),
+      signatureAlgorithm = mapToSignatureAlgorithm(didJwkDescriptorMap),
       remoteCryptoServicesToken = mapToToken(didJwkDescriptorMap?.getMapOpt("remoteCryptoServicesToken"))
     )
   }
+
+  /**
+   * A missing signatureAlgorithm resolves to ES256 (P-256). The JWS algorithm names are accepted as
+   * aliases of the curve names. Unknown values are rejected instead of being passed to
+   * [VCLSignatureAlgorithm.fromString], which resolves them to secp256k1.
+   */
+  private fun mapToSignatureAlgorithm(didJwkDescriptorMap: ReadableMap?): VCLSignatureAlgorithm {
+    val key = "signatureAlgorithm"
+    if (didJwkDescriptorMap == null || !didJwkDescriptorMap.hasKey(key) || didJwkDescriptorMap.isNull(key)) {
+      return VCLSignatureAlgorithm.ES256
+    }
+    if (didJwkDescriptorMap.getType(key) != ReadableType.String) {
+      throw unsupportedSignatureAlgorithmError("(non-string value)")
+    }
+    return when (val signatureAlgorithm = didJwkDescriptorMap.getString(key)) {
+      "ES256", VCLSignatureAlgorithm.ES256.value -> VCLSignatureAlgorithm.ES256
+      "ES256K", VCLSignatureAlgorithm.SECP256k1.value -> VCLSignatureAlgorithm.SECP256k1
+      else -> throw unsupportedSignatureAlgorithmError("\"$signatureAlgorithm\"")
+    }
+  }
+
+  private fun unsupportedSignatureAlgorithmError(signatureAlgorithm: String) = VCLError(
+    message = "Unsupported signatureAlgorithm $signatureAlgorithm. Expected one of: ES256, P-256, ES256K, secp256k1."
+  )
 }

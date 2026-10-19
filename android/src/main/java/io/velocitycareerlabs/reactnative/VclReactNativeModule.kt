@@ -80,6 +80,8 @@ class VclReactNativeModule(val reactContext: ReactApplicationContext) :
   ) {
     try {
       block()
+    } catch (error: VCLError) {
+      promise.rejectBridgedVCLError(error)
     } catch (ex: Exception) {
       promise.rejectBridgedVCLError(VCLError(ex))
     }

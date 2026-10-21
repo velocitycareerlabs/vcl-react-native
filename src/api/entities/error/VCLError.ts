@@ -50,9 +50,11 @@ export class VCLError extends Error {
   /** The DID of the issuer or verifier the failed request was for. */
   requestDid?: string;
   /**
-   * The URI of the failed request, passed through unchanged. It can carry query
-   * parameters (`exchange_id`, `credential_types` and issuer-specific values),
-   * so redact it before sending it to telemetry.
+   * The URI of the failed request. The value of its `push_delegate.push_token`
+   * query parameter is replaced with `[redacted]`, and the rest is passed
+   * through unchanged. It can still carry query parameters such as
+   * `exchange_id`, `credential_types`, `vendorOriginContext` and
+   * issuer-specific values, so redact it before sending it to telemetry.
    */
   requestUri?: string;
   /** The kind of request that failed, e.g. `issuing_request`. */

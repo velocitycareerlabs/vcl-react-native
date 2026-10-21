@@ -100,7 +100,7 @@ string, set only when the native SDK recorded it:
 | `sourceErrorCode` | The error code before the taxonomy mapping, e.g. the server's `exchange_invalid` behind `client_request_rejected`. Failures the SDK detects itself have no `payload`, so this is their only record of the cause. |
 | `validationPhase` | The phase that failed: `link_validation`, `client_request_fetch`, `did_resolution`, `registration_check`, `request_validation` or `request_authorization`. |
 | `requestDid` | The DID of the issuer or verifier the request was for. |
-| `requestUri` | The URI of the failed request. |
+| `requestUri` | The URI of the failed request, with the `push_delegate.push_token` value replaced by `[redacted]`. |
 | `requestKind` | `issuing_request` or `presentation_request`. |
 
 ```js
@@ -114,9 +114,12 @@ try {
 }
 ```
 
-The SDK passes these values through unchanged. `requestUri` can carry query
-parameters (`exchange_id`, `credential_types` and issuer-specific values), so
-redact it before sending it to telemetry.
+The SDK passes these values through unchanged, with one exception. When you
+pass a `pushDelegate`, the native SDKs add its push URL and push token to the
+request URI, so the SDK replaces the `push_delegate.push_token` value in
+`requestUri` with `[redacted]`. `requestUri` can still carry other query
+parameters (`exchange_id`, `credential_types`, `vendorOriginContext` and
+issuer-specific values), so redact it before sending it to telemetry.
 
 In `Legacy` mode the native SDKs clear these fields and report the error codes
 they used before 2.10.0.

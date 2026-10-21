@@ -99,6 +99,34 @@ describe('VclApi error bridging', () => {
     });
   });
 
+  it.each([
+    {
+      form: 'an encoded token at the end',
+      reportedRequestUri: `${requestUri}&push_delegate.push_url=https%3A%2F%2Fpush.example.com&push_delegate.push_token=fcm%3AAPA91bExampleToken`,
+      expectedRequestUri: `${requestUri}&push_delegate.push_url=https%3A%2F%2Fpush.example.com&push_delegate.push_token=[redacted]`,
+    },
+    {
+      form: 'a raw token before other parameters',
+      reportedRequestUri:
+        'https://agent.example.com/issue/get-credential-manifest?push_delegate.push_token=fcm:APA91bExampleToken&issuerDid=did:web:issuer.example.com',
+      expectedRequestUri:
+        'https://agent.example.com/issue/get-credential-manifest?push_delegate.push_token=[redacted]&issuerDid=did:web:issuer.example.com',
+    },
+  ])(
+    'redacts the push token in requestUri, given $form',
+    async ({ reportedRequestUri, expectedRequestUri }) => {
+      rejectWithBridgedError({
+        ...sixFieldPayload,
+        ...taxonomyContext,
+        requestUri: reportedRequestUri,
+      });
+
+      const error = await catchGetCredentialManifestError();
+
+      expect(error.requestUri).toBe(expectedRequestUri);
+    }
+  );
+
   it('leaves missing or non-string taxonomy context undefined', async () => {
     rejectWithBridgedError({
       ...sixFieldPayload,

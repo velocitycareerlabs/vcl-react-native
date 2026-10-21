@@ -13,6 +13,9 @@ import {
 
 export const BRIDGED_VCL_ERROR_CODE = 'VCL_BRIDGED_ERROR_V1';
 
+const PUSH_TOKEN_QUERY_PARAM = /([?&]push_delegate\.push_token=)[^&#]*/g;
+const REDACTED_VALUE = '[redacted]';
+
 type SerializedVCLError = {
   payload?: string;
   error?: string;
@@ -52,7 +55,7 @@ export class VCLErrorDeserializer {
           error.validationPhase
         ),
         requestDid: VCLErrorDeserializer.parseString(error.requestDid),
-        requestUri: VCLErrorDeserializer.parseString(error.requestUri),
+        requestUri: VCLErrorDeserializer.parseRequestUri(error.requestUri),
         requestKind: VCLErrorDeserializer.parseString(error.requestKind),
         diagnostics: VCLErrorDeserializer.parseDiagnostics(error.diagnostics),
       });
@@ -74,6 +77,16 @@ export class VCLErrorDeserializer {
 
     const parsedStatusCode = parseInt(String(statusCode), 10);
     return Number.isNaN(parsedStatusCode) ? undefined : parsedStatusCode;
+  }
+
+  // The native SDKs report the request endpoint, which includes the wallet's
+  // push token when the caller passed a `pushDelegate`. The caller already has
+  // the token, so it is redacted here rather than by every consumer.
+  private static parseRequestUri(requestUri: unknown): string | undefined {
+    return VCLErrorDeserializer.parseString(requestUri)?.replace(
+      PUSH_TOKEN_QUERY_PARAM,
+      `$1${REDACTED_VALUE}`
+    );
   }
 
   private static parseDiagnostics(

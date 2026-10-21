@@ -1,6 +1,6 @@
 {
   "name": "@velocitycareerlabs/vcl-react-native",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "vclNativeSdkVersions": {
     "ios": "2.10.0",
     "android": "2.10.0"
@@ -119,6 +119,9 @@
   ],
   "jest": {
     "preset": "react-native",
+    "moduleNameMapper": {
+      "^@velocitycareerlabs/vcl-react-native$": "<rootDir>/src/index"
+    },
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"

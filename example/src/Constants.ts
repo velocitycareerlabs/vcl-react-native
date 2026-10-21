@@ -103,6 +103,32 @@ export abstract class Constants {
   static readonly IssuerDidStaging =
     'did:ion:EiByBvq95tfmhl41DOxJeaa26HjSxAUoz908PITFwMRDNA';
 
+  // Issuing deep links the SDK fails with a taxonomy error on Staging
+  static readonly TaxonomyErrorDeepLinksStaging = {
+    // The agent answers 404 exchange_not_found
+    'Rejected Request': Constants.getIssuingDeepLinkStaging(
+      `https://stagingagent.velocitycareerlabs.io/api/holder/v0.6/org/${Constants.IssuerDidStaging}/issue/get-credential-manifest?exchange_id=000000000000000000000000`
+    ),
+    // The request_uri is not http(s)
+    'Invalid Link': Constants.getIssuingDeepLinkStaging(
+      'ftp://stagingagent.velocitycareerlabs.io/get-credential-manifest'
+    ),
+    // The registrar has no organization for the issuer DID
+    'Unregistered Issuer': Constants.getIssuingDeepLinkStaging(
+      `https://stagingagent.velocitycareerlabs.io/api/holder/v0.6/org/${Constants.IssuerDidStaging}/issue/get-credential-manifest?id=624d65daf18484b8525288c3`,
+      'did:web:unregistered-issuer.example.com'
+    ),
+  };
+
+  private static getIssuingDeepLinkStaging(
+    requestUri: string,
+    issuerDid = Constants.IssuerDidStaging
+  ) {
+    return `velocity-network-testnet://issue?request_uri=${encodeURIComponent(
+      requestUri
+    )}&issuerDid=${encodeURIComponent(issuerDid)}`;
+  }
+
   static readonly OrganizationsSearchDescriptorByDidDev: VCLOrganizationsSearchDescriptor =
     { filter: { did: Constants.IssuerDidDev } };
 

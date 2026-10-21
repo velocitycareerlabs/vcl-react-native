@@ -57,6 +57,8 @@ export const enum InitState {
 }
 
 const environment = VCLEnvironment.Staging;
+// Legacy keeps the error codes the native SDKs used before 2.10.0
+const errorCodeCompatibilityMode = VCLErrorCodeCompatibilityMode.Taxonomy;
 
 const didJwkDescriptor: VCLDidJwkDescriptor = {
   signatureAlgorithm: VCLSignatureAlgorithm.SECP256k1,
@@ -97,7 +99,7 @@ export default () => {
     const initialize = async () => {
       const initializationDescriptor: VCLInitializationDescriptor = {
         environment,
-        errorCodeCompatibilityMode: VCLErrorCodeCompatibilityMode.Taxonomy,
+        errorCodeCompatibilityMode,
         nativeErrorStackFrameLimit: 20,
       };
 
@@ -582,6 +584,27 @@ export default () => {
     }
   };
 
+  const onTriggerTaxonomyError = (deepLinkValue: string) => async () => {
+    setBridgedError(undefined);
+
+    const credentialManifestDescriptorByDeepLink: VCLCredentialManifestDescriptorByDeepLink =
+      {
+        deepLink: { value: deepLinkValue },
+        didJwk: didJwkRef.current,
+      };
+
+    try {
+      await vcl.getCredentialManifest(credentialManifestDescriptorByDeepLink);
+    } catch (error: any) {
+      const taxonomyVCLError = error as VCLError;
+      console.log(
+        'VCL taxonomy error demo:',
+        JSON.stringify(toErrorDisplayObject(taxonomyVCLError))
+      );
+      setBridgedError(taxonomyVCLError);
+    }
+  };
+
   const menuItems = {
     'Get Countries': onGetCountries,
     'Get Credential Types': onGetCredentialTypes,
@@ -599,6 +622,14 @@ export default () => {
     'Generate Signed JWT': onGenerateSignedJwt,
     'Generate DID:JWK': onGenerateDidJwk,
     'Trigger Bridged VCLError': onTriggerBridgedError,
+    ...Object.fromEntries(
+      Object.entries(Constants.TaxonomyErrorDeepLinksStaging).map(
+        ([name, deepLinkValue]) => [
+          `Trigger Taxonomy VCLError: ${name}`,
+          onTriggerTaxonomyError(deepLinkValue),
+        ]
+      )
+    ),
   };
 
   const handleClick = (key: string, value: () => void) => {
@@ -633,7 +664,9 @@ export default () => {
         >
           <View style={styles.errorScreen}>
             <View style={styles.errorHeader}>
-              <Text style={styles.errorTitle}>Latest Bridged Error</Text>
+              <Text style={styles.errorTitle}>
+                Latest Bridged Error ({errorCodeCompatibilityMode})
+              </Text>
               <Button
                 title="Close"
                 onPress={() => setBridgedError(undefined)}
@@ -720,6 +753,11 @@ const toErrorDisplayObject = (error: VCLError) => {
     errorCode: error.errorCode,
     requestId: error.requestId,
     statusCode: error.statusCode,
+    sourceErrorCode: error.sourceErrorCode,
+    validationPhase: error.validationPhase,
+    requestDid: error.requestDid,
+    requestUri: error.requestUri,
+    requestKind: error.requestKind,
     diagnostics: error.diagnostics,
   };
 };

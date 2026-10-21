@@ -36,13 +36,7 @@ fun Promise.rejectBridgedVCLError(error: VCLError) {
 
 private fun VCLError.toBridgedJsonObject(
   nativeErrorStackFrameLimit: Int
-) = JSONObject().apply {
-  putOpt("payload", payload)
-  putOpt("error", error)
-  putOpt("errorCode", errorCode)
-  putOpt("requestId", requestId)
-  putOpt("message", message)
-  putOpt("statusCode", statusCode)
+) = toJsonObject().apply {
   put("diagnostics", toDiagnosticsJsonObject(nativeErrorStackFrameLimit))
 }
 

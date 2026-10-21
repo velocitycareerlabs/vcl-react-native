@@ -179,6 +179,7 @@ describe('VclApi error bridging', () => {
     expect(error).toBeInstanceOf(VCLError);
     expect(error.message).toBe('Native module crashed');
     expect(error.cause).toBe(nativeRejection);
+    expect(Object.keys(error)).not.toContain('cause');
     expect(error.errorCode).toBeUndefined();
   });
 });

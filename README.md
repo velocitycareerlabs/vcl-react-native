@@ -124,4 +124,7 @@ issuer-specific values), so redact it before sending it to telemetry.
 In `Legacy` mode the native SDKs clear these fields and report the error codes
 they used before 2.10.0.
 
+A rejection that does not come from a native `VCLError` is still thrown as a
+`VCLError`, with the original rejection as its `cause`.
+
 More details can be found [HERE](https://www.velocitynetwork.foundation/main/career-wallets-velocity-sdks#react-native)

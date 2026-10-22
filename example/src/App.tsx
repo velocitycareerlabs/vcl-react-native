@@ -61,7 +61,7 @@ const environment = VCLEnvironment.Staging;
 const errorCodeCompatibilityMode = VCLErrorCodeCompatibilityMode.Taxonomy;
 
 const didJwkDescriptor: VCLDidJwkDescriptor = {
-  signatureAlgorithm: VCLSignatureAlgorithm.SECP256k1,
+  signatureAlgorithm: VCLSignatureAlgorithm.ES256,
 };
 
 export default () => {

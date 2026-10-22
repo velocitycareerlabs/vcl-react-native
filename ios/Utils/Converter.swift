@@ -741,9 +741,35 @@ func dictionaryToDidJwk(_ didJwkDictionary: [String: Any]?) -> VCLDidJwk {
   )
 }
 
-func dictionaryToDidJwkDescriptor(_ didJwkDescriptorDictionary: [String: Any]?) -> VCLDidJwkDescriptor {
+func dictionaryToDidJwkDescriptor(_ didJwkDescriptorDictionary: [String: Any]?) throws -> VCLDidJwkDescriptor {
   return VCLDidJwkDescriptor(
-    signatureAlgorithm: VCLSignatureAlgorithm.fromString(value: didJwkDescriptorDictionary?["signatureAlgorithm"] as? String ?? ""),
+    signatureAlgorithm: try dictionaryToSignatureAlgorithm(didJwkDescriptorDictionary?["signatureAlgorithm"]),
     remoteCryptoServicesToken: dictionaryToToken(didJwkDescriptorDictionary?["remoteCryptoServicesToken"] as? [String: Any])
+  )
+}
+
+/// A missing signatureAlgorithm resolves to ES256 (P-256). The JWS algorithm names are accepted as
+/// aliases of the curve names. Unknown values are rejected instead of being passed to
+/// `VCLSignatureAlgorithm.fromString`, which resolves them to secp256k1.
+private func dictionaryToSignatureAlgorithm(_ signatureAlgorithm: Any?) throws -> VCLSignatureAlgorithm {
+  guard let signatureAlgorithm = signatureAlgorithm, !(signatureAlgorithm is NSNull) else {
+    return .ES256
+  }
+  guard let signatureAlgorithmValue = signatureAlgorithm as? String else {
+    throw unsupportedSignatureAlgorithmError("(non-string value)")
+  }
+  switch signatureAlgorithmValue {
+  case "ES256", VCLSignatureAlgorithm.ES256.rawValue:
+    return .ES256
+  case "ES256K", VCLSignatureAlgorithm.SECP256k1.rawValue:
+    return .SECP256k1
+  default:
+    throw unsupportedSignatureAlgorithmError("\"\(signatureAlgorithmValue)\"")
+  }
+}
+
+private func unsupportedSignatureAlgorithmError(_ signatureAlgorithm: String) -> VCLError {
+  return VCLError(
+    message: "Unsupported signatureAlgorithm \(signatureAlgorithm). Expected one of: ES256, P-256, ES256K, secp256k1."
   )
 }

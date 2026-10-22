@@ -308,8 +308,15 @@ import VCL
     didJwkDescriptorDictionary: [String: Any]? = nil,
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
+    let didJwkDescriptor: VCLDidJwkDescriptor
+    do {
+      didJwkDescriptor = try dictionaryToDidJwkDescriptor(didJwkDescriptorDictionary)
+    } catch {
+      errorBridge.rejectBridgedVCLError(reject, error: error as? VCLError ?? VCLError(error: error))
+      return
+    }
     vcl.generateDidJwk(
-      didJwkDescriptor: dictionaryToDidJwkDescriptor(didJwkDescriptorDictionary),
+      didJwkDescriptor: didJwkDescriptor,
       successHandler: {
         resolve(didJwkToDictionary($0))
       },

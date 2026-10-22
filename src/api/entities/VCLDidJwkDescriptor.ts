@@ -9,6 +9,12 @@ import type { VCLSignatureAlgorithm } from '../VCLSignatureAlgorithm';
 import type { VCLToken } from './VCLToken';
 
 export interface VCLDidJwkDescriptor {
-  signatureAlgorithm: VCLSignatureAlgorithm;
+  /**
+   * Signature algorithm of the generated key. Defaults to
+   * `VCLSignatureAlgorithm.ES256` (P-256) when omitted. The native bridge also
+   * accepts the JWS algorithm names `'ES256'` and `'ES256K'`, and rejects any
+   * other value with a `VCLError`.
+   */
+  signatureAlgorithm?: VCLSignatureAlgorithm;
   remoteCryptoServicesToken?: VCLToken;
 }

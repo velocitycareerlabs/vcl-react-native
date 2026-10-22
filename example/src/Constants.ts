@@ -154,12 +154,12 @@ export abstract class Constants {
 
   static readonly SomeJwt: VCLJwt = {
     encodedJwt:
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJqd2siOnsia3R5IjoiRUMiLCJjcnYiOiJzZWNwMjU2azEiLCJ4IjoiQ1JFNzc0WV8ydkctdTZka2UwSmQzYVhrd1R4WkE2TV96cDZ2TkR0Vmt5NCIsInkiOiJZLWhIdS1FSXlHSGFRRTdmamxZVVlBZ2lVanFqZFc2VXlIaHI2OVFZTS04IiwidXNlIjoic2lnIn19.eyJwMSI6InYxIiwicDIiOiJ2MTIiLCJuYmYiOjE2OTQ0MzUyMjAsImp0aSI6Ijk4YTc4MGFmLTIyZGYtNGU3ZC1iYTZjLTBmYjE0Njk2Zjg0NSIsImlzcyI6ImlzczEyMyIsInN1YiI6IlpHNXQwT1ZrT08iLCJpYXQiOjE2OTQ0MzUyMjB9.kaEGDsRFjFylIAQ1DDX0GQyWBD1y5rG7WNpFZbrL1DFPrfFgDrydXXOCaBbr8TN81kPrbkscsHUuioY-tGCxMw',
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImp3ayI6eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2IiwieCI6ImM2Zk1xM19yTnJST1lfVWZ2ckN0WVBiVmMzTVJ6MXFJcGE0aXJRdFVIVm8iLCJ5IjoialhWdUJNdWYxTjdnZHl1NDl1VGpJVmJCZGN5SU5YZjBzX1BjUWd6ZTkxbyIsInVzZSI6InNpZyJ9fQ.eyJwMSI6InYxIiwicDIiOiJ2MTIiLCJuYmYiOjE2OTQ0MzUyMjAsImp0aSI6Ijk4YTc4MGFmLTIyZGYtNGU3ZC1iYTZjLTBmYjE0Njk2Zjg0NSIsImlzcyI6ImlzczEyMyIsInN1YiI6IlpHNXQwT1ZrT08iLCJpYXQiOjE2OTQ0MzUyMjB9.jE0Qz1fAfbC-35WSqU-Nlnxx1Qbg7liS9n64pm5CF4wxh0jwUl6DNeS7Tt8VW0rAQ3sT5Tf-7twfQ3zwZH3CQQ',
   };
 
   static readonly SomeJwkPublic: VCLPublicJwk = {
     valueStr:
-      '{ "kty": "EC", "crv": "secp256k1", "x": "CRE774Y_2vG-u6dke0Jd3aXkwTxZA6M_zp6vNDtVky4", "y": "Y-hHu-EIyGHaQE7fjlYUYAgiUjqjdW6UyHhr69QYM-8", "use": "sig" }',
+      '{ "kty": "EC", "crv": "P-256", "x": "c6fMq3_rNrROY_UfvrCtYPbVc3MRz1qIpa4irQtUHVo", "y": "jXVuBMuf1N7gdyu49uTjIVbBdcyINXf0s_PcQgze91o", "use": "sig" }',
   };
 
   static readonly SomePayload = JSON.parse('{"p1":"v1", "p2":"v12"}');
